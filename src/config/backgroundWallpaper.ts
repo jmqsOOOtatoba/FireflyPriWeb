@@ -81,7 +81,7 @@ export const backgroundWallpaper: BackgroundWallpaperConfig = {
 				"热爱是拯救无趣人生的唯一途径",
 				"向前走，哪怕是微小的步伐，也比停滞不前更有意义",
 				"太阳依旧升起，风依旧吹拂，岁月依旧流转",
-				"Upon Lighted Fyrefly, I Soon Gaze",
+				"向阳而生 永远热爱 喜欢聪明的人",
 				"From Undreamt Night, I Thence Shine",
 				"In Finalized Morrow, I Full Bloom",
 			],
