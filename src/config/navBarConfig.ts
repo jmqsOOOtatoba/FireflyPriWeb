@@ -101,10 +101,10 @@ const getDynamicNavBarConfig = (): NavBarConfig => {
 				icon: "fa7-brands:github",
 			},
 			{
-				name: "Bilibili",
+				name: "bilibili",
 				url: "https://space.bilibili.com/353880725?spm_id_from=333.1007.0.0",
 				external: true,
-				icon: "fa7-brands:Bilibili",
+				icon: "fa7-brands:bilibili",
 			},
 			{
 				name: "Firefly文档",
