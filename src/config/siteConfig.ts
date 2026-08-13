@@ -20,7 +20,6 @@ export const siteConfig: SiteConfig = {
 	,// 站点关键词
 	keywords: [
 		"陌殊途左沐",
-		"个人美化",
 		"Astro",
 		"ACGN",
 		"博客",
@@ -31,7 +30,7 @@ export const siteConfig: SiteConfig = {
 	// 主题色
 	themeColor: {
 		// 主题色的默认色相，范围从 0 到 360。例如：红色：0，青色：200，蓝绿色：250，粉色：345
-		hue: 165,
+		hue: 270,
 		// 默认模式："light" 亮色，"dark" 暗色，"system" 跟随系统
 		defaultMode: "system",
 	},
@@ -44,9 +43,9 @@ export const siteConfig: SiteConfig = {
 	// 网站Card样式配置
 	card: {
 		// 是否开启卡片边框和阴影，开启后让网站更有立体感
-		border: false,
+		border: true,
 		// 是否让卡片风格跟随主题色相
-		followTheme: false,
+		followTheme: true,
 	},
 
 	// Favicon 配置
@@ -75,9 +74,9 @@ export const siteConfig: SiteConfig = {
 		// 使用 Astro 图标库时不需要设置 valueDark，图标会自动跟随主题亮暗色切换
 		logo: {
 			type: "image",
-			value: "assets/images/logo/firefly-light.png",
-			valueDark: "assets/images/logo/firefly-dark.png",
-			alt: "🍀❄",
+			value: "assets/images/logo/azumalogoW.png",
+			valueDark: "assets/images/logo/azumalogoB.png",
+			alt: "🍀",
 		},
 		// 导航栏标题
 		title: "陌殊途左沐",
@@ -109,7 +108,7 @@ export const siteConfig: SiteConfig = {
 		// 番组计划页面开关，含追番、游戏、书籍和音乐
 		bangumi: true,
 		// VNDB页面开关。
-		vndb: true,
+		vndb: false,
 		// 相册页面开关
 		gallery: true,
 		// 追番页面开关
@@ -168,9 +167,9 @@ export const siteConfig: SiteConfig = {
 			// 标签数量，设为 0 则不限制
 			tagCount: 3,
 			// 是否显示字数
-			showWords: false,
+			showWords: true,
 			// 是否显示阅读时间
-			showReadingTime: false,
+			showReadingTime: true,
 		},
 		// 底部 PostStats 统计信息显示控制
 		// 如果tagsPosition设置为"bottom"，则stats将不显示
