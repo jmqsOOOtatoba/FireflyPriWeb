@@ -19,29 +19,30 @@ const showTitle = widgetConfig?.showTitle !== false;
   name="访客信息"
   showTitle={showTitle}
   id="visitor-info"
-  class={className}
+  class:list={[className, "visitor-info-widget"]}
   style={style}
 >
-  <div id="visitor-data" class="flex flex-col gap-3">
+  <div class="visitor-info-content flex flex-col gap-3">
     <div class="text-center text-neutral-500 dark:text-neutral-400 text-sm">
       加载中...
     </div>
   </div>
 </WidgetLayout>
 
-
 <script is:inline>
   async function loadVisitorInfo() {
-    var container = document.getElementById('visitor-data');
-    if (!container) return;
+    var containers = document.querySelectorAll('.visitor-info-content');
+    
+    containers.forEach(function(container) {
+      if (container.getAttribute('data-loaded') === 'true') return;
+      fetchWeatherData(container);
+    });
+  }
 
+  async function fetchWeatherData(container) {
     try {
-      console.log('开始获取访客信息...');
       var response = await fetch('https://wttr.in/?format=j1');
-      console.log('API 响应状态:', response.status);
       var data = await response.json();
-      console.log('API 数据:', data);
-      
       var current = data.current_condition[0];
       var area = data.nearest_area[0];
 
@@ -83,10 +84,12 @@ const showTitle = widgetConfig?.showTitle !== false;
           '<span class="text-xs font-bold text-neutral-900 dark:text-neutral-100">' + current.temp_C + '°C (体感 ' + current.FeelsLikeC + '°C)</span>' +
         '</div>' +
       '</div>';
+      
+      container.setAttribute('data-loaded', 'true');
 
     } catch (error) {
       console.error('获取访客信息失败:', error);
-      container.innerHTML = '<div class="text-center text-red-500 text-sm py-2">加载失败: ' + error.message + '</div>';
+      container.innerHTML = '<div class="text-center text-red-500 text-sm py-2">加载失败</div>';
     }
   }
 
