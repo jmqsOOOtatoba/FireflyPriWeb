@@ -1,0 +1,136 @@
+---
+import { Icon } from "astro-icon/components";
+import WidgetLayout from "@/components/common/WidgetLayout.astro";
+import I18nKey from "@/i18n/i18nKey";
+import { i18n } from "@/i18n/translation";
+import type { WidgetComponentConfig } from "@/types/config";
+
+interface Props {
+  class?: string;
+  style?: string;
+  widgetConfig?: WidgetComponentConfig;
+}
+
+const { class: className, style, widgetConfig } = Astro.props;
+const showTitle = widgetConfig?.showTitle !== false;
+---
+
+<WidgetLayout
+  name="访客信息"
+  showTitle={showTitle}
+  id="visitor-info"
+  class={className}
+  style={style}
+>
+  <div id="visitor-data" class="flex flex-col gap-3">
+    <div class="text-center text-neutral-500 dark:text-neutral-400 text-sm">
+      加载中...
+    </div>
+  </div>
+</WidgetLayout>
+
+<script is:inline>
+  // 访客信息组件
+  async function loadVisitorInfo() {
+    const container = document.getElementById('visitor-data');
+    if (!container) return;
+
+    try {
+      // 使用免费的 IP 地理位置 API
+      const ipResponse = await fetch('https://ipapi.co/json/');
+      const ipData = await ipResponse.json();
+
+      // 获取天气信息
+      let weatherInfo = null;
+      if (ipData.latitude && ipData.longitude) {
+        try {
+          const weatherResponse = await fetch(
+            `https://wttr.in/${ipData.city}?format=j1`
+          );
+          weatherInfo = await weatherResponse.json();
+        } catch (e) {
+          console.log('天气获取失败:', e);
+        }
+      }
+
+      // 构建显示内容
+      let html = `
+        <div class="flex flex-col gap-2">
+          <div class="flex items-center gap-2 px-3 py-2 rounded-lg bg-neutral-100/60 dark:bg-neutral-800/50">
+            <div class="text-(--primary) text-lg">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+            </div>
+            <span class="text-neutral-700 dark:text-neutral-300 font-medium text-sm">
+              IP 地址
+            </span>
+            <span class="text-xs font-bold text-neutral-900 dark:text-neutral-100 ml-auto">
+              ${ipData.ip || '未知'}
+            </span>
+          </div>
+
+          <div class="flex items-center gap-2 px-3 py-2 rounded-lg bg-neutral-100/60 dark:bg-neutral-800/50">
+            <div class="text-(--primary) text-lg">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            </div>
+            <span class="text-neutral-700 dark:text-neutral-300 font-medium text-sm">
+              位置
+            </span>
+            <span class="text-xs font-bold text-neutral-900 dark:text-neutral-100 ml-auto">
+              ${ipData.city || '未知'}, ${ipData.region || ''}, ${ipData.country_name || ''}
+            </span>
+          </div>
+      `;
+
+      // 添加天气信息
+      if (weatherInfo && weatherInfo.current_condition && weatherInfo.current_condition[0]) {
+        const current = weatherInfo.current_condition[0];
+        html += `
+          <div class="flex items-center gap-2 px-3 py-2 rounded-lg bg-neutral-100/60 dark:bg-neutral-800/50">
+            <div class="text-(--primary) text-lg">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"/></svg>
+            </div>
+            <span class="text-neutral-700 dark:text-neutral-300 font-medium text-sm">
+              天气
+            </span>
+            <span class="text-xs font-bold text-neutral-900 dark:text-neutral-100 ml-auto">
+              ${current.lang_zh && current.lang_zh[0] ? current.lang_zh[0].value : current.weatherDesc[0].value}
+            </span>
+          </div>
+
+          <div class="flex items-center gap-2 px-3 py-2 rounded-lg bg-neutral-100/60 dark:bg-neutral-800/50">
+            <div class="text-(--primary) text-lg">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M15 13V5c0-1.66-1.34-3-3-3S9 3.34 9 5v8c-1.21.91-2 2.37-2 4 0 2.76 2.24 5 5 5s5-2.24 5-5c0-1.63-.79-3.09-2-4zm-4-8c0-.55.45-1 1-1s1 .45 1 1h-1v1h1v2h-1v1h1v2h-2V5z"/></svg>
+            </div>
+            <span class="text-neutral-700 dark:text-neutral-300 font-medium text-sm">
+              温度
+            </span>
+            <span class="text-xs font-bold text-neutral-900 dark:text-neutral-100 ml-auto">
+              ${current.temp_C}°C (体感 ${current.FeelsLikeC}°C)
+            </span>
+          </div>
+        `;
+      }
+
+      html += '</div>';
+      container.innerHTML = html;
+
+    } catch (error) {
+      console.error('获取访客信息失败:', error);
+      container.innerHTML = `
+        <div class="text-center text-neutral-500 dark:text-neutral-400 text-sm">
+          无法获取访客信息
+        </div>
+      `;
+    }
+  }
+
+  // 页面加载完成后执行
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadVisitorInfo);
+  } else {
+    loadVisitorInfo();
+  }
+
+  // 监听页面切换事件（Swup）
+  document.addEventListener('swup:contentReplaced', loadVisitorInfo);
+</script>

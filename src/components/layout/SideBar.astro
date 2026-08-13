@@ -12,6 +12,7 @@ import SiteInfo from "@/components/widget/SiteInfo.astro";
 import SiteStats from "@/components/widget/SiteStats.astro";
 import Tags from "@/components/widget/Tags.astro";
 import { sidebarLayoutConfig } from "@/config";
+import VisitorInfo from "@/components/widget/VisitorInfo.astro";
 import type {
 	MobileBottomComponentConfig,
 	WidgetComponentConfig,
@@ -53,6 +54,7 @@ const componentMap = {
 	music: Music,
 	siteInfo: SiteInfo,
 	dynamic: Dynamic,
+    visitorInfo: VisitorInfo,
 };
 
 // 获取侧边栏位置
