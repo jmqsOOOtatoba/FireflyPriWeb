@@ -169,7 +169,7 @@ export const siteConfig: SiteConfig = {
 			// 是否显示字数
 			showWords: true,
 			// 是否显示阅读时间
-			showReadingTime: true,
+			showReadingTime: false,
 		},
 		// 底部 PostStats 统计信息显示控制
 		// 如果tagsPosition设置为"bottom"，则stats将不显示
