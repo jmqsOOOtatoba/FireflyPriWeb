@@ -1,6 +1,6 @@
 # 关于我 / About Me
 
-你好！我是 **夏叶** ，一个在数字世界中默默无闻的一片叶子。
+你好！我是 **左沐** 似乎很早之前就不再是拯救世界的高中生了。目前研究生在读，主修控制方向，喜欢翻译自己喜欢的漫画，有时候会随手画点无聊的东西。你可以在我的个人博客以及**_哔哩哔哩_**OR**_抖音_**找到我的相关作品，如果你喜欢本站，可以加入友链，感谢你的访问。
 
 ## 🛠️ 关于本站
 
@@ -11,7 +11,7 @@
 
 **🖥️在线预览： [Firefly - Demo site](https://firefly.cuteleaf.cn/)**
 
-**🏠我的博客： [https://blog.cuteleaf.cn](https://blog.cuteleaf.cn/)**
+**🏠我的博客： [azuma.mstzuomu.space](azuma.mstzuomu.space)**
 
 **📝Firefly使用文档： [https://docs-firefly.cuteleaf.cn](https://docs-firefly.cuteleaf.cn/)**
 
