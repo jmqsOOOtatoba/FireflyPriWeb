@@ -29,23 +29,30 @@ const showTitle = widgetConfig?.showTitle !== false;
   </div>
 </WidgetLayout>
 
+
 <script is:inline>
   async function loadVisitorInfo() {
     var container = document.getElementById('visitor-data');
     if (!container) return;
 
     try {
+      console.log('开始获取访客信息...');
       var response = await fetch('https://wttr.in/?format=j1');
+      console.log('API 响应状态:', response.status);
       var data = await response.json();
-
+      console.log('API 数据:', data);
+      
       var current = data.current_condition[0];
       var area = data.nearest_area[0];
 
-      var weatherText = current.lang_zh && current.lang_zh[0] 
-        ? current.lang_zh[0].value 
-        : current.weatherDesc[0].value;
-
       var locationText = area.areaName[0].value + ', ' + area.region[0].value;
+
+      var weatherText = '未知';
+      if (current.lang_zh && current.lang_zh[0] && current.lang_zh[0].value) {
+        weatherText = current.lang_zh[0].value;
+      } else if (current.weatherDesc && current.weatherDesc[0]) {
+        weatherText = current.weatherDesc[0].value;
+      }
 
       container.innerHTML = '<div class="flex flex-col gap-2">' +
         '<div class="flex items-center justify-between px-3 py-2 rounded-lg bg-neutral-100/60 dark:bg-neutral-800/50">' +
@@ -79,7 +86,7 @@ const showTitle = widgetConfig?.showTitle !== false;
 
     } catch (error) {
       console.error('获取访客信息失败:', error);
-      container.innerHTML = '<div class="text-center text-neutral-500 dark:text-neutral-400 text-sm py-2">无法获取访客信息</div>';
+      container.innerHTML = '<div class="text-center text-red-500 text-sm py-2">加载失败: ' + error.message + '</div>';
     }
   }
 

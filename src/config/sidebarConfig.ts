@@ -265,6 +265,8 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 			// 是否在文章详情页显示
 			showOnPostPage: true,
 		},
+
+
 		{
 			// 组件类型：分类组件
 			type: "categories",
@@ -278,6 +280,16 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 				collapseThreshold: 5,
 			},
 		},
+
+  {
+	//组件类型：访客信息IP
+    type: "visitorInfo",  
+	// 是否启动
+    enable: true,
+	//是否在文章详情页展示
+    showOnPostPage: true,
+  },
+
 		{
 			// 组件类型：标签组件
 			type: "tags",
