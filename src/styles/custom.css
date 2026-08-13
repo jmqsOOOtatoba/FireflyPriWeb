@@ -1,0 +1,5 @@
+.home-banner video {
+  object-fit: cover;
+  /* 第二个数值越小越靠上：0%优先展示视频顶部，30%展示偏上区域 */
+  object-position: center 0%;
+}
