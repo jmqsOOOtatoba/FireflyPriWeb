@@ -37,6 +37,9 @@ import {
 import I18nKey from "./src/i18n/i18nKey";
 import { i18n } from "./src/i18n/translation";
 import { GithubCardComponent } from "./src/plugins/rehype-component-github-card.mjs";
+
+import { BilibiliCardComponent } from "./src/plugins/rehype-component-bilibili-card.mjs";
+
 import { rehypeDiagramPanZoom } from "./src/plugins/rehype-diagram-panzoom.mjs";
 import rehypeEmailProtection from "./src/plugins/rehype-email-protection.mjs";
 import rehypeExternalLinks from "./src/plugins/rehype-external-links.mjs";
@@ -304,6 +307,8 @@ export default defineConfig({
 					{
 						components: {
 							github: GithubCardComponent,
+
+							 bilibili: BilibiliCardComponent,
 							
 						},
 					},
