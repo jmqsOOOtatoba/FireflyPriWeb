@@ -53,7 +53,7 @@ import { remarkReadingTime } from "./src/plugins/remark-reading-time.mjs";
 import { remarkWikiLink } from "./src/plugins/remark-wiki-link.js";
 import { collectUsedFontCssVars } from "./src/utils/fontHelper";
 
-import { BilibiliCardComponent } from "./src/plugins/rehype-component-bilibili-card.mjs";
+
 
 if (process.env.NODE_ENV === "development") {
 	setMaxListeners(20);
@@ -304,7 +304,7 @@ export default defineConfig({
 					{
 						components: {
 							github: GithubCardComponent,
-							bilibili: BilibiliCardComponent,
+							
 						},
 					},
 				],
