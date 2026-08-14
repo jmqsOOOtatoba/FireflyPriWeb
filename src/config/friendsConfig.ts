@@ -23,6 +23,15 @@ export const friendsPageConfig: FriendsPageConfig = {
 // 友链配置
 export const friendsConfig: FriendLink[] = [
 	{
+		title: "MIFENG BLOG",
+		imgurl: "https://blog.imbee.top/images/logo/logo.webp",
+		desc: "一个菜鸟的博客",
+		siteurl: "https://blog.imbee.top/",
+		tags: ["Blog"],
+		weight: 9,
+		enabled: true,
+	},
+	{
 		title: "夏夜流萤",
 		imgurl:
 			"https://weavatar.com/avatar/d252655d40d6874417a720bad0a6c5f77f8f6a1fd2f882f8f338402dc37e4190?s=640",
