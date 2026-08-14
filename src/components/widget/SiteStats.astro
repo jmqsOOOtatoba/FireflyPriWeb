@@ -175,77 +175,45 @@ const stats = [
     });
 
 
-// ====== 在这里添加Umami统计数据获取 ======
-// 获取Umami统计数据
-const totalViewsElements = document.querySelectorAll('[data-stat-id="total-views"]');
-const totalVisitorsElements = document.querySelectorAll('[data-stat-id="total-visitors"]');
+// ====== 不蒜子统计 ======
+// 加载不蒜子脚本
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+})();
 
-// Umami API配置（需要替换为你的配置）
-const umamiConfig = {
-    websiteId: 'YOUR_UMAMI_WEBSITE_ID', // 替换为你的Umami网站ID
-    apiUrl: 'https://cloud.umami.is/api', // Umami API地址
-    // 如果使用自建Umami，修改为你的地址，例如：
-    // apiUrl: 'https://your-umami-domain.com/api',
-};
-
-// 获取统计数据的函数
-async function fetchUmamiStats() {
-    try {
-        // 获取总浏览量（pageviews）
-        const pageviewsResponse = await fetch(
-            `${umamiConfig.apiUrl}/websites/${umamiConfig.websiteId}/pageviews?start_at=${Math.floor(Date.now() / 1000) - 86400 * 30}&end_at=${Math.floor(Date.now() / 1000)}`
-        );
-        
-        // 获取访客数（visitors）
-        const visitorsResponse = await fetch(
-            `${umamiConfig.apiUrl}/websites/${umamiConfig.websiteId}/visitors?start_at=${Math.floor(Date.now() / 1000) - 86400 * 30}&end_at=${Math.floor(Date.now() / 1000)}`
-        );
-        
-        if (pageviewsResponse.ok && visitorsResponse.ok) {
-            const pageviewsData = await pageviewsResponse.json();
-            const visitorsData = await visitorsResponse.json();
-            
-            // 计算总浏览量（所有页面的浏览量之和）
-            const totalViews = pageviewsData.reduce((sum, item) => sum + (item.y || 0), 0);
-            
-            // 计算访客数（所有访客数之和）
-            const totalVisitors = visitorsData.reduce((sum, item) => sum + (item.y || 0), 0);
-            
-            // 更新页面显示
+// 获取不蒜子统计数据
+function fetchBusuanziStats() {
+    const totalViewsElements = document.querySelectorAll('[data-stat-id="total-views"]');
+    const totalVisitorsElements = document.querySelectorAll('[data-stat-id="total-visitors"]');
+    
+    setTimeout(() => {
+        if (typeof busuanzi !== 'undefined') {
             totalViewsElements.forEach((element) => {
-                element.textContent = totalViews.toLocaleString();
+                element.textContent = (busuanzi.pv || 0).toLocaleString();
             });
-            
             totalVisitorsElements.forEach((element) => {
-                element.textContent = totalVisitors.toLocaleString();
+                element.textContent = (busuanzi.uv || 0).toLocaleString();
             });
-            
-            console.log('Umami统计加载成功:', { totalViews, totalVisitors });
         } else {
-            console.error('Umami API请求失败');
-            // 使用默认值或缓存值
             totalViewsElements.forEach((element) => {
-                element.textContent = 'N/A';
+                element.textContent = '0';
             });
             totalVisitorsElements.forEach((element) => {
-                element.textContent = 'N/A';
+                element.textContent = '0';
             });
         }
-    } catch (error) {
-        console.error('获取Umami统计数据失败:', error);
-        // 使用默认值
-        totalViewsElements.forEach((element) => {
-            element.textContent = 'N/A';
-        });
-        totalVisitorsElements.forEach((element) => {
-            element.textContent = 'N/A';
-        });
-    }
+    }, 1000);
 }
 
-// 调用Umami数据获取函数
-fetchUmamiStats();
-// ====== Umami统计数据获取结束 ======
+fetchBusuanziStats();
+
+document.addEventListener("swup:contentReplaced", () => {
+    setTimeout(fetchBusuanziStats, 500);
+});
+// ====== 不蒜子统计结束 ======
 
 
 
