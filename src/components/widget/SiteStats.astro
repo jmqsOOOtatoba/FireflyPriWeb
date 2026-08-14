@@ -157,6 +157,48 @@ const stats = [
         </div>
       </div>
     ))}
+
+
+<!-- 不蒜子统计：总浏览量 -->
+<div class="flex items-center justify-between px-3 py-1.5">
+    <div class="flex items-center gap-2.5">
+        <div class="text-(--primary) text-xl">
+            <Icon is:inline name="material-symbols:visibility-outline" />
+        </div>
+        <span class="text-neutral-700 dark:text-neutral-300 font-medium text-sm">
+            总浏览量
+        </span>
+    </div>
+    <div class="flex items-center">
+        <span class="text-base font-bold text-neutral-900 dark:text-neutral-100">
+            <span id="busuanzi_value_site_pv"></span>
+        </span>
+    </div>
+</div>
+
+<!-- 不蒜子统计：访客数 -->
+<div class="flex items-center justify-between px-3 py-1.5">
+    <div class="flex items-center gap-2.5">
+        <div class="text-(--primary) text-xl">
+            <Icon is:inline name="material-symbols:group" />
+        </div>
+        <span class="text-neutral-700 dark:text-neutral-300 font-medium text-sm">
+            访客数
+        </span>
+    </div>
+    <div class="flex items-center">
+        <span class="text-base font-bold text-neutral-900 dark:text-neutral-100">
+            <span id="busuanzi_value_site_uv"></span>
+        </span>
+    </div>
+</div>
+
+
+
+
+
+
+
   </div>
 </WidgetLayout>
 
@@ -175,45 +217,7 @@ const stats = [
     });
 
 
-// ====== 不蒜子统计 ======
-// 加载不蒜子脚本
-(function() {
-    var hm = document.createElement("script");
-    hm.src = "https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js";
-    var s = document.getElementsByTagName("script")[0]; 
-    s.parentNode.insertBefore(hm, s);
-})();
 
-// 获取不蒜子统计数据
-function fetchBusuanziStats() {
-    const totalViewsElements = document.querySelectorAll('[data-stat-id="total-views"]');
-    const totalVisitorsElements = document.querySelectorAll('[data-stat-id="total-visitors"]');
-    
-    setTimeout(() => {
-        if (typeof busuanzi !== 'undefined') {
-            totalViewsElements.forEach((element) => {
-                element.textContent = (busuanzi.pv || 0).toLocaleString();
-            });
-            totalVisitorsElements.forEach((element) => {
-                element.textContent = (busuanzi.uv || 0).toLocaleString();
-            });
-        } else {
-            totalViewsElements.forEach((element) => {
-                element.textContent = '0';
-            });
-            totalVisitorsElements.forEach((element) => {
-                element.textContent = '0';
-            });
-        }
-    }, 1000);
-}
-
-fetchBusuanziStats();
-
-document.addEventListener("swup:contentReplaced", () => {
-    setTimeout(fetchBusuanziStats, 500);
-});
-// ====== 不蒜子统计结束 ======
 
 
 
