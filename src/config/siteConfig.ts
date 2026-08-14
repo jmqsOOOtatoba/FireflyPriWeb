@@ -6,7 +6,7 @@ const SITE_LANG = "zh_CN";
 
 export const siteConfig: SiteConfig = {
 	// 站点标题
-	title: "陌殊途左沐",
+	title: "左沐の手册",
 
 	// 站点副标题
 	subtitle: "热爱是拯救无趣人生的唯一途径",
