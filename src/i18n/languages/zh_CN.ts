@@ -391,6 +391,9 @@ export const zh_CN: Translation = {
 	[Key.siteInfoCollapse]: "收起构建信息",
 	[Key.siteInfoDomain]: "站点域名",
 	[Key.siteInfoLicense]: "文章许可",
+	// 在 zh_CN.ts 文件中添加
+[Key.siteStatsTotalViews]: "总浏览量",
+[Key.siteStatsTotalVisitors]: "访客数",
 
 	// 日历组件
 	[Key.calendarSunday]: "日",

@@ -8,7 +8,7 @@ export const analyticsConfig: AnalyticsConfig = {
 	// Umami 统计配置
 	umamiAnalytics: {
 		// Umami Website ID
-		websiteId: "",
+		websiteId: "78431b3f-f005-4261-ac00-1aa7d0cd4c53",
 		// Umami JS地址，支持使用自建
 		scriptUrl: "https://cloud.umami.is/script.js",
 		// Umami 会话回放脚本地址，支持使用自建
