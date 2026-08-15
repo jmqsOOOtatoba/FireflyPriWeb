@@ -39,6 +39,7 @@
 .bc-info {
     flex: 1;
     min-width: 0;
+    overflow: hidden;
 }
 
 .bc-username {
@@ -51,9 +52,8 @@
 .bc-sign {
     font-size: 0.875rem;
     color: var(--text-secondary);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 .bc-stats {
