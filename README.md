@@ -92,6 +92,13 @@
 
 如果你有好用的功能和优化，请提交 [Pull Request](https://github.com/CuteLeaf/Firefly/pulls)
 
+### 个人新增
+- [x] **访客信息** - 显示访客位置、天气、温度等信息
+- [x] **站点统计** - 文章数量、分类数量、标签数量、总字数、运行天数等统计
+- [x] **不蒜子统计** - 总浏览量和访客数统计
+- [x] **留言功能** - 支持留言互动
+- [x] **Umami后台** - 网站数据后台可视化
+
 ## 🚀 快速开始
 
 ### 环境要求
@@ -246,6 +253,8 @@ location: China # 位置
 - 提醒块（Admonitions） - 支持 GitHub, Obsidian, VitePress, Docusaurus 四种风格主题配置 ([预览和用法](https://firefly.cuteleaf.cn/posts/markdown-extended/))
 - GitHub 仓库卡片 ([预览和用法](https://firefly.cuteleaf.cn/posts/markdown-extended/))
 - 基于 Expressive Code 的增强代码块 ([预览](http://firefly.cuteleaf.cn/posts/code-examples/) / [文档](https://expressive-code.com/))
+
+- Bilibili用户卡片 自行添加
 
 ## 🧞 指令
 

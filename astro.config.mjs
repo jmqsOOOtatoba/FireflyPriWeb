@@ -57,7 +57,6 @@ import { remarkWikiLink } from "./src/plugins/remark-wiki-link.js";
 import { collectUsedFontCssVars } from "./src/utils/fontHelper";
 
 
-
 if (process.env.NODE_ENV === "development") {
 	setMaxListeners(20);
 }
@@ -286,6 +285,12 @@ export default defineConfig({
 				parseDirectiveNode,
 				remarkMermaid,
 				[remarkPlantuml, plantumlConfig],
+
+
+
+
+
+
 			],
 			rehypePlugins: [
 				[rehypeKatex, { katex }],

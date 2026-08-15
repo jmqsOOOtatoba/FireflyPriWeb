@@ -33,18 +33,15 @@ export function BilibiliCardComponent(properties, children) {
 		},
 		[
 			h("div", { class: "bc-header" }, [
-    h("div", { class: "bc-titlebar" }, [
-        h("div", { class: "bc-titlebar-left" }, [
-            h("div", { 
-                class: "bc-avatar",
-                style: avatar ? `background-image: url(${avatar}); background-color: transparent;` : ""
-            }),
-            h("div", { class: "bc-info" }, [
-                h("div", { class: "bc-username" }, name),
-                h("div", { class: "bc-sign" }, sign),
-            ]),
+    h("div", { class: "bc-titlebar-left" }, [
+        h("div", { 
+            class: "bc-avatar",
+            style: avatar ? `background-image: url(${avatar}); background-color: transparent;` : ""
+        }),
+        h("div", { class: "bc-info" }, [
+            h("div", { class: "bc-username" }, name),
+            h("div", { class: "bc-sign" }, sign),
         ]),
-        h("div", { class: "bilibili-logo" }),
     ]),
 ]),
 
