@@ -24,34 +24,6 @@ export function BilibiliCardComponent(properties, children) {
 	
 	const cardUuid = `BC${Math.random().toString(36).slice(-6)}`;
 
-	const nAvatar = h(`div#${cardUuid}-avatar`, { class: "bc-avatar" });
-	
-	const nTitle = h("div", { class: "bc-titlebar" }, [
-		h("div", { class: "bc-titlebar-left" }, [
-			nAvatar,
-			h("div", { class: "bc-info" }, [
-				h("div", { class: "bc-username" }, name),
-				h("div", { class: "bc-sign" }, sign),
-			]),
-		]),
-		h("div", { class: "bilibili-logo" }),
-	]);
-
-	const nFans = h(`div#${cardUuid}-fans`, { class: "bc-stat" }, [
-		h("span", { class: "bc-stat-value" }, fans),
-		h("span", { class: "bc-stat-label" }, "粉丝"),
-	]);
-	
-	const nFollowing = h(`div#${cardUuid}-following`, { class: "bc-stat" }, [
-		h("span", { class: "bc-stat-value" }, following),
-		h("span", { class: "bc-stat-label" }, "关注"),
-	]);
-	
-	const nLikes = h(`div#${cardUuid}-likes`, { class: "bc-stat" }, [
-		h("span", { class: "bc-stat-value" }, likes),
-		h("span", { class: "bc-stat-label" }, "获赞"),
-	]);
-
 	return h(
 		`a#${cardUuid}-card`,
 		{
@@ -60,8 +32,36 @@ export function BilibiliCardComponent(properties, children) {
 			target: "_blank",
 		},
 		[
-			nTitle,
-			h("div", { class: "bc-stats" }, [nFans, nFollowing, nLikes]),
+			h("div", { class: "bc-header" }, [
+    h("div", { class: "bc-titlebar" }, [
+        h("div", { class: "bc-titlebar-left" }, [
+            h("div", { 
+                class: "bc-avatar",
+                style: avatar ? `background-image: url(${avatar}); background-color: transparent;` : ""
+            }),
+            h("div", { class: "bc-info" }, [
+                h("div", { class: "bc-username" }, name),
+                h("div", { class: "bc-sign" }, sign),
+            ]),
+        ]),
+        h("div", { class: "bilibili-logo" }),
+    ]),
+]),
+
+			h("div", { class: "bc-stats" }, [
+				h("div", { class: "bc-stat" }, [
+					h("span", { class: "bc-stat-value" }, fans),
+					h("span", { class: "bc-stat-label" }, "粉丝"),
+				]),
+				h("div", { class: "bc-stat" }, [
+					h("span", { class: "bc-stat-value" }, following),
+					h("span", { class: "bc-stat-label" }, "关注"),
+				]),
+				h("div", { class: "bc-stat" }, [
+					h("span", { class: "bc-stat-value" }, likes),
+					h("span", { class: "bc-stat-label" }, "获赞"),
+				]),
+			]),
 		],
 	);
 }
