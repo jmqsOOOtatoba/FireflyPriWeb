@@ -157,7 +157,7 @@ const stats = [
     </div>
     <div class="flex items-center">
         <span class="text-base font-bold text-neutral-900 dark:text-neutral-100">
-            <span id="busuanzi_value_site_pv"></span>
+                        <span id="busuanzi_value_site_pv">-</span>
         </span>
     </div>
 </div>
@@ -174,7 +174,7 @@ const stats = [
     </div>
     <div class="flex items-center">
         <span class="text-base font-bold text-neutral-900 dark:text-neutral-100">
-            <span id="busuanzi_value_site_uv"></span>
+                       <span id="busuanzi_value_site_uv">-</span>
         </span>
     </div>
 </div>
@@ -235,8 +235,15 @@ const stats = [
   // 页面加载时更新
   updateDynamicStats();
 
+
   // 页面切换时重新更新
   document.addEventListener("swup:contentReplaced", () => {
-    setTimeout(updateDynamicStats, 100);
+    setTimeout(() => {
+      updateDynamicStats();
+      // 重新触发不蒜子统计
+      if (typeof busuanzi !== 'undefined' && busuanzi.pv) {
+        busuanzi.pv();
+      }
+    }, 100);
   });
 </script>
