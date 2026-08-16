@@ -52,6 +52,8 @@ const hasCover =
 
 const coverWidth = "30%";
 
+const isCoverTop = style.includes("cover-top");
+
 // 网格模式封面是否撑满卡片贴边，false 则按卡片内容区的内边距内缩（间距随断点变化）
 const gridCoverFullWidth =
 	siteConfig.postListLayout.grid.coverFullWidth ?? false;
@@ -102,11 +104,12 @@ const minutes = remarkPluginFrontmatter.minutes;
 ---
 
 <div
-  class:list={[
+    class:list={[
     "post-card-wrapper",
     hasCover ? "has-cover" : "no-cover",
     pinned ? "pinned" : "",
     gridCoverFullWidth ? "" : "grid-cover-inset",
+    isCoverTop ? "cover-top" : "",
     "card-base flex flex-col-reverse w-full rounded-(--radius-large) overflow-hidden relative",
     className,
   ]}
@@ -417,6 +420,34 @@ const minutes = remarkPluginFrontmatter.minutes;
       display: flex !important;
     }
   }
+
+/* 列表模式封面在上方 */
+:global(.list-mode.cover-top) .post-card-wrapper {
+    flex-direction: column-reverse !important;
+}
+
+:global(.list-mode.cover-top) .has-cover .post-card-image {
+    position: relative !important;
+    top: auto !important;
+    bottom: auto !important;
+    right: auto !important;
+    left: auto !important;
+    width: 100% !important;
+    height: 200px !important;
+    margin: 0 !important;
+    border-radius: var(--radius-large) var(--radius-large) 0 0 !important;
+}
+
+:global(.list-mode.cover-top) .has-cover .post-card-content {
+    width: 100% !important;
+}
+
+
+
+
+
+
+
 
   /* === Grid Mode Styles === */
   /* 网格模式：封面在顶部（移动端和桌面端一致） */
