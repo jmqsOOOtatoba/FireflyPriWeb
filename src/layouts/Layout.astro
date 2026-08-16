@@ -148,7 +148,14 @@ const siteLang = lang.replace("_", "-");
     )}
 
       <!-- 不蒜子统计 -->
-      <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+    var bszCaller, bszTag;
+    !function(){var c,d,e,a=document.createElement("script");a.src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js",a.defer=!0,a.onload=function(){bszCaller.bszTag()},document.body.appendChild(a),bszCaller={bszTag:function(){var a=document.getElementById("busuanzi_container_site_pv"),b=document.getElementById("busuanzi_value_site_pv"),c=document.getElementById("busuanzi_container_site_uv"),d=document.getElementById("busuanzi_value_site_uv");bszTag={container_site_pv:a,value_site_pv:b,container_site_uv:c,value_site_uv:d}}},d=document.getElementById("busuanzi_container_site_pv"),e=document.getElementById("busuanzi_container_site_uv"),d&&(d.style.display=""),e&&(e.style.display="")}();
+</script>
+<script>
+    // 强制使用固定的站点ID，让所有域名共享统计
+    window.BUSUANZI_SITE_ID = "azuma-mstzuomu";
+</script>
 
 
 
