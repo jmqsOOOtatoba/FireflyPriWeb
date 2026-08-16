@@ -11,6 +11,15 @@ slug: guide/firefly-layout-system
 
 ## 📖 概述
 
+
+
+::pdf{url="https://example.com/your-file.pdf" title="我的PDF文档" height="600"}
+
+
+
+
+
+
 Firefly 提供了灵活的布局系统，允许您根据内容需求和个人喜好自定义博客的视觉呈现方式。布局系统主要包括**侧边栏布局**和**文章列表布局**两个维度，它们相互配合，共同决定了页面的整体结构。
 
 本文将详细介绍 Firefly 的各种布局模式、它们的特点、使用场景，以及不同布局组合的效果。

@@ -40,6 +40,8 @@ import { GithubCardComponent } from "./src/plugins/rehype-component-github-card.
 
 import { BilibiliCardComponent } from "./src/plugins/rehype-component-bilibili-card.mjs";
 
+import { PdfViewerComponent } from "./src/plugins/rehype-component-pdf-viewer.mjs";
+
 import { rehypeDiagramPanZoom } from "./src/plugins/rehype-diagram-panzoom.mjs";
 import rehypeEmailProtection from "./src/plugins/rehype-email-protection.mjs";
 import rehypeExternalLinks from "./src/plugins/rehype-external-links.mjs";
@@ -314,6 +316,8 @@ export default defineConfig({
 							github: GithubCardComponent,
 
 							 bilibili: BilibiliCardComponent,
+
+							 pdf: PdfViewerComponent,
 							
 						},
 					},

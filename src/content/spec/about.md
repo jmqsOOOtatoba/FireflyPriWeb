@@ -5,7 +5,7 @@
 目前研究生在读，主修控制方向，喜欢翻译自己感兴趣的漫画，有时候会随手画点无聊的东西。你可以在我的个人博客以及[**_哔哩哔哩_**](https://space.bilibili.com/353880725) OR [**_抖音_**](https://www.douyin.com/user/MS4wLjABAAAA08mhVuVaVZXw7-AMzkdDhn6ziNhnkVmZdDL_adIdgGXajSAfHWSSP9FV3WRVHtbW?from_tab_name=main)找到我的相关作品。
 
 
-::bilibili{uid="353880725" name="陌殊途左沐" fans="1万" following="2090" likes="5.9万" sign="随缘分享电子杂志，随缘汉化。亚马逊电子书可帮下。热爱是拯救无趣人生的唯一途径" avatar="https://s41.ax1x.com/2026/08/14/pmOTqzt.webp"}
+::bilibili{uid="353880725" name="陌殊途左沐" fans="1万" following="2090" likes="5.9万" sign="随缘分享电子杂志，随缘汉化。亚马逊电子书可帮下。热爱是拯救无趣人生的唯一途径" avatar="https://tu.mstzuomu.space/file/头像/1786845052763_头像.jpg"}
 
 
 如果你喜欢本站，欢迎加入[**友链**](https://azuma.mstzuomu.space/friends/)，感谢你的访问。
@@ -33,7 +33,7 @@
 本站相关图片素材均来自哔哩哔哩UP主[**東雪蓮Official**](https://space.bilibili.com/1437582453)
 
 
-::bilibili{uid="1437582453" name="東雪蓮Official" fans="87.9万" following="72" likes="375.6万" sign="向阳而生，永远热爱。喜欢聪明的人。不回私信有什么请找 @暮月是只小兔叽" avatar="https://s41.ax1x.com/2026/08/14/pmOIOfI.webp"}
+::bilibili{uid="1437582453" name="東雪蓮Official" fans="87.9万" following="72" likes="375.6万" sign="向阳而生，永远热爱。喜欢聪明的人。不回私信有什么请找 @暮月是只小兔叽" avatar="https://tu.mstzuomu.space/file/1786844751615_aaa.jpg"}
 
 ---
 
