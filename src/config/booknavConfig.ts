@@ -42,6 +42,12 @@ export const booknavConfig: BooknavGroup[] = [
 				weight: 10,
 			},
 			{
+				title: "小米MIMO",
+				url: "https://platform.xiaomimimo.com/console/balance",
+				desc: "小米MIMO平台",
+				weight: 10,
+			},
+			{
 				title: "MDN Web Docs",
 				url: "https://developer.mozilla.org",
 				desc: "最权威的 Web 技术文档",
@@ -75,6 +81,19 @@ export const booknavConfig: BooknavGroup[] = [
 		weight: 90,
 		items: [
 			{
+				title: "DeDRM_tools",
+				url: "https://github.com/Satsuoni/DeDRM_tools/releases",
+				desc: "Kindle 电子书去 DRM 工具",
+				//icon: "/favicon/firefly-32.png",
+				weight: 10,
+			},
+			{
+				title: "CloudFlare-ImgBed",
+				url: "https://github.com/MarSeventh/CloudFlare-ImgBed",
+				desc: "CloudFlare 图床工具",
+				weight: 10,
+			},
+			{
 				title: "Firefly",
 				url: "https://github.com/CuteLeaf/Firefly",
 				desc: "清晰美观的 Astro 个人博客主题模板",
@@ -105,12 +124,52 @@ export const booknavConfig: BooknavGroup[] = [
 		],
 	},
 	{
+		id: "community",
+		name: "社区",
+		icon: "boxicons:community",
+		desc: "交友、问答与讨论",
+		weight: 90,
+		items: [
+			{
+				title: "萌国萌站",
+				url: "https://icp.gov.moe/aboutus.php",
+				desc: "面向二次元爱好者的社区网站，提供交流、分享和讨论的平台。",
+				weight: 10,
+			},
+			
+		],
+	},
+	{
 		id: "tools",
 		name: "工具",
 		icon: "material-symbols:build-outline-rounded",
 		desc: "顺手的在线小工具",
 		weight: 80,
 		items: [
+			{
+				title: "MS Generation Project",
+				url: "https://store.rg-adguard.net/",
+				desc: "微软商店应用离线安装包下载",
+				weight: 10,
+			},
+			{
+				title: "Umami Cloud",
+				url: "https://cloud.umami.is/",
+				desc: "Umami Cloud 统计服务文档",
+				weight: 9,
+			},
+			{
+				title: "NB优选",
+				url: "https://www.byoip.top/",
+				desc: "IP优选",
+				weight: 9,
+			},
+			{
+				title: "Calibre",
+				url: "https://calibre-ebook.com/",
+				desc: "Calibre开源的电子书管理软件，支持电子书格式转换、阅读和管理。",
+				weight: 9,	
+			},
 			{
 				title: "TinyPNG",
 				url: "https://tinypng.com",
@@ -139,11 +198,23 @@ export const booknavConfig: BooknavGroup[] = [
 		weight: 70,
 		items: [
 			{
+				title: "Twikoo",
+				url: "https://twikoo.js.org/intro.html",
+				desc: "轻量级的评论系统，支持多种平台和自定义功能。",
+				weight: 10,	
+			},
+			{
 				title: "Firefly Docs",
 				url: "https://docs-firefly.cuteleaf.cn",
 				desc: "Firefly 主题模板文档",
 				icon: "https://docs-firefly.cuteleaf.cn/logo.png",
 				weight: 10,
+			},
+			{
+				title: "CloudFlare ImgBed Docs",
+				url: "https://cfbed.sanyue.de/guide/introduction.html",
+				desc: "CloudFlare ImgBed 图床工具文档",
+				weight: 9,
 			},
 			{
 				title: "夏夜流萤",

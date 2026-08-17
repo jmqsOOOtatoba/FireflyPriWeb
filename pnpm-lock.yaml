@@ -41,6 +41,9 @@ importers:
       '@fancyapps/ui':
         specifier: ^6.1.14
         version: 6.1.14
+      '@iconify-json/boxicons':
+        specifier: ^1.2.0
+        version: 1.2.0
       '@iconify-json/fa7-brands':
         specifier: ^1.2.4
         version: 1.2.4
@@ -1540,6 +1543,9 @@ packages:
 
   '@fancyapps/ui@6.1.14':
     resolution: {integrity: sha512-cBV73XXHrc0qMca+PJJ6qay3xweIgsoYse13rGRstgUs0xA5WAv1tgbSzPCIOOjiLs2S2jiVFJxyszgvgyfxMg==}
+
+  '@iconify-json/boxicons@1.2.0':
+    resolution: {integrity: sha512-yAfCVaiZ5t2bC1xNVEdkWUI94e3u15IrytO2XFh8/7Y45M1i51adQpi42OhH2pUdsYM0/KY4Gklrb+XB+oZS/w==}
 
   '@iconify-json/fa7-brands@1.2.4':
     resolution: {integrity: sha512-60acXyxhQl1lddBH5YGzfQLkzlP9jqNcblFmgel7lJpgsVx/4QmrXAL90ARb8XhHX7dFMGRDmlqER9mq8aaz2g==}
@@ -7667,6 +7673,10 @@ snapshots:
       '@expressive-code/core': 0.44.1
 
   '@fancyapps/ui@6.1.14': {}
+
+  '@iconify-json/boxicons@1.2.0':
+    dependencies:
+      '@iconify/types': 2.0.0
 
   '@iconify-json/fa7-brands@1.2.4':
     dependencies:
