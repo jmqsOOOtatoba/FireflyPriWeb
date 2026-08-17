@@ -28,7 +28,16 @@ export const friendsConfig: FriendLink[] = [
 		desc: "一个菜鸟的博客",
 		siteurl: "https://blog.imbee.top/",
 		tags: ["Blog"],
-		weight: 9,
+		weight: 100,
+		enabled: true,
+	},
+	{
+		title: "EGS-blog",
+		imgurl: "https://blog.egs.cc.cd/hero/avatar.png",
+		desc: "heron_i的小站",
+		siteurl: "https://blog.egs.cc.cd/",
+		tags: ["Blog"],
+		weight: 99,
 		enabled: true,
 	},
 	{
@@ -38,7 +47,7 @@ export const friendsConfig: FriendLink[] = [
 		desc: "飞萤之火自无梦的长夜亮起，绽放在终竟的明天。",
 		siteurl: "https://blog.cuteleaf.cn",
 		tags: ["Blog"],
-		weight: 10, // 权重，数字越大排序越靠前
+		weight: 98, // 权重，数字越大排序越靠前
 		enabled: true, // 是否启用
 	},
 	{
