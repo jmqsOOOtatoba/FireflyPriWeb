@@ -31,6 +31,15 @@ export const friendsConfig: FriendLink[] = [
 		weight: 100,
 		enabled: true,
 	},
+{
+    title: "fqzlr",
+    imgurl: "https://q1.qlogo.cn/g?b=qq&nk=20447289&s=640",
+    desc: "躬身入局，心为主理，行有尺度，自持本心.",
+    siteurl:  "https://blog.fqzlr.top/",
+    tags: ["Blog"],
+	weight: 100,
+		enabled: true,
+},
 	{
 		title: "EGS-blog",
 		imgurl: "https://blog.egs.cc.cd/hero/avatar.png",
