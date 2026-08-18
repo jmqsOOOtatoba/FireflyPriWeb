@@ -41,6 +41,7 @@ import { GithubCardComponent } from "./src/plugins/rehype-component-github-card.
 import { BilibiliCardComponent } from "./src/plugins/rehype-component-bilibili-card.mjs";
 
 import { PdfViewerComponent } from "./src/plugins/rehype-component-pdf-viewer.mjs";
+import { MusicPlayerComponent } from "./src/plugins/rehype-component-music-player.mjs";
 
 import { rehypeDiagramPanZoom } from "./src/plugins/rehype-diagram-panzoom.mjs";
 import rehypeEmailProtection from "./src/plugins/rehype-email-protection.mjs";
@@ -318,6 +319,7 @@ export default defineConfig({
 							 bilibili: BilibiliCardComponent,
 
 							 pdf: PdfViewerComponent,
+						 music: MusicPlayerComponent,
 							
 						},
 					},
@@ -388,3 +390,5 @@ export default defineConfig({
 		},
 	},
 });
+
+

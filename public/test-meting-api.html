@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Meting API 测试</title>
+</head>
+<body>
+    <h1>Meting API 测试</h1>
+    <div id="result">正在测试...</div>
+    
+    <script>
+        const METING_API = "https://api.i-meto.com/meting/api?server=:server&type=:type&id=:id&r=:r";
+        const METING_FALLBACK_APIS = [
+            "https://api.injahow.cn/meting/?server=:server&type=:type&id=:id",
+            "https://api.moeyao.cn/meting/?server=:server&type=:type&id=:id",
+        ];
+        
+        async function testAPI() {
+            const resultDiv = document.getElementById('result');
+            let html = '<h2>测试结果</h2>';
+            
+            const tests = [
+                { server: 'netease', type: 'song', id: '1901371647', desc: '网易云单曲' },
+                { server: 'netease', type: 'playlist', id: '24381616', desc: '网易云歌单' },
+                { server: 'tencent', type: 'song', id: '003OUlho2HcRHC', desc: 'QQ音乐单曲' },
+            ];
+            
+            for (const test of tests) {
+                html += `<h3>${test.desc}</h3>`;
+                html += `<p>参数: server=${test.server}, type=${test.type}, id=${test.id}</p>`;
+                
+                const apis = [METING_API, ...METING_FALLBACK_APIS];
+                let success = false;
+                
+                for (const apiTemplate of apis) {
+                    try {
+                        const url = apiTemplate
+                            .replace(':server', test.server)
+                            .replace(':type', test.type)
+                            .replace(':id', test.id)
+                            .replace(':r', Math.random());
+                        
+                        html += `<p>请求: ${url}</p>`;
+                        
+                        const response = await fetch(url);
+                        if (!response.ok) {
+                            html += `<p style="color: red;">响应错误: ${response.status}</p>`;
+                            continue;
+                        }
+                        
+                        const data = await response.json();
+                        html += `<p>返回数据:</p>`;
+                        html += `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+                        
+                        if (Array.isArray(data) && data.length > 0) {
+                            const song = data[0];
+                            html += `<p style="color: green;">✓ 成功获取到歌曲信息</p>`;
+                            html += `<p>标题: ${song.title || song.name}</p>`;
+                            html += `<p>艺术家: ${song.author || song.artist}</p>`;
+                            html += `<p>URL: ${song.url ? '有' : '无'}</p>`;
+                            success = true;
+                            break;
+                        } else if (data && data.url) {
+                            html += `<p style="color: green;">✓ 成功获取到URL</p>`;
+                            html += `<p>URL: ${data.url}</p>`;
+                            success = true;
+                            break;
+                        }
+                    } catch (e) {
+                        html += `<p style="color: red;">请求失败: ${e.message}</p>`;
+                    }
+                }
+                
+                if (!success) {
+                    html += `<p style="color: red;">✗ 所有API都失败了</p>`;
+                }
+                
+                html += '<hr>';
+            }
+            
+            resultDiv.innerHTML = html;
+        }
+        
+        testAPI();
+    </script>
+</body>
+</html>
