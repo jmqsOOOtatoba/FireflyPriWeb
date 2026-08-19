@@ -41,20 +41,11 @@ const showTitle = widgetConfig?.showTitle !== false;
 
   async function fetchWeatherData(container) {
     try {
-      var response = await fetch('https://wttr.in/?format=j1');
+      var response = await fetch('https://uapis.cn/api/v1/misc/weather');
       var data = await response.json();
-      var current = data.current_condition[0];
-      var area = data.nearest_area[0];
+      var locationText = data.city + ', ' + data.district;
 
-      var locationText = area.areaName[0].value + ', ' + area.region[0].value;
-
-      var weatherText = '未知';
-      if (current.lang_zh && current.lang_zh[0] && current.lang_zh[0].value) {
-        weatherText = current.lang_zh[0].value;
-      } else if (current.weatherDesc && current.weatherDesc[0]) {
-        weatherText = current.weatherDesc[0].value;
-      }
-
+      var weatherText = data.weather || '未知';
       container.innerHTML = '<div class="flex flex-col gap-2">' +
         '<div class="flex items-center justify-between px-3 py-2 rounded-lg bg-neutral-100/60 dark:bg-neutral-800/50">' +
           '<div class="flex items-center gap-2.5">' +
@@ -81,7 +72,7 @@ const showTitle = widgetConfig?.showTitle !== false;
             '</div>' +
             '<span class="text-neutral-700 dark:text-neutral-300 font-medium text-sm">温度</span>' +
           '</div>' +
-          '<span class="text-xs font-bold text-neutral-900 dark:text-neutral-100">' + current.temp_C + '°C (体感 ' + current.FeelsLikeC + '°C)</span>' +
+          '<span class="text-xs font-bold text-neutral-900 dark:text-neutral-100">' + data.temperature + '°C ' + data.wind_direction + data.wind_power + '</span>' +
         '</div>' +
       '</div>';
       
