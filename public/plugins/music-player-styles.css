@@ -139,8 +139,21 @@
     transform: scale(0.95);
 }
 
+/* 播放/暂停图标 */
 .play-icon, .pause-icon {
     font-size: 14px;
+    line-height: 1;
+}
+
+.play-icon svg, .pause-icon svg {
+    width: 1em;
+    height: 1em;
+    fill: currentColor;
+    vertical-align: middle;
+}
+
+.play-icon.hidden, .pause-icon.hidden {
+    display: none;
 }
 
 .music-progress-container {
@@ -200,8 +213,21 @@
     opacity: 0.8;
 }
 
+/* 音量/静音图标 */
 .volume-icon, .mute-icon {
     font-size: 16px;
+    line-height: 1;
+}
+
+.volume-icon svg, .mute-icon svg {
+    width: 1em;
+    height: 1em;
+    fill: currentColor;
+    vertical-align: middle;
+}
+
+.volume-icon.hidden, .mute-icon.hidden {
+    display: none;
 }
 
 .music-volume-slider {
