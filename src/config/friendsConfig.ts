@@ -48,7 +48,7 @@ export const friendsConfig: FriendLink[] = [
     tags: ["Blog"],
 	weight: 100,
 		enabled: true,
-}，
+},
 	{
 		title: "EGS-blog",
 		imgurl: "https://blog.egs.cc.cd/hero/avatar.png",
