@@ -5,10 +5,10 @@ import type { FriendLink, FriendsPageConfig } from "../types/friendsConfig";
 // 友链页面配置
 export const friendsPageConfig: FriendsPageConfig = {
 	// 页面标题，如果留空则使用 i18n 中的翻译
-	title: "",
+	title: "朋友的世界",
 
 	// 页面描述文本，如果留空则使用 i18n 中的翻译
-	description: "",
+	description: "这里是我的朋友们，欢迎访问他们的博客和网站",
 
 	// 是否显示底部自定义内容（friends.mdx 中的内容）
 	showCustomContent: true,
@@ -27,6 +27,15 @@ export const friendsConfig: FriendLink[] = [
 		imgurl: "https://blog.imbee.top/images/logo/logo.webp",
 		desc: "一个菜鸟的博客",
 		siteurl: "https://blog.imbee.top/",
+		tags: ["Blog"],
+		weight: 100,
+		enabled: true,
+	},
+	{
+		title: "Olinl Blog",
+		imgurl: "https://blog.olinl.com/assets/images/avatar.webp",
+		desc: "分享、实践、学习",
+		siteurl: "https://blog.olinl.com",
 		tags: ["Blog"],
 		weight: 100,
 		enabled: true,
