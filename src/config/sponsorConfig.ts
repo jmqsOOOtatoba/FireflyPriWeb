@@ -2,10 +2,10 @@ import type { SponsorConfig } from "../types/sponsorConfig";
 
 export const sponsorConfig: SponsorConfig = {
 	// 页面标题，如果留空则使用 i18n 中的翻译
-	title: "打赏",
+	title: "打米",
 
 	// 页面描述文本，如果留空则使用 i18n 中的翻译
-	description: "如果您对该网站感兴趣，或者觉得内容对您有帮助，欢迎打赏支持。",
+	description: "如果感兴趣，就给点米吃吧",
 
 	// 打赏用途说明
 	usage:

@@ -108,11 +108,6 @@ const stats = [
 		dynamic: true,
 		id: "last-update",
 	},
-
-
-
-
-
 ];
 ---
 
@@ -202,13 +197,6 @@ const stats = [
       element.textContent = diffDays.toString();
     });
 
-
-
-
-
-
-
-
     // 更新最后活动时间
     if (lastPostDate) {
       const lastPost = new Date(lastPostDate);
@@ -246,4 +234,13 @@ const stats = [
       }
     }, 100);
   });
+
+  // 防止 Swup 切页重跑脚本时重复注册监听器
+  if (!window.__siteStatsInit) {
+    window.__siteStatsInit = true;
+    // 页面切换时重新更新
+    document.addEventListener("swup:contentReplaced", () => {
+      setTimeout(updateDynamicStats, 100);
+    });
+  }
 </script>

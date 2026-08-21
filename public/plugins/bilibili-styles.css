@@ -1,0 +1,88 @@
+.card-bilibili {
+    display: block;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    background-color: rgba(243, 244, 246, 0.8);
+    border: 1px solid rgba(209, 213, 219, 0.5);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+}
+
+.dark .card-bilibili {
+    background-color: rgba(38, 38, 38, 0.8);
+    border-color: rgba(64, 64, 64, 0.5);
+}
+
+.card-bilibili:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.bc-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.bc-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: var(--avatar-bg, #e5e7eb);
+    background-size: cover;
+    background-position: center;
+    flex-shrink: 0;
+}
+
+.bc-info {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.bc-username {
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.bc-sign {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+.bc-stats {
+    display: flex;
+    gap: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--card-border);
+}
+
+.bc-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+}
+
+.bc-stat-value {
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--text-primary);
+}
+
+.bc-stat-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+
+
+
+
+

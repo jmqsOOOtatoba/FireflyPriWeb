@@ -27,6 +27,8 @@ import remarkDirective from "remark-directive"; /* Handle directives */
 import remarkMath from "remark-math";
 import remarkSectionize from "remark-sectionize";
 import {
+	commentConfig,
+	dynamicConfig,
 	expressiveCodeConfig,
 	fontConfig,
 	fontsList,
@@ -58,7 +60,6 @@ import { remarkPlantuml } from "./src/plugins/remark-plantuml.js";
 import { remarkReadingTime } from "./src/plugins/remark-reading-time.mjs";
 import { remarkWikiLink } from "./src/plugins/remark-wiki-link.js";
 import { collectUsedFontCssVars } from "./src/utils/fontHelper";
-
 
 if (process.env.NODE_ENV === "development") {
 	setMaxListeners(20);
@@ -244,28 +245,42 @@ export default defineConfig({
 				if (pathname === "/dynamic/" && !siteConfig.pages.dynamic) {
 					return false;
 				}
+				if (pathname === "/gallery/" && !siteConfig.pages.gallery) {
+					return false;
+				}
 				if (pathname === "/friends/" && !siteConfig.pages.friends) {
-					return false;
-				}
-				if (pathname === "/booknav/" && !siteConfig.pages.booknav) {
-					return false;
-				}
-				if (pathname === "/sponsor/" && !siteConfig.pages.sponsor) {
 					return false;
 				}
 				if (pathname === "/guestbook/" && !siteConfig.pages.guestbook) {
 					return false;
 				}
+				if (pathname === "/booknav/" && !siteConfig.pages.booknav) {
+					return false;
+				}
+				if (pathname === "/bilibili/" && !siteConfig.pages.bilibili) {
+					return false;
+				}
 				if (pathname === "/bangumi/" && !siteConfig.pages.bangumi) {
 					return false;
 				}
-				if (pathname === "/gallery/" && !siteConfig.pages.gallery) {
+				if (pathname === "/vndb/" && !siteConfig.pages.vndb) {
 					return false;
 				}
-				if (pathname === "/anime/" && !siteConfig.pages.anime) {
+				if (pathname === "/myanimelist/" && !siteConfig.pages.mal) {
 					return false;
 				}
-
+				// 动态页评论嵌入页：评论关闭时重定向到 /404/，不应进 sitemap
+				if (
+					pathname === "/dynamic/comments/" &&
+					(dynamicConfig.showComment === false ||
+						!commentConfig.type ||
+						commentConfig.type === "none")
+				) {
+					return false;
+				}
+				if (pathname === "/sponsor/" && !siteConfig.pages.sponsor) {
+					return false;
+				}
 				return true;
 			},
 		}),
@@ -288,12 +303,6 @@ export default defineConfig({
 				parseDirectiveNode,
 				remarkMermaid,
 				[remarkPlantuml, plantumlConfig],
-
-
-
-
-
-
 			],
 			rehypePlugins: [
 				[rehypeKatex, { katex }],
@@ -390,5 +399,3 @@ export default defineConfig({
 		},
 	},
 });
-
-
