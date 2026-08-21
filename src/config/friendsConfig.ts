@@ -50,6 +50,15 @@ export const friendsConfig: FriendLink[] = [
 		enabled: true,
 },
 {
+    title: "萧小晓",
+    imgurl: "https://blog.lxlovo.top/assets/friends/png.png",
+    desc: "一个爱写文的菜鸡。",
+    siteurl: "https://blog.lxlovo.top",
+    tags: ["Blog"],
+    weight: 100,
+    enabled: true,
+},
+{
 	title: "临渊羡鱼",
     imgurl: "https://x1anyu.cn/assets/images/avatar.png",
     desc: "久有羡鱼意，不甘空望川. 躬身耕岁月，步步赴清澜",
