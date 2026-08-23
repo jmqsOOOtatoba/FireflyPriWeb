@@ -34,7 +34,7 @@
 本站相关图片素材均来自哔哩哔哩UP主[**東雪蓮Official**](https://space.bilibili.com/1437582453)
 
 
-::bilibili{uid="1437582453" name="東雪蓮Official" fans="87.9万" following="72" likes="375.6万" sign="向阳而生，永远热爱。喜欢聪明的人。不回私信有什么请找 @暮月是只小兔叽" avatar="https://tu.mstzuomu.space/file/1786844751615_aaa.jpg"}
+::bilibili{uid="1437582453" name="東雪蓮Official" fans="87.9万" following="72" likes="375.6万" sign="向阳而生，永远热爱。喜欢聪明的人。不回私信有什么请找 @暮月是只小兔叽" avatar="https://tu.mstzuomu.space/file/头像/1786844751615_aaa.jpg"}
 
 ---
 
