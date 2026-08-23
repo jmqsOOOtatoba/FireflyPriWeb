@@ -10,8 +10,8 @@
     // Meting API 配置
     const METING_API = "https://api.i-meto.com/meting/api?server=:server&type=:type&id=:id&r=:r";
     const METING_FALLBACK_APIS = [
-        "https://api.injahow.cn/meting/?server=:server&type=:type&id=:id",
-        "https://api.moeyao.cn/meting/?server=:server&type=:type&id=:id",
+       "https://api.injahow.cn/meting/?server=:server&type=:type&id=:id",
+			"https://api.moeyao.cn/meting/?server=:server&type=:type&id=:id",
     ];
     
     // 存储所有活跃的播放器实例

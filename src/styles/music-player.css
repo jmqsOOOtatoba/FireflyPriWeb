@@ -1,0 +1,135 @@
+/* ===== Music Player (文章内嵌音乐播放器) ===== */
+
+.music-player-container {
+    @apply rounded-2xl overflow-hidden border border-(--line-divider) bg-(--card-bg);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+.music-player-container:hover {
+    @apply border-(--primary);
+    box-shadow: 0 2px 12px oklch(0.5 0.08 var(--hue) / 0.12);
+}
+
+/* Header: 封面 + 歌曲信息 */
+.music-player-header {
+    @apply flex items-center gap-4 p-4;
+}
+
+.music-player-cover {
+    @apply w-16 h-16 rounded-xl shrink-0 bg-neutral-200 dark:bg-neutral-700;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.music-player-info {
+    @apply flex flex-col gap-0.5 min-w-0 grow;
+}
+
+.music-player-title {
+    @apply font-bold text-base text-neutral-900 dark:text-neutral-100 truncate;
+}
+
+.music-player-artist {
+    @apply text-sm text-neutral-500 dark:text-neutral-400 truncate;
+}
+
+.music-player-source {
+    @apply mt-1;
+}
+
+.music-source-tag {
+    @apply text-[0.65rem] px-2 py-0.5 rounded-full bg-(--btn-regular-bg) text-(--btn-content);
+}
+
+/* Controls: 播放按钮 + 进度条 + 音量 */
+.music-player-controls {
+    @apply flex items-center gap-3 px-4 pb-4;
+}
+
+.music-play-btn {
+    @apply w-10 h-10 rounded-full flex items-center justify-center shrink-0;
+    @apply bg-(--primary) text-white cursor-pointer;
+    @apply hover:opacity-80 active:scale-90;
+    transition: opacity 0.15s, transform 0.15s;
+}
+
+.music-play-btn svg {
+    @apply w-5 h-5;
+}
+
+/* Progress Bar */
+.music-progress-container {
+    @apply grow flex flex-col gap-1 min-w-0;
+}
+
+.music-progress-bar {
+    @apply w-full h-1.5 rounded-full bg-(--btn-regular-bg) overflow-hidden cursor-pointer;
+}
+
+.music-progress {
+    @apply h-full rounded-full bg-(--primary) w-0;
+    transition: width 0.1s linear;
+}
+
+.music-time {
+    @apply flex justify-between text-[0.65rem] text-neutral-400 dark:text-neutral-500 font-mono;
+}
+
+/* Volume */
+.music-volume-container {
+    @apply flex items-center gap-1.5 shrink-0;
+}
+
+.music-volume-btn {
+    @apply w-7 h-7 flex items-center justify-center rounded-md cursor-pointer;
+    @apply text-neutral-500 dark:text-neutral-400 hover:text-(--primary);
+    transition: color 0.15s;
+}
+
+.music-volume-btn svg {
+    @apply w-4 h-4;
+}
+
+.music-volume-slider {
+    @apply w-0 opacity-0 cursor-pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--btn-regular-bg);
+    outline: none;
+    transition: width 0.2s, opacity 0.2s;
+}
+
+.music-volume-container:hover .music-volume-slider {
+    @apply w-16 opacity-100;
+}
+
+.music-volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--primary);
+    cursor: pointer;
+}
+
+.music-volume-slider::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--primary);
+    cursor: pointer;
+    border: none;
+}
+
+/* 响应式 */
+@media (max-width: 640px) {
+    .music-player-controls {
+        @apply flex-wrap;
+    }
+    .music-volume-container {
+        @apply hidden;
+    }
+}

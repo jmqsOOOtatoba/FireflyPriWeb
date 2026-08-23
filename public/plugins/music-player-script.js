@@ -137,8 +137,8 @@
             const audio = new Audio();
             audio.volume = volume;
             audio.loop = loop;
-            audio.preload = 'metadata';
-            audio.crossOrigin = 'anonymous';
+            audio.preload = 'none';
+            // audio.crossOrigin = 'anonymous'; // 移除跨域设置
             
             const playBtn = player.querySelector('.music-play-btn');
             const playIcon = player.querySelector('.play-icon');
@@ -304,3 +304,5 @@
         });
     }
 })();
+
+
