@@ -45,7 +45,7 @@ export const sakuraConfig: SakuraConfig = {
 			max: 2.2,
 		},
 		// 旋转速度
-		rotation: 0.03,
+		rotation: 0.01,
 		// 消失速度，不应大于最小不透明度
 		fadeSpeed: 0.03,
 	},
