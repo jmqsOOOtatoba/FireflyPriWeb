@@ -424,16 +424,6 @@ export function setWallpaperMode(mode: WALLPAPER_MODE): void {
 	}
 	localStorage.setItem("wallpaperMode", mode);
 	applyWallpaperModeToDocument(mode);
-<<<<<<< HEAD
-	if (typeof window !== "undefined") {
-		window.dispatchEvent(
-			new CustomEvent("wallpaperModeChange", {
-				detail: { mode },
-			}),
-		);
-	}
-=======
->>>>>>> upstream/master
 }
 
 export function initWallpaperMode(): void {
