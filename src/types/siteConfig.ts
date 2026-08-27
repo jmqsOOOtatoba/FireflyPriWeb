@@ -7,6 +7,10 @@ import type {
 	WALLPAPER_NONE,
 	WALLPAPER_OVERLAY,
 } from "../constants/constants";
+<<<<<<< HEAD
+=======
+import type { NsfwMode } from "./nsfw";
+>>>>>>> upstream/master
 
 export type LIGHT_DARK_MODE =
 	| typeof LIGHT_MODE
@@ -86,8 +90,14 @@ export type SiteConfig = {
 		bangumi: boolean;
 		vndb: boolean;
 <<<<<<< HEAD
+<<<<<<< HEAD
 		gallery: boolean; // 相册页面开关
 		anime: boolean; // 追番页面开关
+=======
+		mal: boolean; // MyAnimeList 页面开关
+		gallery: boolean; // 相册页面开关
+		bilibili: boolean; // 哔哩哔哩追番页面开关
+>>>>>>> upstream/master
 =======
 		mal: boolean; // MyAnimeList 页面开关
 		gallery: boolean; // 相册页面开关
@@ -103,8 +113,13 @@ export type SiteConfig = {
 	categoryStyle?: "pill" | "rectangle";
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	// 标签样式："pill"=胶囊，"rectangle"=主题色矩形
 	tagStyle?: "pill" | "rectangle";
+=======
+	// 标签样式："pill"=主题色胶囊，"pill-gray"=中性灰胶囊，"rectangle"=主题色矩形
+	tagStyle?: "pill" | "pill-gray" | "rectangle";
+>>>>>>> upstream/master
 =======
 	// 标签样式："pill"=主题色胶囊，"pill-gray"=中性灰胶囊，"rectangle"=主题色矩形
 	tagStyle?: "pill" | "pill-gray" | "rectangle";
@@ -119,7 +134,11 @@ export type SiteConfig = {
 		mobileDefaultMode?: "list" | "grid"; // 移动端默认布局模式（视口宽度<780px时使用），不设置则跟随 defaultMode
 		// 列表模式下封面图的位置："right"=右侧（默认），"left"=左侧。网格模式封面固定在顶部，不受此项影响
 <<<<<<< HEAD
+<<<<<<< HEAD
 		coverPosition?: "left" | "right" | "top" | undefined;
+=======
+		coverPosition?: "left" | "right";
+>>>>>>> upstream/master
 =======
 		coverPosition?: "left" | "right";
 >>>>>>> upstream/master
@@ -187,6 +206,10 @@ export type SiteConfig = {
 			game?: boolean;
 			real?: boolean;
 		};
+<<<<<<< HEAD
+=======
+		nsfw?: NsfwMode; // NSFW 处理："off" 不过滤 | "blur" 仅模糊封面 | "hide" 隐藏条目
+>>>>>>> upstream/master
 	};
 
 	// VNDB 配置
@@ -197,6 +220,7 @@ export type SiteConfig = {
 		apiUrl?: string; // VNDB API 地址
 		vnBaseUrl?: string; // VNDB 条目详情页地址，末尾需要带 /
 		apiToken?: string; // 私密列表访问令牌，仅 static 模式下使用
+<<<<<<< HEAD
 		blurNsfw?: boolean; // 对Nsfw的游戏封面模糊化，默认为true
 	};
 
@@ -211,6 +235,11 @@ export type SiteConfig = {
 			listId: string; // TMDB 列表 ID
 		};
 =======
+=======
+		nsfw?: NsfwMode; // NSFW 处理："off" 不过滤 | "blur" 仅模糊封面 | "hide" 隐藏条目
+	};
+
+>>>>>>> upstream/master
 	// MyAnimeList 配置
 	mal?: {
 		username?: string; // MyAnimeList 用户名，列表需为公开状态
@@ -218,11 +247,18 @@ export type SiteConfig = {
 		apiUrl?: string; // MAL API 地址
 		animeBaseUrl?: string; // 动画条目详情页地址，末尾需要带 /
 		mangaBaseUrl?: string; // 漫画条目详情页地址，末尾需要带 /
+<<<<<<< HEAD
+=======
+		nsfw?: NsfwMode; // NSFW 处理："off" 不过滤 | "blur" 仅模糊封面 | "hide" 隐藏条目
+>>>>>>> upstream/master
 	};
 
 	// Bilibili 配置
 	bilibili?: {
 		uid?: string; // Bilibili 用户 UID
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	};
 

@@ -7,6 +7,8 @@ tags: [Firefly, 布局, 博客, 指南]
 category: 博客指南
 slug: guide/firefly-layout-system
 draft: true
+series: "Firefly 功能示例"
+seriesOrder: 2
 ---
 
 ## 📖 概述

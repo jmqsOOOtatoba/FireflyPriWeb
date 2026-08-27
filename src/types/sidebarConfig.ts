@@ -11,8 +11,12 @@ export type WidgetComponentType =
 	| "music"
 	| "siteInfo"
 <<<<<<< HEAD
+<<<<<<< HEAD
 	| "dynamic"
 	| "visitorInfo";
+=======
+	| "dynamic";
+>>>>>>> upstream/master
 =======
 	| "dynamic";
 >>>>>>> upstream/master
