@@ -67,6 +67,15 @@ export const friendsConfig: FriendLink[] = [
 	weight: 100,
 		enabled: true,
 },
+{
+	title: "mccsjs",
+	siteurl: "https://mccsjs.cn/",
+	desc: "点一盏灯，等待一个迷路的夜🍁",
+	imgurl: "https://mccsjs.cn/img/ico.jpg",
+	tags: ["Blog"],
+	weight: 100,
+		enabled: true,
+},
 	{
 		title: "EGS-blog",
 		imgurl: "https://blog.egs.cc.cd/hero/avatar.png",
