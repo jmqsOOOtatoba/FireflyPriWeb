@@ -8,10 +8,11 @@
     'use strict';
     
     // Meting API 配置
-    const METING_API = "https://api.i-meto.com/meting/api?server=:server&type=:type&id=:id&r=:r";
+    const METING_API = "https://api.injahow.cn/meting/?server=:server&type=:type&id=:id";
     const METING_FALLBACK_APIS = [
-        "https://api.injahow.cn/meting/?server=:server&type=:type&id=:id",
-        "https://api.moeyao.cn/meting/?server=:server&type=:type&id=:id",
+       
+		"https://api.moeyao.cn/meting/?server=:server&type=:type&id=:id",
+        "https://api.i-meto.com/meting/api?server=:server&type=:type&id=:id&r=:r",
     ];
     
     // 存储所有活跃的播放器实例
@@ -137,8 +138,8 @@
             const audio = new Audio();
             audio.volume = volume;
             audio.loop = loop;
-            audio.preload = 'none';
-            // audio.crossOrigin = 'anonymous'; // 移除跨域设置
+            audio.preload = 'metadata';
+            audio.crossOrigin = 'anonymous';
             
             const playBtn = player.querySelector('.music-play-btn');
             const playIcon = player.querySelector('.play-icon');
@@ -221,34 +222,10 @@
             audio.addEventListener('loadedmetadata', function() {
                 durationEl.textContent = formatTime(audio.duration);
             });
-              // 播放URL回退机制
-              var currentTrackUrls = [];
-              var currentTrackUrlIndex = 0;
-
-              function tryPlayCurrentUrl() {
-                  if (currentTrackUrlIndex >= currentTrackUrls.length) {
-                      player.classList.add('error');
-                      titleEl.textContent = '加载失败';
-                      artistEl.textContent = '音频格式不支持或网络错误';
-                      return;
-                  }
-                  audio.src = currentTrackUrls[currentTrackUrlIndex];
-                  // 如果启用了自动播放，尝试播放
-                  if (autoplay) {
-                      audio.play().catch(function() {});
-                  }
-              }
-
-              audio.addEventListener('error', function() {
-                  if (currentTrackUrlIndex < currentTrackUrls.length - 1) {
-                      currentTrackUrlIndex++;
-                      console.warn('播放失败，尝试备用URL:', currentTrackUrls[currentTrackUrlIndex]);
-                      tryPlayCurrentUrl();
-                  } else {
-                      player.classList.add('error');
-                      titleEl.textContent = '加载失败';
-                      artistEl.textContent = '音频格式不支持或网络错误';
-                  }
+            audio.addEventListener('error', function() {
+                player.classList.add('error');
+                titleEl.textContent = '加载失败';
+                artistEl.textContent = '音频格式不支持或网络错误';
             });
             audio.addEventListener('ended', function() {
                 if (!loop) {
@@ -284,26 +261,7 @@
                         }
                         
                         if (songData.url) {
-                            // 构建备用URL列表（类似主页播放器的回退机制）
-                            currentTrackUrls = [songData.url];
-                            currentTrackUrlIndex = 0;
-                            
-                            // 从URL中提取id和server参数，构建备用API的URL
-                            var matchId = songData.url.match(/[?&]id=([^&]+)/);
-                            var matchServer = songData.url.match(/[?&]server=([^&]+)/);
-                            if (matchId && matchServer) {
-                                METING_FALLBACK_APIS.forEach(function(fallback) {
-                                    var fallbackUrl = fallback
-                                        .replace(':server', matchServer[1])
-                                        .replace(':type', 'url')
-                                        .replace(':id', matchId[1]);
-                                    if (currentTrackUrls.indexOf(fallbackUrl) === -1) {
-                                        currentTrackUrls.push(fallbackUrl);
-                                    }
-                                });
-                            }
-                            
-                            tryPlayCurrentUrl();
+                            audio.src = songData.url;
                         } else {
                             throw new Error('未获取到音乐URL');
                         }
@@ -314,6 +272,17 @@
                     
                     player.classList.remove('loading');
                     
+                    if (autoplay) {
+                        audio.play().catch(function() {
+                            const playOnInteraction = function() {
+                                audio.play().catch(function() {});
+                                document.removeEventListener('click', playOnInteraction);
+                                document.removeEventListener('touchstart', playOnInteraction);
+                            };
+                            document.addEventListener('click', playOnInteraction);
+                            document.addEventListener('touchstart', playOnInteraction);
+                        });
+                    }
                 } catch (error) {
                     console.error('加载音乐失败:', error);
                     player.classList.remove('loading');
@@ -336,6 +305,3 @@
         });
     }
 })();
-
-
-

@@ -22,29 +22,23 @@ export const musicPlayerConfig: MusicPlayerConfig = {
 
 	// Meting API 配置
 	meting: {
-		// Meting API 地址
-		// 默认使用官方 API，也可以使用自定义 API
-		api: "https://api.i-meto.com/meting/api?server=:server&type=:type&id=:id&r=:r",
-		// 音乐平台：netease=网易云音乐, tencent=QQ音乐, kugou=酷狗音乐, xiami=虾米音乐, baidu=百度音乐
+		// Meting API 地址 - 使用备用 API（自建 API 被网易云音乐限制）
+		api: "https://api.injahow.cn/meting/?server=:server&type=:type&id=:id",
+		// 音乐平台：netease=网易云音乐
 		server: "netease",
-		// 类型：song=单曲, playlist=歌单, album=专辑, search=搜索, artist=艺术家
-		type: "artist",
-		// 歌单/专辑/单曲 ID 或搜索关键词
-		id: "47028814",
+		// 类型：playlist=歌单（artist 类型被限制，改用 playlist）
+		type: "playlist",
+		// 歌单 ID - 热歌榜
+		id: "9128158149",
 		// 认证 token（可选）
 		auth: "",
 		// 备用 API 配置（当主 API 失败时使用）
 		fallbackApis: [
-			"https://api.injahow.cn/meting/?server=:server&type=:type&id=:id",
 			"https://api.moeyao.cn/meting/?server=:server&type=:type&id=:id",
 		],
 	},
 
 	// 本地音乐配置（当 mode 为 'local' 时使用）
-	// 1. 支持传入歌词文件的路径
-	// lrc: "/assets/music/lrc/使一颗心免于哀伤-哼唱.lrc",
-	// 2. 或者直接填入歌词字符串内容
-	// lrc: "[00:00.00]歌词内容...",
 	local: {
 		playlist: [
 			{
