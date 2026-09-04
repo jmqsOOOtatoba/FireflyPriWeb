@@ -86,6 +86,15 @@ export const friendsConfig: FriendLink[] = [
 		enabled: true,
 	},
 	{
+title: "Lin Blog",
+imgurl: "https://linlog.top/api/uploads/2026/09/1788411216332767920-dca59196a965c5e8.jpg",
+desc: "记录技术、互联网与日常观察",
+siteurl: "https://linlog.top",
+tags: ["Blog"],
+weight: 100,
+enabled: true,
+},
+	{
 		title: "夏夜流萤",
 		imgurl:
 			"https://weavatar.com/avatar/d252655d40d6874417a720bad0a6c5f77f8f6a1fd2f882f8f338402dc37e4190?s=640",
