@@ -360,6 +360,9 @@ siteStatsTotalVisitors = "siteStatsTotalVisitors",
 	wallpaperMode = "wallpaperMode",
 	wallpaperBannerMode = "wallpaperBannerMode",
 	wallpaperFullscreenMode = "wallpaperFullscreenMode",
+	fullscreenLayout = "fullscreenLayout",
+	fullscreenClassicLayout = "fullscreenClassicLayout",
+	fullscreenHeroLayout = "fullscreenHeroLayout",
 	wallpaperOverlayMode = "wallpaperOverlayMode",
 	wallpaperNoneMode = "wallpaperNoneMode",
 
@@ -498,6 +501,13 @@ siteStatsTotalVisitors = "siteStatsTotalVisitors",
 	videoPrev = "videoPrev",
 	videoNext = "videoNext",
 	videoLoadError = "videoLoadError",
+
+	// 沉浸阅读 (immersive reading)
+	immersiveReading = "immersiveReading",
+	enterImmersiveReading = "enterImmersiveReading",
+	exitImmersiveReading = "exitImmersiveReading",
+	tocExpand = "tocExpand",
+	tocCollapse = "tocCollapse",
 }
 
 export default I18nKey;
