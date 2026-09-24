@@ -152,7 +152,7 @@ const stats = [
     </div>
     <div class="flex items-center">
         <span class="text-base font-bold text-neutral-900 dark:text-neutral-100">
-                        <span id="busuanzi_value_site_pv">-</span>
+                        <span id="busuanzi_value_site_pv" data-busuanzi-key="site_pv">-</span>
         </span>
     </div>
 </div>
@@ -169,7 +169,7 @@ const stats = [
     </div>
     <div class="flex items-center">
         <span class="text-base font-bold text-neutral-900 dark:text-neutral-100">
-                       <span id="busuanzi_value_site_uv">-</span>
+                       <span id="busuanzi_value_site_uv" data-busuanzi-key="site_uv">-</span>
         </span>
     </div>
 </div>
@@ -220,8 +220,26 @@ const stats = [
     }
   }
 
+  // 不蒜子脚本只会写入 getElementById 命中的第一个元素（即桌面侧边栏那份，
+  // 移动端布局下被 CSS 隐藏），而站点统计组件在桌面侧边栏和移动端底部
+  // 各渲染一份，因此需要把第一份的数值镜像到所有 data-busuanzi-key 元素，
+  // 否则窄屏下可见的那份会一直停留在占位符 "-"。
+  function syncBusuanziValues() {
+    ["site_pv", "site_uv"].forEach((key) => {
+      const source = document.getElementById(`busuanzi_value_${key}`);
+      if (!source) return;
+      const value = source.textContent;
+      document.querySelectorAll(`[data-busuanzi-key="${key}"]`).forEach((element) => {
+        if (element.textContent !== value) {
+          element.textContent = value;
+        }
+      });
+    });
+  }
+
   // 页面加载时更新
   updateDynamicStats();
+  syncBusuanziValues();
 
 
   // 页面切换时重新更新
@@ -241,6 +259,17 @@ const stats = [
     // 页面切换时重新更新
     document.addEventListener("swup:contentReplaced", () => {
       setTimeout(updateDynamicStats, 100);
+    });
+
+    // 不蒜子数值通过 JSONP 异步写入，监听第一个元素的变化并同步到其余实例（仅注册一次）
+    ["site_pv", "site_uv"].forEach((key) => {
+      const source = document.getElementById(`busuanzi_value_${key}`);
+      if (!source) return;
+      new MutationObserver(syncBusuanziValues).observe(source, {
+        childList: true,
+        characterData: true,
+        subtree: true,
+      });
     });
   }
 </script>
