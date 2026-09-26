@@ -8,7 +8,7 @@ export const fcircleConfig = {
 
 	// FCL 数据站地址（fork 仓库 page 分支部署后的站点根地址，末尾必须带 /）
 	// 部署完成后把这里改成你自己的地址，例如 https://xxx.vercel.app/
-	apiUrl: "https://YOUR-FCL-DOMAIN.vercel.app/",
+	apiUrl: "https://fc.mstzuomu.space/",
 
 	// 每次加载文章数量
 	pageSize: 24,
