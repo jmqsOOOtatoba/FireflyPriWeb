@@ -12,6 +12,8 @@ const pages = resolvePageToggles({
 
 	// 友链页面开关
 	friends: true,
+	// 友链朋友圈页面开关（Friend-Circle-Lite）
+	fcircle: true,
 	// 留言板页面开关，需要配置评论系统
 	guestbook: true,
 
@@ -53,14 +55,7 @@ export const siteConfig: SiteConfig = {
 		"左沐の手册是一个专注于技术分享和生活记录的个人博客，致力于为读者提供有价值的内容和良好的阅读体验。",
 
 	// 站点关键词
-	keywords: [
-		"Firefly",
-		"Astro",
-		"ACGN",
-		"博客",
-		"左沐の手册",
-		"静态博客",
-	],
+	keywords: ["Firefly", "Astro", "ACGN", "博客", "左沐の手册", "静态博客"],
 
 	// 主题色
 	themeColor: {
