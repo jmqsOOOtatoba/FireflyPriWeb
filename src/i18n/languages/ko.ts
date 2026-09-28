@@ -118,7 +118,6 @@ export const ko: Translation = {
 	[Key.publishedAt]: "게시일",
 	[Key.updatedAt]: "수정일",
 	[Key.readTime]: "읽는 시간",
-	[Key.timeRemaining]: "약 {n}분 남음",
 	[Key.license]: "라이선스",
 	[Key.bangumi]: "Bangumi",
 

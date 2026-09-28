@@ -116,7 +116,6 @@ export const zh_CN: Translation = {
 	[Key.publishedAt]: "发布于",
 	[Key.updatedAt]: "更新于",
 	[Key.readTime]: "阅读时长",
-	[Key.timeRemaining]: "约剩 {n} 分钟",
 	[Key.license]: "许可协议",
 	[Key.bangumi]: "番组计划",
 

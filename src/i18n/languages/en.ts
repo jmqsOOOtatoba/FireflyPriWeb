@@ -119,7 +119,6 @@ export const en: Translation = {
 	[Key.publishedAt]: "Published at",
 	[Key.updatedAt]: "Updated at",
 	[Key.readTime]: "Read time",
-	[Key.timeRemaining]: "{n} min left",
 	[Key.license]: "License",
 	[Key.bangumi]: "Bangumi",
 

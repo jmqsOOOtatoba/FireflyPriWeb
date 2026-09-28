@@ -1,8 +1,6 @@
 ---
 import type { MarkdownHeading } from "astro";
 import { siteConfig } from "@/config";
-import I18nKey from "@/i18n/i18nKey";
-import { i18n } from "@/i18n/translation";
 import BackToComment from "./BackToComment.astro";
 import BackToHome from "./BackToHome.astro";
 import BackToTop from "./BackToTop.astro";
@@ -23,12 +21,13 @@ const readingProgressEnabled = siteConfig.post.readingProgress;
 
 <div class="floating-controls-container">
   {readingProgressEnabled && (
-    <div id="reading-progress-badge" class="reading-progress-badge">
+    <div id="reading-progress-badge" class="reading-progress-badge card-base" aria-hidden="true">
+      <!-- 类名用 rp- 前缀：.ring 会撞 Tailwind 的 .ring 焦点环工具类（box-shadow 1px currentColor） -->
+      <svg class="rp-ring" viewBox="0 0 36 36">
+        <circle class="rp-ring-track" cx="18" cy="18" r="15" />
+        <circle id="reading-progress-ring" class="rp-ring-value" cx="18" cy="18" r="15" />
+      </svg>
       <span id="reading-progress-pct">0%</span>
-      <span
-        id="reading-progress-remain"
-        data-template={i18n(I18nKey.timeRemaining)}
-      ></span>
     </div>
   )}
   <FloatingTOC headings={headings ?? []} encrypted={encrypted} />
@@ -44,27 +43,30 @@ const readingProgressEnabled = siteConfig.post.readingProgress;
 </div>
 
 <style>
-  /* 阅读进度徽章：右下角悬浮栈的首项，非文章页/未激活时完全隐藏 */
+  /*
+   * 阅读进度圆环：与 .floating-btn 同规格的方框。背景/圆角/overflow 交给 card-base——
+   * 卡片透明度、卡片边框等全局设置都通过 .card-base 类挂钩，必须带上才能跟随这些设置。
+   * 本组件只补尺寸、毛玻璃、边框与内容布局。不可交互（pointer-events: none），无 hover。
+   */
   #reading-progress-badge {
     display: none;
-    align-items: center;
-    padding: 0.3rem 0.7rem;
-    border-radius: 999px;
-    font-size: 0.75rem;
-    line-height: 1;
-    color: var(--primary);
-    background-color: var(--card-bg);
+    place-items: center;
+    position: relative;
+    width: 3rem;
+    height: 3rem;
+    flex-shrink: 0;
     border: 1px solid rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    color: var(--primary);
     pointer-events: none;
     user-select: none;
-    /* 文字更新的布局失效限制在徽章子树内，不污染正文布局 */
+    /* 环与文字的布局失效限制在徽章子树内，不污染正文布局 */
     contain: content;
   }
 
   #reading-progress-badge.show {
-    display: flex;
+    display: grid;
   }
 
   /* 切页期间隐藏，visit:end 移除类并刷新后重新显示，避免旧页百分比残值闪现 */
@@ -72,17 +74,84 @@ const readingProgressEnabled = siteConfig.post.readingProgress;
     display: none;
   }
 
-  #reading-progress-remain {
-    color: rgba(0, 0, 0, 0.45);
+  /* SVG 与数字叠放（同 FloatingButton 双图标的手法：grid 同格） */
+  #reading-progress-badge .rp-ring,
+  #reading-progress-badge #reading-progress-pct {
+    grid-area: 1 / 1;
+  }
+
+  .rp-ring {
+    width: 83%;
+    height: 83%;
+    /* 从 12 点方向起笔 */
+    transform: rotate(-90deg);
+  }
+
+  .rp-ring-track,
+  .rp-ring-value {
+    fill: none;
+    stroke-width: 3;
+  }
+
+  .rp-ring-track {
+    stroke: rgba(0, 0, 0, 0.1);
+  }
+
+  .rp-ring-value {
+    stroke: var(--primary);
+    stroke-linecap: round;
+    /* 周长 2πr（r=15）≈ 94.2478；初始 dashoffset = 周长 = 0% */
+    stroke-dasharray: 94.2478;
+    stroke-dashoffset: 94.2478;
+  }
+
+  #reading-progress-pct {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
   }
 
   :global(.dark) #reading-progress-badge {
-    background-color: var(--card-bg);
     border-color: rgba(255, 255, 255, 0.15);
   }
 
-  :global(.dark) #reading-progress-remain {
-    color: rgba(255, 255, 255, 0.45);
+  :global(.dark) .rp-ring-track {
+    stroke: rgba(255, 255, 255, 0.15);
+  }
+
+  /* 尺寸断点跟随 FloatingButton（480 → 2.5rem，360 → 2rem） */
+  @media (max-width: 480px) {
+    #reading-progress-badge {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+
+    #reading-progress-pct {
+      font-size: 0.625rem;
+    }
+  }
+
+  @media (max-width: 360px) {
+    #reading-progress-badge {
+      width: 2rem;
+      height: 2rem;
+    }
+
+    #reading-progress-pct {
+      font-size: 0.5625rem;
+    }
+  }
+
+  @media (max-width: 320px) {
+    #reading-progress-badge {
+      width: 1.75rem;
+      height: 1.75rem;
+    }
+
+    #reading-progress-pct {
+      font-size: 0.5rem;
+    }
   }
 
   .floating-controls-container {
@@ -93,7 +162,7 @@ const readingProgressEnabled = siteConfig.post.readingProgress;
     gap: 0.5rem;
     align-items: flex-end; /* 右对齐 */
     pointer-events: none; /* 容器不阻挡点击 */
-    
+
     /* 默认桌面端位置 - 对应 BackToTop 的位置 */
     right: 1rem;
     bottom: 4rem;
@@ -129,11 +198,11 @@ const readingProgressEnabled = siteConfig.post.readingProgress;
       bottom: max(3rem, 4rem - 5vh);
     }
   }
-  
+
   /* 横屏模式适配 */
   @media (orientation: landscape) and (max-height: 500px) {
     .floating-controls-container {
-      bottom: 4rem; 
+      bottom: 4rem;
     }
   }
 

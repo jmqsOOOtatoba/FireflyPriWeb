@@ -1,5 +1,5 @@
 /**
- * 阅读进度（顶部细条 + 悬浮百分比/预计剩余时间）。
+ * 阅读进度（顶部细条 + 右下角圆环百分比）。
  *
  * 进度语义：正文进入视口底边为 0%，正文底边到达视口底边为 100%，
  * 即 p = clamp((viewportHeight - rect.top) / rect.height, 0, 1)——
@@ -8,7 +8,7 @@
  * 每帧成本：一次 getBoundingClientRect + 算术。scrollFunction 先读 scrollTop
  *（布局脏时已在此强制计算），随后本函数的 rect 读取命中同一次新鲜布局，不触发额外回流。
  * 百分比文字仅在整数变化时写入，且 badge 带 contain:content，文字变更的布局失效
- * 被限制在 badge 子树内，不污染正文布局。
+ * 被限制在 badge 子树内，不污染正文布局；圆环 dashoffset 走 SVG 属性（不触发布局）。
  * 正文元素被 Swup 替换后靠 isConnected 自愈重新查询，非文章页每帧仅一次
  * getElementById 哈希查找（与 scrollFunction 中已有的 navbar 查询同量级）。
  */
@@ -19,16 +19,16 @@ let enabled = false;
 let bar: HTMLElement | null = null;
 let badge: HTMLElement | null = null;
 let pctEl: HTMLElement | null = null;
-let remainEl: HTMLElement | null = null;
+let ringEl: SVGCircleElement | null = null;
 
 let article: HTMLElement | null = null;
 let observer: ResizeObserver | null = null;
-let totalMinutes = 0;
-let remainTemplate = "";
 let active = false;
 let lastP = -1;
 let lastPct = -1;
-let lastRemain = -1;
+
+/** 圆环周长 2πr（r=15，与 SVG viewBox 一致） */
+const RING_C = 2 * Math.PI * 15;
 
 /** Swup 换页/解密后旧引用断开 → 重查并重绑 ResizeObserver；非文章页 null===null 直接短路 */
 function resolveArticle(): void {
@@ -36,9 +36,7 @@ function resolveArticle(): void {
 	const next = document.getElementById("post-container");
 	if (next === article) return;
 	article = next;
-	totalMinutes = Number(article?.dataset.readingMinutes) || 0;
 	lastPct = -1;
-	lastRemain = -1;
 	if (observer) {
 		observer.disconnect();
 		if (article) observer.observe(article);
@@ -49,7 +47,6 @@ function setActive(next: boolean): void {
 	if (active === next) return;
 	active = next;
 	lastPct = -1;
-	lastRemain = -1;
 	bar?.classList.toggle("visible", next);
 	badge?.classList.toggle("show", next);
 }
@@ -62,11 +59,12 @@ export function initReadingProgress(): void {
 	bar = document.getElementById("reading-progress-bar");
 	badge = document.getElementById("reading-progress-badge");
 	pctEl = document.getElementById("reading-progress-pct");
-	remainEl = document.getElementById("reading-progress-remain");
-	if (!bar || !badge || !pctEl || !remainEl) return;
+	ringEl = document.getElementById(
+		"reading-progress-ring",
+	) as SVGCircleElement | null;
+	if (!bar || !badge || !pctEl || !ringEl) return;
 
 	enabled = true;
-	remainTemplate = remainEl.dataset.template || "";
 
 	if (typeof ResizeObserver !== "undefined") {
 		// 正文高度变化（图片加载、代码块展开、解密）后无滚动也能重算
@@ -87,7 +85,7 @@ export function initReadingProgress(): void {
 /** 由 scrollFunction 每帧调用；页面过渡期间 scrollFunction 提前返回，不会执行到这里 */
 export function updateReadingProgress(): void {
 	// enabled 为 true 时下列元素必然存在，显式判空仅为满足 TS 收窄
-	if (!enabled || !bar || !badge || !pctEl || !remainEl) return;
+	if (!enabled || !bar || !badge || !pctEl || !ringEl) return;
 
 	resolveArticle();
 	if (!article) {
@@ -104,24 +102,17 @@ export function updateReadingProgress(): void {
 	);
 	setActive(true);
 
-	// transform 只走合成层，逐帧写入开销可忽略；文字仅整数变化时写
+	// transform/dashoffset 只影响合成与绘制，不触发布局，逐帧写入开销可忽略
 	if (p !== lastP) {
 		lastP = p;
 		bar.style.transform = `scaleX(${p})`;
+		ringEl.style.strokeDashoffset = String(RING_C * (1 - p));
 	}
 
+	// 百分比文字仅整数变化时写，配合 contain:content 把回流限制在徽章内
 	const pct = Math.round(p * 100);
 	if (pct !== lastPct) {
 		lastPct = pct;
 		pctEl.textContent = `${pct}%`;
-	}
-
-	const remain = Math.ceil(totalMinutes * (1 - p));
-	if (remain !== lastRemain) {
-		lastRemain = remain;
-		remainEl.textContent =
-			remain > 0 && remainTemplate
-				? ` · ${remainTemplate.replace("{n}", String(remain))}`
-				: "";
 	}
 }
