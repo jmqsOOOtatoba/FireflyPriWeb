@@ -103,6 +103,15 @@ tags: ["Blog"],
 weight: 100,
 enabled: true,
 },
+{
+	title: "团子和蛋糕",
+	desc: "如果你喜欢那么欢迎来到我的世界！",
+	siteurl: "https://blog.tsh520.cn",
+	imgurl: "https://blog.tsh520.cn/assets/ziyuan/tx.webp",
+	tags: ["Blog"],
+	weight: 100,
+	enabled: true,
+},
 	{
 		title: "夏夜流萤",
 		imgurl:
