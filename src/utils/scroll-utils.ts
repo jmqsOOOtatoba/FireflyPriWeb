@@ -6,6 +6,7 @@ import {
 } from "@/constants/constants";
 import { isBannerMode, isFullscreenMode } from "@/utils/banner-utils";
 import { updateSidebarStickySpacing } from "@/utils/grid-layout-utils";
+import { updateReadingProgress } from "@/utils/reading-progress";
 
 const backToTopBtn = document.getElementById("back-to-top-btn");
 const toc = document.getElementById("toc-wrapper");
@@ -23,6 +24,9 @@ export function scrollFunction(): void {
 	const scrollTop = document.documentElement.scrollTop;
 	const bannerHeight = window.innerHeight * (BANNER_HEIGHT / 100);
 	const navbarElement = document.getElementById("navbar");
+
+	// 阅读进度：紧跟 scrollTop 读取（布局已新鲜），后续 DOM 写入前完成 rect 测量
+	updateReadingProgress();
 
 	// 根据滚动位置动态更新侧边栏 sticky 间距
 	updateSidebarStickySpacing();

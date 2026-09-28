@@ -118,6 +118,7 @@ export const ja: Translation = {
 	[Key.publishedAt]: "公開日",
 	[Key.updatedAt]: "更新日",
 	[Key.readTime]: "読了時間",
+	[Key.timeRemaining]: "残り約 {n} 分",
 	[Key.license]: "ライセンス",
 	[Key.bangumi]: "Bangumi",
 

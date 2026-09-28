@@ -171,6 +171,8 @@ export type SiteConfig = {
 		randomPosts: boolean;
 		// OpenGraph图片功能
 		generateOgImages: boolean;
+		// 是否显示阅读进度（顶部进度条 + 百分比 + 预计剩余时间）
+		readingProgress: boolean;
 		// 沉浸阅读配置
 		immersiveReading?: ImmersiveReadingConfig;
 	};

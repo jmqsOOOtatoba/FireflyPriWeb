@@ -1,6 +1,8 @@
 ---
 import type { MarkdownHeading } from "astro";
 import { siteConfig } from "@/config";
+import I18nKey from "@/i18n/i18nKey";
+import { i18n } from "@/i18n/translation";
 import BackToComment from "./BackToComment.astro";
 import BackToHome from "./BackToHome.astro";
 import BackToTop from "./BackToTop.astro";
@@ -16,9 +18,19 @@ interface Props {
 const { headings, encrypted } = Astro.props;
 const immersiveReadingEnabled =
 	siteConfig.post.immersiveReading?.enable !== false;
+const readingProgressEnabled = siteConfig.post.readingProgress;
 ---
 
 <div class="floating-controls-container">
+  {readingProgressEnabled && (
+    <div id="reading-progress-badge" class="reading-progress-badge">
+      <span id="reading-progress-pct">0%</span>
+      <span
+        id="reading-progress-remain"
+        data-template={i18n(I18nKey.timeRemaining)}
+      ></span>
+    </div>
+  )}
   <FloatingTOC headings={headings ?? []} encrypted={encrypted} />
   {immersiveReadingEnabled && (
     <>
@@ -32,6 +44,47 @@ const immersiveReadingEnabled =
 </div>
 
 <style>
+  /* 阅读进度徽章：右下角悬浮栈的首项，非文章页/未激活时完全隐藏 */
+  #reading-progress-badge {
+    display: none;
+    align-items: center;
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    line-height: 1;
+    color: var(--primary);
+    background-color: var(--card-bg);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    pointer-events: none;
+    user-select: none;
+    /* 文字更新的布局失效限制在徽章子树内，不污染正文布局 */
+    contain: content;
+  }
+
+  #reading-progress-badge.show {
+    display: flex;
+  }
+
+  /* 切页期间隐藏，visit:end 移除类并刷新后重新显示，避免旧页百分比残值闪现 */
+  :global(html.is-page-transitioning) #reading-progress-badge {
+    display: none;
+  }
+
+  #reading-progress-remain {
+    color: rgba(0, 0, 0, 0.45);
+  }
+
+  :global(.dark) #reading-progress-badge {
+    background-color: var(--card-bg);
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+
+  :global(.dark) #reading-progress-remain {
+    color: rgba(255, 255, 255, 0.45);
+  }
+
   .floating-controls-container {
     position: fixed;
     z-index: 1000;

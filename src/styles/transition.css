@@ -115,3 +115,34 @@ html.is-animating .transition-swup-fade {
     /* 提升到合成层：切页期间主线程忙碌时进度条仍由合成线程平滑推进 */
     will-change: transform;
 }
+/* --------------------------------------------------------------------------
+   4b. Reading Progress Bar (post pages)
+   -------------------------------------------------------------------------- */
+
+#reading-progress-bar {
+    --reading-progress-height: 3px;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--reading-progress-height);
+    /* 低于 #progress-bar(9999)：切页时由导航进度条覆盖，同色无缝衔接 */
+    z-index: 9998;
+    pointer-events: none;
+    background: var(--primary);
+    transform-origin: left center;
+    transform: scaleX(0);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    will-change: transform;
+}
+
+#reading-progress-bar.visible {
+    opacity: 1;
+}
+
+/* 切页期间隐藏阅读进度条，避免旧页残值与导航进度条混显；visit:end 移除类后淡入 */
+html.is-page-transitioning #reading-progress-bar {
+    opacity: 0;
+}

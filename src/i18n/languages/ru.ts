@@ -119,6 +119,7 @@ export const ru: Translation = {
 	[Key.publishedAt]: "Опубликовано",
 	[Key.updatedAt]: "Обновлено",
 	[Key.readTime]: "Время чтения",
+	[Key.timeRemaining]: "осталось ~{n} мин",
 	[Key.license]: "Лицензия",
 	[Key.bangumi]: "Bangumi",
 

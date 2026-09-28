@@ -530,6 +530,7 @@ const ogImageAlt = propsOgImageAlt ?? pageTitle;
     </script>
 
     <div id="progress-bar"></div>
+    {siteConfig.post.readingProgress && <div id="reading-progress-bar" aria-hidden="true" />}
 
     {/* 卡片样式：根据 localStorage 覆盖默认配置 */}
     <script is:inline define:vars={{
