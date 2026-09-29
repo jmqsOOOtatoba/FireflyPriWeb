@@ -2182,3 +2182,54 @@ $ astro dev
 [2m19:43:27[22m [34m[200][39m / [2m288ms[22m
 [2m19:43:27[22m [34m[200][39m /api/allPostMeta.json [2m209ms[22m
 [2m19:43:27[22m [34m[200][39m /api/allPostMeta.json [2m1ms[22m
+[2m19:43:28[22m [34m[200][39m /api/dynamic.json [2m8ms[22m
+[2m19:43:28[22m [34m[200][39m / [2m30ms[22m
+[2m19:43:28[22m [34m[200][39m /dynamic/ [2m20ms[22m
+[2m19:43:30[22m [34m[200][39m / [2m17ms[22m
+[2m19:43:30[22m [34m[200][39m /archive/ [2m47ms[22m
+[2m19:43:30[22m [34m[200][39m /categories/ [2m33ms[22m
+[2m19:43:30[22m [34m[200][39m /tags/ [2m48ms[22m
+[2m19:43:30[22m [34m[200][39m /friends/ [2m57ms[22m
+[2m19:43:30[22m [34m[200][39m /fcircle/ [2m44ms[22m
+[2m19:43:31[22m [34m[200][39m /guestbook/ [2m47ms[22m
+[2m19:43:31[22m [34m[200][39m /gallery/ [2m46ms[22m
+[2m19:43:31[22m [34m[200][39m /booknav/ [2m40ms[22m
+[2m19:43:31[22m [34m[200][39m /bangumi/ [2m31ms[22m
+[2m19:43:31[22m [34m[200][39m /sponsor/ [2m41ms[22m
+[2m19:43:31[22m [34m[200][39m /about/ [2m38ms[22m
+[2m19:43:31[22m [34m[200][39m /archive/ [2m23ms[22m
+[2m19:43:31[22m [34m[200][39m /archive/ [2m14ms[22m
+[2m19:43:31[22m [34m[200][39m /archive/ [2m18ms[22m
+[2m19:43:31[22m [34m[200][39m /archive/ [2m23ms[22m
+[2m19:43:31[22m [34m[200][39m /archive/ [2m16ms[22m
+[2m19:43:31[22m [34m[200][39m /archive/ [2m17ms[22m
+[2m19:43:31[22m [34m[200][39m /archive/ [2m25ms[22m
+[2m19:43:31[22m [34m[200][39m /posts/azuma.zuomu-blog-13/ [2m42ms[22m
+[2m19:43:31[22m [34m[200][39m /posts/web-update-7/ [2m11ms[22m
+[2m19:43:31[22m [34m[200][39m /posts/azuma.zuomu-blog-12/ [2m20ms[22m
+[2m19:43:31[22m [34m[200][39m /posts/azuma.zuomu-blog-11/ [2m21ms[22m
+[Bilibili] Fetched 809 items (anime: 581, drama: 228).
+[Bilibili] Page data: 809 items
+[2m19:43:32[22m [34m[200][39m /bilibili/ [2m1345ms[22m
+[2m19:45:33[22m [34m[200][39m /api/dynamic.json [2m13ms[22m
+[2m19:45:45[22m [34m[200][39m /archive/ [2m28ms[22m
+[2m19:45:45[22m [34m[200][39m /archive/ [2m23ms[22m
+[2m19:45:45[22m [34m[200][39m /archive/ [2m17ms[22m
+[2m19:45:45[22m [34m[200][39m /archive/ [2m20ms[22m
+[2m19:45:46[22m [34m[200][39m /archive/ [2m19ms[22m
+[2m19:45:46[22m [34m[200][39m /archive/ [2m20ms[22m
+[2m19:45:46[22m [34m[200][39m /posts/azuma.zuomu-blog-10/ [2m26ms[22m
+[2m19:45:46[22m [34m[200][39m /posts/azuma.zuomu-blog-9/ [2m21ms[22m
+[2m19:47:10[22m [34m[200][39m /api/dynamic.json [2m8ms[22m
+[2m19:47:11[22m [34m[200][39m /archive/ [2m16ms[22m
+[2m19:47:11[22m [34m[200][39m /categories/ [2m39ms[22m
+[2m19:47:11[22m [34m[200][39m /tags/ [2m38ms[22m
+[2m19:47:11[22m [34m[200][39m /friends/ [2m43ms[22m
+[2m19:47:11[22m [34m[200][39m /fcircle/ [2m35ms[22m
+[2m19:47:11[22m [34m[200][39m /guestbook/ [2m40ms[22m
+[2m19:47:11[22m [34m[200][39m /dynamic/ [2m38ms[22m
+[2m19:47:11[22m [34m[200][39m /gallery/ [2m40ms[22m
+[2m19:47:11[22m [34m[200][39m /booknav/ [2m37ms[22m
+[Bilibili] Fetched 809 items (anime: 581, drama: 228).
+[Bilibili] Page data: 809 items
+[2m19:47:12[22m [34m[200][39m /bilibili/ [2m589ms[22m
