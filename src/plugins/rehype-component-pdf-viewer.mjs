@@ -27,25 +27,26 @@ export function PdfViewerComponent(properties, children) {
 	const url = properties.url;
 	const title = properties.title || "PDF Viewer";
 	const height = properties.height || 600;
-	const viewerId = `pdf-viewer-${Math.random().toString(36).slice(-6)}`;
 
-	// 使用PDF.js在线查看器或直接嵌入
-	const viewerUrl = url;
+	// 浏览器原生 PDF 预览（iframe 直接加载），不引入 pdf.js 重依赖
 	return h("div", { class: "pdf-container" }, [
 		h("div", { class: "pdf-header" }, [
 			h("div", { class: "pdf-title" }, title),
-			h("a", {
-				class: "pdf-download",
-				href: url,
-				target: "_blank",
-				download: "",
-			}, "下载PDF"),
+			h(
+				"a",
+				{
+					class: "pdf-download",
+					href: url,
+					target: "_blank",
+					download: "",
+				},
+				"下载PDF",
+			),
 		]),
 		h("div", { class: "pdf-viewer-wrapper" }, [
 			h("iframe", {
-				id: viewerId,
 				class: "pdf-viewer",
-				src: viewerUrl,
+				src: url,
 				style: `height: ${height}px;`,
 				title: title,
 			}),

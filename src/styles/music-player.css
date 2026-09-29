@@ -1,7 +1,9 @@
-/* ===== Music Player (文章内嵌音乐播放器) ===== */
+/* ===== Music Player (文章内嵌音乐播放器 ::music) ===== */
+/* 由 Markdown.astro / DynamicItemTemplate.astro 引入，只在有正文的页面加载 */
+@reference "tailwindcss";
 
 .music-player-container {
-    @apply rounded-2xl overflow-hidden border border-(--line-divider) bg-(--card-bg);
+    @apply rounded-2xl overflow-hidden border border-(--line-divider) bg-(--card-bg) my-6;
     transition: border-color 0.3s, box-shadow 0.3s;
 }
 .music-player-container:hover {
@@ -131,5 +133,27 @@
     }
     .music-volume-container {
         @apply hidden;
+    }
+}
+
+/* 状态类（music-player-script.js 运行时切换） */
+.music-player-container.loading {
+    @apply opacity-70 pointer-events-none;
+}
+
+.music-player-container.error {
+    @apply border-red-300 bg-red-50 dark:border-red-900 dark:bg-red-950;
+}
+
+.music-play-btn.playing {
+    animation: music-pulse 2s infinite;
+}
+
+@keyframes music-pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
     }
 }

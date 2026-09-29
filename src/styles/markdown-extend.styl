@@ -244,6 +244,122 @@ a.card-github.fetch-error
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1)
   transition-duration: 0.15s
 
+// ─── PDF 查看器（::pdf 指令，rehype-component-pdf-viewer） ──────────────────
+
+.pdf-container
+  margin: 1.5rem 0
+  border-radius: 0.75rem
+  overflow: hidden
+  background: var(--license-block-bg)
+  border: 1px solid var(--line-divider)
+
+.pdf-header
+  display: flex
+  align-items: center
+  justify-content: space-between
+  padding: 0.75rem 1rem
+  border-bottom: 1px solid var(--line-divider)
+
+.pdf-title
+  font-weight: 600
+  font-size: 0.95rem
+  color: var(--tw-prose-headings)
+
+.pdf-download
+  font-size: 0.85rem
+  color: var(--primary)
+  text-decoration: none
+  padding: 0.25rem 0.75rem
+  border-radius: 0.375rem
+  background: var(--btn-regular-bg)
+  transition: background-color 0.2s ease
+
+  &:hover
+    background: var(--btn-regular-bg-hover)
+
+.pdf-viewer-wrapper
+  position: relative
+  width: 100%
+
+.pdf-viewer
+  display: block
+  width: 100%
+  border: none
+
+// 覆盖上方 .custom-md iframe 的全局 margin/border-radius，由容器自己控制留白
+.custom-md .pdf-viewer
+  margin: 0
+  border-radius: 0
+
+// ─── 哔哩哔哩用户卡片（::bilibili 指令，rehype-component-bilibili-card） ────
+
+.card-bilibili
+  display: block
+  padding: 1rem
+  border-radius: 0.75rem
+  background: var(--license-block-bg)
+  border: 1px solid var(--line-divider)
+  transition: all 0.3s ease
+  text-decoration: none
+  color: inherit
+
+  &:hover
+    transform: translateY(-2px)
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1)
+
+.bc-header
+  display: flex
+  align-items: center
+  gap: 0.75rem
+  margin-bottom: 0.75rem
+
+.bc-avatar
+  width: 48px
+  height: 48px
+  border-radius: 50%
+  background-color: var(--btn-regular-bg)
+  background-size: cover
+  background-position: center
+  flex-shrink: 0
+
+.bc-info
+  flex: 1
+  min-width: 0
+  overflow: hidden
+
+.bc-username
+  font-weight: 600
+  font-size: 1rem
+  color: var(--tw-prose-headings)
+  margin-bottom: 0.25rem
+
+.bc-sign
+  font-size: 0.875rem
+  color: var(--tw-prose-body)
+  word-break: break-word
+  overflow-wrap: break-word
+
+.bc-stats
+  display: flex
+  gap: 1rem
+  padding-top: 0.75rem
+  border-top: 1px solid var(--line-divider)
+
+.bc-stat
+  display: flex
+  flex-direction: column
+  align-items: center
+  flex: 1
+
+.bc-stat-value
+  font-weight: 600
+  font-size: 1rem
+  color: var(--tw-prose-headings)
+
+.bc-stat-label
+  font-size: 0.75rem
+  color: var(--tw-prose-body)
+
 // ─── 共享图表容器样式 ───────────────────────────────────────────────────────
 // pan-zoom 控制栏、全屏 overlay 等交互样式由 rehype-diagram-panzoom 插件注入
 

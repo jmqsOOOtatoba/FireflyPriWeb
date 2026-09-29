@@ -1,0 +1,11 @@
+---
+// 文章内嵌音乐播放器客户端管理器（::music 指令）
+//
+// rehype-component-music-player.mjs 在构建期生成 .music-player-container 静态 DOM，
+// 本脚本负责运行时交互：Meting API 三级回退取源、播放/进度/音量控制、
+// Swup 切页时暂停并重新初始化、多播放器互斥暂停。
+// 样式见 styles/music-player.css（由 Markdown.astro / DynamicItemTemplate 引入）。
+---
+<script>
+  import "@/plugins/music-player-script.js";
+</script>

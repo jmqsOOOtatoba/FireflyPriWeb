@@ -6,9 +6,9 @@ import UmamiAnalytics from "@components/analytics/UmamiAnalytics.astro";
 import CodeGroupManager from "@components/features/CodeGroupManager.astro";
 import FancyboxManager from "@components/features/FancyboxManager.astro";
 import FontSetup from "@components/features/FontSetup.astro";
-import '@/styles/pdf-viewer.css';
 import GithubCardManager from "@components/features/GithubCardManager.astro";
 import MusicManager from "@components/features/MusicManager.astro";
+import MusicPlayerManager from "@components/features/MusicPlayerManager.astro";
 import MusicPlayerView from "@components/features/MusicPlayerView.astro";
 import SakuraEffect from "@components/features/SakuraEffect.astro";
 import WavesEffect from "@components/features/WavesEffect.astro";
@@ -501,9 +501,6 @@ const ogImageAlt = propsOgImageAlt ?? pageTitle;
 
     <!-- Font Setup (Astro Font API) -->
     <FontSetup />
-          <link rel="stylesheet" href="/plugins/bilibili-styles.css">
-<link rel="stylesheet" href="/plugins/music-player-styles.css">
-    <script is:inline src="/plugins/music-player-script.js"></script>
 </head>
   <body
     class="min-h-screen"
@@ -577,6 +574,9 @@ const ogImageAlt = propsOgImageAlt ?? pageTitle;
 
     <!-- GitHub 卡片客户端实时补全（forks/stars） -->
     <GithubCardManager />
+
+    <!-- 文章内嵌音乐播放器（::music）交互 -->
+    <MusicPlayerManager />
   </body>
 </html>
 
