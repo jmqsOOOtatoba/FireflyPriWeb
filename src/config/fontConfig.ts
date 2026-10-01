@@ -82,18 +82,23 @@ export const fontsList: FontDefinition[] = [
 		fallbacks: ["sans-serif"],
 	},
 	{
-    name: "HanYi WenHei 85W",
-    cssVariable: "--font-hanyi-wenhei",
-    provider: "local",
-    options: {
-        variants: [
-            {
-                src: ["./public/assets/fonts/HYWenHei-65W-3.ttf"],  // 改为实际的文件名
-            },
-        ],
-    },
-    fallbacks: ["sans-serif", "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB"],
-},
+		name: "HanYi WenHei 85W",
+		cssVariable: "--font-hanyi-wenhei",
+		provider: "local",
+		options: {
+			variants: [
+				{
+					src: ["./public/assets/fonts/HYWenHei-65W-3.ttf"], // 改为实际的文件名
+				},
+			],
+		},
+		fallbacks: [
+			"sans-serif",
+			"PingFang SC",
+			"Microsoft YaHei",
+			"Hiragino Sans GB",
+		],
+	},
 ];
 
 // ─── 字体选择与区域覆盖 ─────────────────────────────────────

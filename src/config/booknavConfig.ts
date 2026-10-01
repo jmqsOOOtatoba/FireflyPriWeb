@@ -136,7 +136,6 @@ export const booknavConfig: BooknavGroup[] = [
 				desc: "面向二次元爱好者的社区网站，提供交流、分享和讨论的平台。",
 				weight: 10,
 			},
-			
 		],
 	},
 	{
@@ -168,7 +167,7 @@ export const booknavConfig: BooknavGroup[] = [
 				title: "Calibre",
 				url: "https://calibre-ebook.com/",
 				desc: "Calibre开源的电子书管理软件，支持电子书格式转换、阅读和管理。",
-				weight: 9,	
+				weight: 9,
 			},
 			{
 				title: "TinyPNG",
@@ -201,7 +200,7 @@ export const booknavConfig: BooknavGroup[] = [
 				title: "Twikoo",
 				url: "https://twikoo.js.org/intro.html",
 				desc: "轻量级的评论系统，支持多种平台和自定义功能。",
-				weight: 10,	
+				weight: 10,
 			},
 			{
 				title: "Firefly Docs",

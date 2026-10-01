@@ -142,7 +142,6 @@ export const live2dWidgetConfig: Live2DWidgetConfig = {
 				icon: "mdi:swap-horizontal",
 				label: "切换模型",
 				action: "switchModel",
-				
 			},
 			{
 				icon: "mdi:github",

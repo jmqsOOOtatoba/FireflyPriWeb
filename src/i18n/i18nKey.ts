@@ -1,12 +1,8 @@
 enum I18nKey {
-	
-	
 	// 在 i18nKey.ts 文件中添加
-siteStatsTotalViews = "siteStatsTotalViews",
-siteStatsTotalVisitors = "siteStatsTotalVisitors",
-	
-	
-	
+	siteStatsTotalViews = "siteStatsTotalViews",
+	siteStatsTotalVisitors = "siteStatsTotalVisitors",
+
 	home = "home",
 	about = "about",
 	archive = "archive",

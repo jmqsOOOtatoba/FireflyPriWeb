@@ -129,16 +129,16 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 			// 是否在文章详情页显示
 			showOnPostPage: false,
 		},
-{
-  // 组件类型：访客信息组件
-  type: "visitorInfo",
-  // 是否启用该组件
-  enable: true,
-  // 组件位置："top" 或 "bottom"
-  position: "top",
-  // 是否在文章详情页显示
-  showOnPostPage: true,
-},
+		{
+			// 组件类型：访客信息组件
+			type: "visitorInfo",
+			// 是否启用该组件
+			enable: true,
+			// 组件位置："top" 或 "bottom"
+			position: "top",
+			// 是否在文章详情页显示
+			showOnPostPage: true,
+		},
 
 		{
 			// 组件类型：站点信息组件
@@ -279,14 +279,14 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 			},
 		},
 
-  {
-	//组件类型：访客信息IP
-    type: "visitorInfo",  
-	// 是否启动
-    enable: true,
-	//是否在文章详情页展示
-    showOnPostPage: true,
-  },
+		{
+			//组件类型：访客信息IP
+			type: "visitorInfo",
+			// 是否启动
+			enable: true,
+			//是否在文章详情页展示
+			showOnPostPage: true,
+		},
 
 		{
 			// 组件类型：标签组件
