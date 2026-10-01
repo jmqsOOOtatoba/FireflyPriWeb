@@ -126,6 +126,18 @@ enum I18nKey {
 	searchBooknav = "searchBooknav",
 	booknavEmpty = "booknavEmpty",
 
+	// 项目展示页
+	projects = "projects",
+	projectsDescription = "projectsDescription",
+	projectDetails = "projectDetails",
+	projectBack = "projectBack",
+	projectEmpty = "projectEmpty",
+	projectSearch = "projectSearch",
+	projectStatusPlanning = "projectStatusPlanning",
+	projectStatusDeveloping = "projectStatusDeveloping",
+	projectStatusPublished = "projectStatusPublished",
+	projectStatusArchived = "projectStatusArchived",
+
 	// 番组计划筛选和状态文本
 	bangumiTitle = "bangumiTitle",
 	bangumiSubtitle = "bangumiSubtitle",
@@ -315,6 +327,14 @@ enum I18nKey {
 	rssCopied = "rssCopied",
 	rssCopyFailed = "rssCopyFailed",
 
+	// Atom页面
+	atom = "atom",
+	atomDescription = "atomDescription",
+	atomSubtitle = "atomSubtitle",
+	atomLink = "atomLink",
+	atomCopyToReader = "atomCopyToReader",
+	atomCopied = "atomCopied",
+
 	//最后编辑时间卡片
 	lastModifiedPrefix = "lastModifiedPrefix",
 	lastModifiedOutdated = "lastModifiedOutdated",
@@ -480,6 +500,7 @@ enum I18nKey {
 	galleryAlbums = "galleryAlbums",
 	galleryNoAlbums = "galleryNoAlbums",
 	galleryBackToAlbums = "galleryBackToAlbums",
+	galleryEnterAlbum = "galleryEnterAlbum",
 	searchAlbums = "searchAlbums",
 
 	// 密码保护
