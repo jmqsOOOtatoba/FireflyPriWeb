@@ -37,7 +37,9 @@ let commentService: string = commentConfig?.type || "none";
 
 {
   commentService !== "none" && (
-    <div id="post-comments" class="card-base p-8 mb-6 relative overflow-hidden">
+    <div id="post-comments" class="card-base p-8 mb-6 relative overflow-x-clip overflow-y-visible">
+      <!-- overflow-x 用 clip 而非 hidden：hidden 会把 overflow-y: visible 强制降级为 auto，
+           浮层仍被裁；clip 只裁横向保住圆角，纵向放开让回复框表情面板完整浮出卡片 -->
       <!-- 评论区装饰性背景 -->
       <div class="absolute top-0 right-0 w-32 h-32 opacity-5 pointer-events-none">
         <svg viewBox="0 0 100 100" class="w-full h-full">

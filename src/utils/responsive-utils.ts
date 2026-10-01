@@ -220,7 +220,11 @@ export function generateMainContentClasses(
 	}
 
 	classes.push("min-w-0");
-	classes.push("overflow-hidden");
+	// 横向 clip 保住圆角/防横向溢出，纵向放开让评论表情面板浮出内容列；
+	// z-10 让内容列盖过带 transform 残留（onload-animation）的页脚，避免浮层被页脚压住点不到
+	classes.push("overflow-x-clip");
+	classes.push("overflow-y-visible");
+	classes.push("z-10");
 
 	return classes.join(" ");
 }
