@@ -20,8 +20,9 @@ _Hard constraints from user that every session must respect._
   2. **多改检查**：对照当前任务范围，找出是否有任务之外的改动（尤其 `pnpm lint` 波及的无关格式化文件），列出并建议回退；
   3. **垃圾文件检查**：找出本次生成的没用文件（临时脚本、测试截图、误建的副本/中间产物），列出并建议删除；同时用 `git diff` 核对有没有不小心删除的内容。
   汇报后等用户确认再执行回退/删除，不要擅自清理。
+  *注：本文件 `MEMORY.md` 已被 git 跟踪并推送到用户仓库（2026-10-02 用户确认保留）——盘点时它的改动属于"记忆更新"，单列说明即可，不按"多改的文件"处理。*
 
-- **内容创作路径（用户指定，2026-01）**：
+- **内容创作路径（用户指定，2026-09/10）**：
   - 写文章 → `src/content/posts/txt/`（如 `1文章.md`、`13文章.md`）；**文件名序号顺延**：取目录内现有最大 N，新文章命名为 `N+1文章.md`（2026-09 用户明确要求按序号排）
   - 发更新公告 → `src/content/posts/update/`（如 `更新公告20260928.md`）
   - 发动态 → `src/content/dynamic/`（如 `20260928-1933.md`）
@@ -56,7 +57,7 @@ _Cross-task facts that survive across sessions. Promoted from session checkpoint
   - **头像必须 `<img referrerpolicy="no-referrer">`，不能 background-image**：B 站头像 CDN（`i*.hdslb.com`）带 Referer 403、无 Referer 200，background-image 设不了 referrerpolicy；http 需 replace 成 https 防混合内容。
   - 样式坑：`.prose` 给正文所有 `img` 加 `margin: 2em 0`（32px）会把头像推出圆框 → `.bc-avatar img { margin: 0 }` 必须覆盖；中层 `.bc-titlebar-left` 要自带 flex（外层 `.bc-header` 的 flex 管不到其内部排列）。
 - **Astro content layer 渲染缓存 `.astro/data-store.json`（2026-10 踩大坑）**：按内容文件哈希缓存**渲染后的整页 HTML**，**改插件/组件代码不会失效**——症状"重启 dev 后页面还是旧 DOM"（如卡片无 `uid` 属性、标签还是「获赞」）。解除需组合拳：改 md 触发重渲染 + 删 store + **重启 dev**。**运行中直接删 store 会让进程持失效引用，spec 页全部 500，只能重启恢复，别再犯**。判断 DOM 新旧的快速办法：curl 页面看有无新代码特征串（如 `uid=`、`fetch-waiting`）。
-- **dev 对 `astro.config.mjs` import 链（rehype 插件等）不热更新**：改 `src/plugins/*.mjs` 必须重启 dev；改 config 文件本身可触发自动重启但**不可靠**（试过追加注释 PID 不变）。用"进程启动时间 vs 文件 mtime"判断新代码是否加载。Playwright CLI 在本机会话频繁 `ChildProcess.kill` 崩溃（规则也禁止装 chromium），验证改用 `playwright-core` + `channel:"chrome"`（系统 Chrome）+ `domcontentloaded`（dev 长连接让 networkidle 永不满足）。
+- **dev 对 `astro.config.mjs` import 链（rehype 插件等）不热更新**：改 `src/plugins/*.mjs` 必须重启 dev；改 config 文件本身可触发自动重启但**不可靠**（试过追加注释 PID 不变）。用"进程启动时间 vs 文件 mtime"判断新代码是否加载。Playwright CLI 在本机会话频繁 `ChildProcess.kill` 崩溃，验证改用 **playwright MCP（首选，见 Rules 的验证流程条）** 或 `playwright-core` + `channel:"chrome"`（系统 Chrome、不下载浏览器）+ `domcontentloaded`（dev 长连接让 networkidle 永不满足）。
 - **uapis.cn 用量**：访客 1500 积分/月按 IP、4 QPS，`bilibili/userinfo` 每次 4 积分（抓取脚本已加 300ms 间隔）；天气组件 `VisitorInfo.astro` 是浏览器直连 `uapis.cn/api/v1/misc/weather`，若某天天气挂了优先查 403 `CORS_FORBIDDEN`。
 - **2026-10-01 已交付形态**：访客信息天气组件（大温度 emoji + 宫格统计卡 + 预警横幅中性配色 `bg-neutral-100/60` + `--primary` 标题）；关于页两张 B 站卡片 uid 化；动态已发 `src/content/dynamic/20261001-1000.md`（记录四个坑）。
 
@@ -86,7 +87,7 @@ _Cross-task facts that survive across sessions. Promoted from session checkpoint
   - `*.vercel.app` 被 DNS 污染（114 DNS 返回假 IP），本机和访客都解析不了 → 数据站只能靠自定义域名访问。
   - git 协议不受 API 封锁影响：`git push/ls-remote` 走 GCM 凭据正常可用；GitHub REST 需要 token 时可从 `git credential fill`（host=github.com）静默取用（勿回显内容）。
 - **本机构建 OG 图 TLS 失败**：`Failed to render image / UNABLE_TO_VERIFY_LEAF_SIGNATURE` → `set NODE_OPTIONS=--use-system-ca` 后重跑（仅本机证书链问题，GitHub CI 不受影响，勿当成代码 bug 反复排查）。
-- **playwright MCP 加载失败的根因与修复（2026-10-01 实锤）**：`C:\Users\JOKERW\.config\mimocode\mimocode.jsonc` 的 `mcp` 段里 local server command **裸写 `"npx"` 会静默加载失败**——本机 node/npx 装在 `D:\ai`（只有 `npx`、`npx.cmd`、`npx.ps1`，**没有 `npx.exe`**），引擎 CreateProcess 只认 exe 解析不到；正确写法 `["cmd","/c","npx","-y","@playwright/mcp@0.0.78"]`（cmd 是真 exe，由它按 PATHEXT 解析 npx.cmd）。诊断要点：①设置页 enabled ≠ 本会话可用，看当前工具列表里有没有 `navigate`/`snapshot` 等；②`%LOCALAPPDATA%\npm-cache\_npx` 缓存里查不到对应包 = 从未启动成功（连下载都没走到）；③改配置必须新会话/重启引擎才生效。修复后已验证挂载成功。
+- **playwright MCP（本项目浏览器自动化首选通道，2026-10-01 已修复可用）**：加载失败根因与 `cmd /c npx` 修复细节记在**全局记忆** `C:\Users\JOKERW\.local\share\mimocode\memory\global\MEMORY.md`（本机级知识，不在本文件重复）；本项目只需记住：截图/测量优先走 MCP 工具（navigate/snapshot/take_screenshot），CLI/Node API 为备选，一律不下载新浏览器。
 
 ### Dead ends
 
