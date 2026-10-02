@@ -141,7 +141,7 @@ const stats = [
 
 
 <!-- 不蒜子统计：总浏览量 -->
-<div class="flex items-center justify-between px-3 py-1.5">
+<div class="flex items-center justify-between px-3 py-1.5" data-busuanzi-row>
     <div class="flex items-center gap-2.5">
         <div class="text-(--primary) text-xl">
             <Icon is:inline name="material-symbols:visibility-outline" />
@@ -158,7 +158,7 @@ const stats = [
 </div>
 
 <!-- 不蒜子统计：访客数 -->
-<div class="flex items-center justify-between px-3 py-1.5">
+<div class="flex items-center justify-between px-3 py-1.5" data-busuanzi-row>
     <div class="flex items-center gap-2.5">
         <div class="text-(--primary) text-xl">
             <Icon name="material-symbols:group" />
@@ -237,6 +237,51 @@ const stats = [
     });
   }
 
+  function busuanziValuesFilled() {
+    const element = document.getElementById("busuanzi_value_site_pv");
+    return !!element && element.textContent.trim() !== "-";
+  }
+
+  function hideBusuanziRows() {
+    document.querySelectorAll("[data-busuanzi-row]").forEach((row) => {
+      row.style.display = "none";
+    });
+  }
+
+  // 不蒜子服务偶发 502/超时，JSONP 失败时页面会停留在占位符 "-"。
+  // 这里轮询数值，未写入则重新注入脚本重发请求，全部重试失败后隐藏统计行。
+  function initBusuanziRetry() {
+    const delays = [4000, 8000, 15000];
+    let attempt = 0;
+    const schedule = () => {
+      if (attempt >= delays.length) {
+        // 给最后一次重试留出响应时间，仍无值才隐藏
+        setTimeout(() => {
+          if (!busuanziValuesFilled()) hideBusuanziRows();
+        }, 6000);
+        return;
+      }
+      const delay = delays[attempt++];
+      setTimeout(() => {
+        if (busuanziValuesFilled()) return;
+        document
+          .querySelectorAll('script[src*="busuanzi.pure.mini.js"]')
+          .forEach((old) => old.remove());
+        const script = document.createElement("script");
+        script.src = `//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js?retry=${Date.now()}`;
+        script.async = true;
+        document.head.appendChild(script);
+        schedule();
+      }, delay);
+    };
+    schedule();
+  }
+
+  // 不合规来源（localhost/裸 IP 等）：每份实例脚本执行时都幂等隐藏本实例的行
+  if (window.__busuanziAllowed === false) {
+    hideBusuanziRows();
+  }
+
   // 页面加载时更新
   updateDynamicStats();
   syncBusuanziValues();
@@ -271,5 +316,9 @@ const stats = [
         subtree: true,
       });
     });
+
+    if (window.__busuanziAllowed !== false) {
+      initBusuanziRetry();
+    }
   }
 </script>
