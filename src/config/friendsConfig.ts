@@ -23,6 +23,16 @@ export const friendsPageConfig: FriendsPageConfig = {
 // 友链配置
 export const friendsConfig: FriendLink[] = [
 	{
+		title: "夏夜流萤",
+		imgurl:
+			"https://weavatar.com/avatar/d252655d40d6874417a720bad0a6c5f77f8f6a1fd2f882f8f338402dc37e4190?s=640",
+		desc: "飞萤之火自无梦的长夜亮起，绽放在终竟的明天。",
+		siteurl: "https://blog.cuteleaf.cn",
+		tags: ["Blog"],
+		weight: 100, // 权重，数字越大排序越靠前
+		enabled: true, // 是否启用
+	},
+	{
 		title: "MIFENG BLOG",
 		imgurl: "https://blog.imbee.top/images/logo/logo.webp",
 		desc: "一个菜鸟的博客",
@@ -82,7 +92,7 @@ export const friendsConfig: FriendLink[] = [
 		desc: "heron_i的小站",
 		siteurl: "https://blog.egs.cc.cd/",
 		tags: ["Blog"],
-		weight: 99,
+		weight: 100,
 		enabled: true,
 	},
 	{
@@ -115,14 +125,22 @@ export const friendsConfig: FriendLink[] = [
 		enabled: true,
 	},
 	{
-		title: "夏夜流萤",
-		imgurl:
-			"https://weavatar.com/avatar/d252655d40d6874417a720bad0a6c5f77f8f6a1fd2f882f8f338402dc37e4190?s=640",
-		desc: "飞萤之火自无梦的长夜亮起，绽放在终竟的明天。",
-		siteurl: "https://blog.cuteleaf.cn",
+		title: "年华",
+		desc: "分享生活和技术。",
+		siteurl: "https://blog.amamo.top",
+		imgurl: "https://q1.qlogo.cn/g?b=qq&nk=1323860289&s=640",
 		tags: ["Blog"],
-		weight: 98, // 权重，数字越大排序越靠前
-		enabled: true, // 是否启用
+		weight: 100,
+		enabled: true,
+	},
+	{
+		title: "MmzMing的知识库",
+		desc: "哈基米，南北绿豆",
+		siteurl: "https://tblog.mmzhiku.xyz",
+		imgurl: "https://i.stardots.io/784774835/StarDots-2026052116374135506.jpg",
+		tags: ["Blog"],
+		weight: 100,
+		enabled: true,
 	},
 	{
 		title: "Firefly Docs",
