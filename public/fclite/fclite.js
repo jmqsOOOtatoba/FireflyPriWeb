@@ -17,6 +17,7 @@ function initialize_fc_lite() {
 
     const randomArticleContainer = document.createElement('div');
     randomArticleContainer.id = 'random-article';
+    randomArticleContainer.classList.add('card-base');
     randomArticleContainer.innerHTML = `
         <div class="loading-placeholder">
             <div class="loading-spinner"></div>
@@ -112,7 +113,7 @@ function initialize_fc_lite() {
 
         articles.forEach((article, index) => {
             const card = document.createElement('div');
-            card.className = 'card';
+            card.className = 'card card-base';
             card.style.animationDelay = `${index * 0.05}s`;
 
             const title = document.createElement('div');

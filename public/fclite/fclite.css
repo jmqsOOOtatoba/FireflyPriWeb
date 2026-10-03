@@ -52,9 +52,7 @@
     position: relative;
     width: 100%;
     margin: 0 0 16px 0;
-    background-color: var(--container-bg-color);
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
+    /* 本地修改：背景/圆角/边框交给 .card-base 卡片系统，跟随主题卡片设置（透明度滑块、边框开关、主题色相） */
     padding: 20px;
     transition: all 0.3s ease;
     overflow: hidden;
@@ -71,17 +69,18 @@
     gap: 12px;
 }
 
+/* 本地修改：统计块对齐主题 btn-regular 语言 */
 .stat-item {
     text-align: center;
     padding: 12px;
-    background-color: var(--background-color);
-    border-radius: 6px;
-    border: 1px solid var(--border-color);
+    background-color: var(--btn-regular-bg);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--line-divider);
     transition: all 0.3s ease;
 }
 
 .stat-item:hover {
-    border-color: var(--hover-color);
+    border-color: color-mix(in srgb, var(--primary) 30%, transparent);
 }
 
 .stat-num {
@@ -140,22 +139,24 @@
     font-size: 12px;
 }
 
+/* 本地修改：作者/日期胶囊对齐主题 category-pill 语言 */
 .random-author,
 .random-date {
     display: inline-flex;
     align-items: center;
     gap: 4px;
     padding: 4px 10px;
-    background-color: var(--background-color);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    color: var(--author-color);
+    background: color-mix(in srgb, var(--btn-content) 6%, transparent);
+    border: 1px solid color-mix(in srgb, var(--btn-content) 12%, transparent);
+    border-radius: var(--radius-full);
+    color: var(--btn-content);
     transition: all 0.3s ease;
 }
 
 .random-author:hover,
 .random-date:hover {
-    border-color: var(--hover-color);
+    border-color: color-mix(in srgb, var(--primary) 30%, transparent);
+    color: var(--primary);
 }
 
 .random-button-container {
@@ -165,28 +166,31 @@
     flex-shrink: 0;
 }
 
+/* 本地修改：「换一篇」对齐主题 btn-regular 胶囊按钮 */
 .random-button-container a {
     padding: 8px 16px;
-    color: var(--text-color) !important;
+    color: var(--btn-content) !important;
     text-decoration: none !important;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    background-color: var(--background-color);
+    border: 1px solid var(--line-divider);
+    border-radius: var(--radius-full);
+    background-color: var(--btn-regular-bg);
     transition: all 0.3s ease;
     font-size: 13px;
     white-space: nowrap;
 }
 
 .random-button-container a:hover {
-    border-color: var(--hover-color);
-    color: var(--hover-color) !important;
+    border-color: color-mix(in srgb, var(--primary) 35%, transparent);
+    background-color: var(--btn-regular-bg-hover);
+    color: var(--primary) !important;
 }
 
+/* 本地修改：「阅读文章」对齐主题主色胶囊按钮 */
 .random-link-button {
     padding: 8px 20px;
     border: none;
-    border-radius: 6px;
-    background-color: var(--hover-color);
+    border-radius: var(--radius-full);
+    background-color: var(--primary);
     color: #fff;
     cursor: pointer;
     font-size: 13px;
@@ -445,10 +449,8 @@
 }
 
 .card {
-    background-color: var(--container-bg-color);
-    border-radius: 8px;
+    /* 本地修改：背景/圆角/边框交给 .card-base 卡片系统，跟随主题卡片设置 */
     padding: 12px;
-    border: 1px solid var(--border-color);
     position: relative;
     overflow: hidden;
     display: flex;
@@ -508,14 +510,17 @@
 }
 
 .card-author:hover {
-    border-color: var(--hover-color);
+    border-color: color-mix(in srgb, var(--primary) 30%, transparent);
+    color: var(--primary);
 }
 
+/* 本地修改：作者胶囊对齐主题 category-pill 语言 */
 .card-author {
     cursor: pointer;
-    background-color: var(--background-color);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
+    background: color-mix(in srgb, var(--btn-content) 6%, transparent);
+    border: 1px solid color-mix(in srgb, var(--btn-content) 12%, transparent);
+    border-radius: var(--radius-full);
+    color: var(--btn-content);
     display: flex;
     padding-right: 10px;
     width: fit-content;
@@ -562,16 +567,17 @@
     right: -8px;
 }
 
+/* 本地修改：「再来亿点」对齐主题 btn-regular 胶囊按钮 */
 #load-more-btn {
-    color: var(--text-color);
+    color: var(--btn-content);
     font-size: 13px;
     font-weight: 500;
-    background-color: var(--container-bg-color);
+    background-color: var(--btn-regular-bg);
     cursor: pointer;
     width: 140px;
     max-width: 100%;
-    border-radius: 20px;
-    border: 1px solid var(--border-color);
+    border-radius: var(--radius-full);
+    border: 1px solid var(--line-divider);
     padding: 8px 24px;
     transition: all 0.3s ease;
     margin: 20px auto;
@@ -579,9 +585,9 @@
 }
 
 #load-more-btn:hover {
-    background-color: var(--hover-color);
-    border-color: var(--hover-color);
-    color: white;
+    background-color: var(--btn-regular-bg-hover);
+    border-color: color-mix(in srgb, var(--primary) 40%, transparent);
+    color: var(--primary);
     width: 180px;
     max-width: 100%;
 }
