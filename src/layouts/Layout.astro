@@ -159,6 +159,12 @@ const ogImageAlt = propsOgImageAlt ?? pageTitle;
 <html lang={siteLang} class="bg-(--page-bg) text-[14px] md:text-[16px]" data-wallpaper-mode={backgroundWallpaper.mode} data-fullscreen-layout={fullscreenLayout} data-has-wallpaper={hasWallpaper ? "" : undefined} data-tag-style={siteConfig.tagStyle ?? "pill"} data-category-style={siteConfig.categoryStyle ?? "rectangle"}>
   <head>
     <meta charset="UTF-8" />
+    <!-- 提前建立第三方连接：图床图片、umami 统计、Cloudflare beacon 都在 HTML 解析中途才被发现 -->
+    <link rel="preconnect" href="https://tu.mstzuomu.space" />
+    <link rel="preconnect" href="https://static.cloudflareinsights.com" />
+    {analyticsConfig?.umamiAnalytics?.websiteId && (
+      <link rel="preconnect" href="https://cloud.umami.is" />
+    )}
     <style is:inline>
 			@layer properties, theme, base, components, utilities;
 		</style>

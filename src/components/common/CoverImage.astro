@@ -3,8 +3,11 @@ import ImageWrapper from "@/components/common/ImageWrapper.astro";
 import { coverImageConfig } from "@/config";
 import type { ImageFormat, ResponsiveImageLayout } from "@/types/config";
 import {
+	buildResizeUrl,
+	canResizeRemote,
 	getImageFormats,
 	getImageQuality,
+	RESIZE_WIDTHS,
 	shouldAddNoReferrer,
 } from "@/utils/image-utils";
 import { getLqipProps } from "@/utils/lqip-utils";
@@ -69,6 +72,11 @@ const widths = [828];
 const sizes = preview
 	? "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 320px"
 	: "(max-width: 768px) 100vw, 828px";
+// 尺寸变体按真实显示尺寸估算（本地图 sizes 为旧值，仅单档产物时无影响）：
+// 列表卡封面桌面约占 680-770px，详情页封面为内容列全宽——否则 Retina 屏会错选 828w 档发糊
+const resizeSizes = preview
+	? "(max-width: 768px) 100vw, 770px"
+	: "(max-width: 768px) 100vw, 100vw";
 const quality = configQuality;
 
 // 是否显示加载动画
@@ -79,6 +87,16 @@ const remoteReferrerPolicy =
 	!isLocal && shouldAddNoReferrer(isPublic ? url(src) : src)
 		? "no-referrer"
 		: undefined;
+
+// 白名单图床走尺寸处理 API：srcset 双档变体，失败时 data-resize-fallback 回退原图
+const remoteSrc = isPublic ? url(src) : src;
+const useResize = canResizeRemote(src);
+const resizeSrcset = useResize
+	? RESIZE_WIDTHS.map((w) => `${buildResizeUrl(src, w)} ${w}w`).join(", ")
+	: undefined;
+const remoteImgSrc = useResize
+	? buildResizeUrl(src, RESIZE_WIDTHS[RESIZE_WIDTHS.length - 1])
+	: remoteSrc;
 ---
 
 <div
@@ -127,7 +145,9 @@ const remoteReferrerPolicy =
 	<!-- 远程图片 -->
 	{!isLocal && (
 		<img
-			src={isPublic ? url(src) : src}
+			src={remoteImgSrc}
+			srcset={resizeSrcset}
+			sizes={useResize ? resizeSizes : undefined}
 			alt={alt || ""}
 			class={imageClass}
 			style={imageStyle}
@@ -135,6 +155,7 @@ const remoteReferrerPolicy =
 			decoding="async"
 			data-cover-img
 			data-remote="true"
+			data-resize-fallback={useResize ? remoteSrc : undefined}
 			referrerpolicy={remoteReferrerPolicy}
 		/>
 	)}
@@ -240,9 +261,20 @@ const remoteReferrerPolicy =
 				container.setAttribute('data-error', 'true');
 			};
 
-			// 统一的错误处理：尝试下一个API或显示错误提示
+			// 统一的错误处理：尺寸变体 → 下一个API → 显示错误提示
 			const onError = () => {
 				if (img.dataset.remote !== 'true') return;
+
+				// 尺寸参数版加载失败（如图床关闭了尺寸处理）→ 一次性回退无参数原图
+				const resizeFallback = img.dataset.resizeFallback;
+				if (resizeFallback && !img.dataset.resizeRetried) {
+					img.dataset.resizeRetried = 'true';
+					img.addEventListener('load', hideLoading, { once: true });
+					img.addEventListener('error', onError, { once: true });
+					img.removeAttribute('srcset');
+					img.src = resizeFallback;
+					return;
+				}
 
 				if (currentApiIndex < apiUrls.length) {
 					// 先绑定好事件，再更换src

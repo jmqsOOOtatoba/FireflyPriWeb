@@ -124,3 +124,34 @@ export function shouldAddNoReferrer(urlStr: string): boolean {
 		return false;
 	}
 }
+
+// 远程封面尺寸变体宽度（px），与 CoverImage 的 sizes 配合覆盖 dpr1/dpr2 显示
+export const RESIZE_WIDTHS = [828, 1656] as const;
+
+/**
+ * 远程图片是否可走图床尺寸处理 API（仅 http(s) 且域名在 resizeHosts 白名单内）
+ */
+export function canResizeRemote(src: string): boolean {
+	if (!/^https?:\/\//.test(src)) return false;
+	const hosts = siteConfig.imageOptimization?.resizeHosts || [];
+	if (hosts.length === 0) return false;
+	try {
+		return hosts.includes(new URL(src).hostname);
+	} catch {
+		return false;
+	}
+}
+
+/**
+ * 为远程图片 URL 追加图床尺寸处理参数
+ */
+export function buildResizeUrl(src: string, width: number): string {
+	try {
+		const u = new URL(src);
+		u.searchParams.set("width", String(width));
+		u.searchParams.set("fallback", "original");
+		return u.toString();
+	} catch {
+		return src;
+	}
+}

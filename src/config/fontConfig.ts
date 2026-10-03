@@ -127,5 +127,9 @@ export const fontConfig: FontSelectionConfig = {
 			// 额外包含的字符
 			extraChars: "",
 		},
+		// 全站正文主字体（selected 引用），不配子集化会原样输出 3.1MB TTF
+		"--font-hanyi-wenhei": {
+			extraChars: "",
+		},
 	},
 };

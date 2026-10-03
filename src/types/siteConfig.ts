@@ -249,6 +249,13 @@ export type SiteConfig = {
 		 * 仅影响匹配域名的图片标签，不影响其他链接的 referrer 行为
 		 */
 		noReferrerDomains?: string[];
+		/**
+		 * 支持服务端尺寸处理的远程图片域名（如 CloudFlare-ImgBed 读取 API）
+		 * 命中域名的远程封面输出 srcset 尺寸变体（?width=N&fallback=original），
+		 * 图床需在后台开启"图片尺寸处理"；加载失败时自动回退原图
+		 * 示例：["tu.mstzuomu.space"]
+		 */
+		resizeHosts?: string[];
 	};
 
 	// 订阅 (RSS / Atom) 配置

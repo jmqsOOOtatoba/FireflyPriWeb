@@ -339,6 +339,8 @@ export const siteConfig: SiteConfig = {
 			"*.myanimelist.net",
 			"*.vndb.org",
 		],
+		// 支持尺寸处理的远程图床域名（后台需开启"图片尺寸处理"）
+		resizeHosts: ["tu.mstzuomu.space"],
 	},
 
 	// ── 订阅 (RSS / Atom) 配置 ──────────────────────────────────
