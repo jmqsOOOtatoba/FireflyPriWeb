@@ -121,6 +121,18 @@ const getDynamicNavBarConfig = (): NavBarConfig => {
 				external: true,
 				icon: "material-symbols:docs",
 			},
+			{
+				name: "Umami",
+				url: "https://cloud.umami.is/",
+				external: true,
+				icon: "simple-icons:umami",
+			},
+			{
+				name: "Cloudflare",
+				url: "https://dash.cloudflare.com/",
+				external: true,
+				icon: "fa7-brands:cloudflare",
+			},
 		],
 	});
 
