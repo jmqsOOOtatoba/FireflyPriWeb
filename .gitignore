@@ -47,3 +47,6 @@ package/
 .codex*
 .claude
 .mimocode
+
+# playwright MCP test artifacts
+.playwright-mcp/
