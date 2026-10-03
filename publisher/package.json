@@ -3,7 +3,7 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"build": "echo 'static, nothing to build'"
+		"build": "mkdir -p dist && cp index.html dist/"
 	},
 	"engines": {
 		"node": ">=20"
