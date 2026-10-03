@@ -189,7 +189,7 @@ const ogImageAlt = propsOgImageAlt ?? pageTitle;
             />
     )}
 
-      <!-- 不蒜子统计：官方禁止 localhost/裸 IP/超 22 字符域名接入，不合规来源跳过加载 -->
+      <!-- 不蒜子统计（v3，官方已迁移至 cdn.busuanzi.cc）：官方禁止 localhost/裸 IP/超 22 字符域名接入，不合规来源跳过加载 -->
       <script is:inline>
         (function () {
           var h = location.hostname;
@@ -203,10 +203,19 @@ const ogImageAlt = propsOgImageAlt ?? pageTitle;
             h.length <= 22;
           window.__busuanziAllowed = allowed;
           if (!allowed) return;
-          var s = document.createElement('script');
-          s.src = '//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js';
-          s.async = true;
-          document.head.appendChild(s);
+          // v3 脚本拉到响应就直接写 DOM（无旧版的 DOM-ready 保护），
+          // 必须等文档解析完再注入，否则响应早于统计元素解析会写空
+          var inject = function () {
+            var s = document.createElement('script');
+            s.src = '//cdn.busuanzi.cc/busuanzi/3.6.9/busuanzi.min.js';
+            s.async = true;
+            document.head.appendChild(s);
+          };
+          if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', inject);
+          } else {
+            inject();
+          }
         })();
       </script>
 
