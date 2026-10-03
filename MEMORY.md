@@ -48,6 +48,9 @@ _Major design choices with rationale. The "why" matters more than the "what" for
   - 样式桥接是必须的：fclite.css 用 `[data-theme=light/dark]` 切色，本站 `data-theme` 装的是代码高亮主题名、暗色靠 `html.dark`，`fcircle.astro` 底部 `:root.dark #friend-circle-lite-root` 变量块负责翻译；`--hover-color` 覆盖成 `var(--primary)` 跟随主题色。
   - 页面内脚本顺序不可动：内联 `window.UserConfig` 必须在 `fclite.js` 之前（fclite 加载即读取，读不到 ReferenceError）；Swup 的 scripts 插件（reloadScripts 默认开）会在切页时重跑容器内脚本，所以站内跳转到该页也能初始化，无需额外 swup 适配。
 - **自定义悬浮 UI 必须带 `card-base` 类才能跟随全局卡片设置**（2026-09 阅读进度徽章踩坑确立）：卡片透明度滑块（`--card-transparent-opacity` → `--card-bg-transparent`）、卡片边框（`.enable-card-border`）、主题色相背景，全部通过 `.card-base` **类选择器**挂钩（代表规则：`main.css` 的 `.wallpaper-transparent .card-base { background-color: var(--card-bg-transparent) !important }`，另有 `.btn-card`、`.bg-(--card-bg)` 两族）。自定义悬浮元素要像 `FloatingButton` 一样受这些设置控制，就必须：类列表带 `card-base`，且**背景/圆角/overflow 交给它提供**（`--radius-large`=1rem），组件只写自身特有样式（尺寸、毛玻璃、边框）；只在 scoped 样式里手写 `background: var(--card-bg)` 会游离于整套设置之外。参考实现：`FloatingControls.astro` 阅读进度徽章。
+- **发布台系统索引与双仓库现状（2026-10-03 落地）**：博客内 **`publisher/`** 是线上部署源——Vercel 项目 `fireflypriweb-publisher`（Root Directory=`publisher`），域名 **`pub.mstzuomu.space`**，环境变量只需 `PUBLISH_TOKEN` + `GITHUB_TOKEN`（repo 默认值硬编码为本仓库，不需 `GITHUB_REPO`），**Deployment Protection 必须保持关闭**。开源模板仓库 **`jmqsOOOtatoba/firefly-publisher`**（独立 git 仓库，环境变量化 `PUB_*` 版本）与博客内 `publisher/` **是两份会各自演进的代码**，开源仓库的改进不会自动同步进来，反之亦然；改线上功能动博客仓库，改开源模板动 firefly-publisher，别改错地方。功能全景：口令登录（sessionStorage 每次会话都要登）、三类内容发布（自动命名）、18 项 frontmatter 字段（**留空不写**、顺序照文章 schema 表）、管理（列表/编辑/保存/删除/近似预览，sha 冲突 409、路径白名单）。本地测试：`publisher/test/local-harness.mjs`（8788，mock GitHub 不碰真仓库，口令 `test-pass-123`）+ `api-test.mjs`（32 断言）。
+- **博客真实部署链路（2026-10-03 确认，覆盖旧说法）**：push master 后上线靠 **Cloudflare 自动构建**；`.github/workflows/deploy.yml`（GitHub Pages）**历史上从未成功过、一直在失败**，与线上无关，用户明确不修不管。旧记忆中"deploy.yml 在 master push 时自动构建部署"的说法**作废**。
+- **发布台/子目录 Vercel 部署三坑（2026-10-03 实战）**：① 仓库根遗留 `vercel.json` 的 `buildCommand`/`outputDirectory` 会串扰到 Root Directory 子项目，且**优先级高于界面设置**（症状：子目录没 build 脚本报 `Command "build" not found`、找不到 `dist`）——已用"子目录自带 vercel.json + build 产出 dist"双保险堵死，别删；② **Deployment Protection** 默认开 Vercel 登录墙，新项目必关；③ CDN 橙云触发的 **Proxy Detected 警告可忽略**（口令保护的个人工具不受影响，代理恰是国内访问 `*.vercel.app` 被 DNS 污染的关键）。改部署配置前先读本条再动。
 
 ## Discovered durable knowledge
 _Cross-task facts that survive across sessions. Promoted from session checkpoints' §7 when proven durable._
@@ -62,6 +65,7 @@ _Cross-task facts that survive across sessions. Promoted from session checkpoint
 - **dev 对 `astro.config.mjs` import 链（rehype 插件等）不热更新**：改 `src/plugins/*.mjs` 必须重启 dev；改 config 文件本身可触发自动重启但**不可靠**（试过追加注释 PID 不变）。用"进程启动时间 vs 文件 mtime"判断新代码是否加载。Playwright CLI 在本机会话频繁 `ChildProcess.kill` 崩溃，验证改用 **playwright MCP（首选，见 Rules 的验证流程条）** 或 `playwright-core` + `channel:"chrome"`（系统 Chrome、不下载浏览器）+ `domcontentloaded`（dev 长连接让 networkidle 永不满足）。
 - **uapis.cn 用量**：访客 1500 积分/月按 IP、4 QPS，`bilibili/userinfo` 每次 4 积分（抓取脚本已加 300ms 间隔）；天气组件 `VisitorInfo.astro` 是浏览器直连 `uapis.cn/api/v1/misc/weather`，若某天天气挂了优先查 403 `CORS_FORBIDDEN`。
 - **2026-10-01 已交付形态**：访客信息天气组件（大温度 emoji + 宫格统计卡 + 预警横幅中性配色 `bg-neutral-100/60` + `--primary` 标题）；关于页两张 B 站卡片 uid 化；动态已发 `src/content/dynamic/20261001-1000.md`（记录四个坑）。
+- **Astro glob loader 的 slug 真相（2026-10-03 实测确立）**：**frontmatter.slug 决定文章的 `entry.id` 与 URL**——有 slug 的文章路由是 `/posts/azuma.zuomu-blog-16/`，没 slug 的是中文文件名路径 `/posts/17文章/`（`[...slug].astro` 取 `removeFileExtension(entry.id)`，loader 优先用 frontmatter.slug 当 id）。**列表/归档排序只看 `published` 日期（+ pinned、同天次级规则），与 slug 完全无关**；slug 另一个作用是 remark-wiki-link 的链接解析目标。写文章要不要 slug = 决定 URL 风格，不是决定顺序。
 
 ### Discovered
 - `fcircle.astro` 在特定条件下 `Astro.redirect("/404/")`（友圈访问控制）。
@@ -82,7 +86,7 @@ _Cross-task facts that survive across sessions. Promoted from session checkpoint
   - fork 首次启用有**两道开关**：Actions 页的 "I understand my workflows…" banner + 单个工作流页面的 "Enable workflow"（fork 的 workflow 会停在 `disabled_fork`，只开第一道 dispatch 会报 422）。
   - Vercel 生产分支在 **Settings → Environments → Production → Branch Tracking**（新 UI 没有独立的 "Production Branch" 项，旧教程会指错路）；改之前 `page` 分支必须已存在，否则报 `Branch "page" not found`。
   - fclite 前端有 **10 分钟 localStorage 缓存**，改完数据要无痕窗口验证；友圈统计的「失败」数是友链可达性检测的正常结果，不是部署故障。
-  - `mstzuomu.space` 会 301 到真实主机 **`azuma.mstzuomu.space`**（GitHub Pages + Cloudflare 反代，响应自带 `ACAO *`）；blog 的 `deploy.yml` 在 master push 时自动构建部署。
+  - `mstzuomu.space` 会 301 到真实主机 **`azuma.mstzuomu.space`**（Cloudflare 代理，响应自带 `ACAO *`）；**push master 后由 Cloudflare 自动构建上线**（deploy.yml 那条 Actions 链路是坏的、与线上无关，详见 Architecture decisions 的"博客真实部署链路"）。
 - **本机网络分栈差异（2026-09 实测，做任何外部 API/部署操作前必看）**：
   - 同一域名不同栈结果不同：`curl.exe` 对 github.com / registry.npmjs.org / `*.vercel.app` 常直接 000，而 **node(fetch) 或 python(urllib) 往往通**（如 api.vercel.com node 通、python 超时）；GitHub/Vercel API 还间歇抖动——**一个栈失败就换栈 + 3~5 次重试**，不要过早下"被墙"结论。
   - PyPI 直连超时 → `pip install -i https://pypi.tuna.tsinghua.edu.cn/simple`；npm 装包 → `--registry=https://registry.npmmirror.com`；Windows 本地跑 FCL 爬虫必须补 `tzdata`（否则 `ZoneInfoNotFoundError`）。
