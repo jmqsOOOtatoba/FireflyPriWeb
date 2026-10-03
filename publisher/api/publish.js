@@ -85,24 +85,33 @@ function buildFrontmatter(type, fields, now) {
 		return `${lines.join("\n")}\n`;
 	}
 
-	// post / update
+	// post / update —— 字段顺序与博客文章文档一致，留空一律不写
 	lines.push(`title: ${yamlStr(fields.title)}`);
 	lines.push(`published: ${now.date}`);
+	if (fields.updated) lines.push(`updated: ${fields.updated}`);
+	if (fields.description)
+		lines.push(`description: ${yamlStr(fields.description)}`);
+	if (fields.image) lines.push(`image: ${yamlStr(fields.image)}`);
+	if (fields.tags?.length) lines.push(`tags: ${JSON.stringify(fields.tags)}`);
+	if (fields.category) lines.push(`category: ${yamlStr(fields.category)}`);
+	if (fields.draft) lines.push("draft: true");
+	if (fields.pinned) lines.push("pinned: true");
 	if (fields.slug) lines.push(`slug: ${yamlStr(fields.slug)}`);
-	if (type === "update") {
-		lines.push(
-			`tags: ${JSON.stringify(fields.tags?.length ? fields.tags : ["更新公告"])}`,
-		);
-		lines.push(`category: ${yamlStr(fields.category || "更新日志")}`);
-		lines.push(`description: ${yamlStr(fields.description || "网站更新公告")}`);
-	} else {
-		if (fields.tags?.length) lines.push(`tags: ${JSON.stringify(fields.tags)}`);
-		if (fields.category) lines.push(`category: ${yamlStr(fields.category)}`);
-		if (fields.description)
-			lines.push(`description: ${yamlStr(fields.description)}`);
-	}
-	lines.push(`author: ${yamlStr(fields.author || "左沐")}`);
-	lines.push("draft: false");
+	if (fields.lang) lines.push(`lang: ${yamlStr(fields.lang)}`);
+	if (fields.author) lines.push(`author: ${yamlStr(fields.author)}`);
+	if (fields.comment !== null) lines.push(`comment: ${fields.comment}`);
+	if (fields.licenseName)
+		lines.push(`licenseName: ${yamlStr(fields.licenseName)}`);
+	if (fields.licenseUrl)
+		lines.push(`licenseUrl: ${yamlStr(fields.licenseUrl)}`);
+	if (fields.sourceLink)
+		lines.push(`sourceLink: ${yamlStr(fields.sourceLink)}`);
+	if (fields.password) lines.push(`password: ${yamlStr(fields.password)}`);
+	if (fields.passwordHint)
+		lines.push(`passwordHint: ${yamlStr(fields.passwordHint)}`);
+	if (fields.series) lines.push(`series: ${yamlStr(fields.series)}`);
+	if (fields.seriesOrder !== null && fields.seriesOrder !== undefined)
+		lines.push(`seriesOrder: ${fields.seriesOrder}`);
 	lines.push("---");
 	return `${lines.join("\n")}\n`;
 }
@@ -270,13 +279,41 @@ export default async function handler(req, res) {
 				.map((t) => t.trim())
 				.filter(Boolean);
 
+	// updated 必须是 YYYY-MM-DD（原样写入 frontmatter，需 yaml 可解析为日期）
+	const updated = String(body.updated ?? "").trim();
+	if (updated && !/^\d{4}-\d{2}-\d{2}$/.test(updated)) {
+		badRequest(res, "updated 必须是 YYYY-MM-DD 格式的日期");
+		return;
+	}
+	// seriesOrder 留空不写；填写则必须是数字
+	const seriesOrderRaw = String(body.seriesOrder ?? "").trim();
+	const seriesOrder = seriesOrderRaw === "" ? null : Number(seriesOrderRaw);
+	if (seriesOrder !== null && !Number.isFinite(seriesOrder)) {
+		badRequest(res, "seriesOrder 必须是数字");
+		return;
+	}
+	const str = (v) => String(v ?? "").trim();
+
 	const fields = {
 		title: finalTitle,
-		slug: String(body.slug ?? "").trim(),
-		description: String(body.description ?? "").trim(),
-		category: String(body.category ?? "").trim(),
-		author: String(body.author ?? "").trim(),
-		location: String(body.location ?? "").trim(),
+		updated,
+		description: str(body.description),
+		image: str(body.image),
+		category: str(body.category),
+		slug: str(body.slug),
+		lang: str(body.lang),
+		author: str(body.author),
+		licenseName: str(body.licenseName),
+		licenseUrl: str(body.licenseUrl),
+		sourceLink: str(body.sourceLink),
+		password: str(body.password),
+		passwordHint: str(body.passwordHint),
+		series: str(body.series),
+		seriesOrder,
+		comment:
+			body.comment === "true" ? true : body.comment === "false" ? false : null,
+		location: str(body.location),
+		draft: Boolean(body.draft),
 		pinned: Boolean(body.pinned),
 		tags,
 	};

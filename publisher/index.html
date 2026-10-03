@@ -106,6 +106,9 @@
 			}
 			input[type="text"],
 			input[type="password"],
+			input[type="date"],
+			input[type="number"],
+			select,
 			textarea {
 				width: 100%;
 				background: var(--field-bg);
@@ -293,14 +296,18 @@
 				</div>
 
 				<details id="extras">
-					<summary>可选字段</summary>
-					<div class="field" id="f-slug">
-						<label for="slug">slug<span class="hint">选填，决定文章 URL；如 azuma.zuomu-blog-17</span></label>
-						<input type="text" id="slug" placeholder="留空则用文件名作为 URL" />
+					<summary>可选字段（留空则不写入文章）</summary>
+					<div class="field" id="f-updated">
+						<label for="updated">更新日期<span class="hint">未设置则默认使用发布日期</span></label>
+						<input type="date" id="updated" />
 					</div>
 					<div class="field" id="f-description">
-						<label for="description">描述<span class="hint">文章列表摘要</span></label>
+						<label for="description">描述<span class="hint">显示在首页文章卡片上</span></label>
 						<textarea class="short" id="description"></textarea>
+					</div>
+					<div class="field" id="f-image">
+						<label for="image">封面图片<span class="hint">路径或外链</span></label>
+						<input type="text" id="image" placeholder="https://... 或 /images/cover.jpg" />
 					</div>
 					<div class="row">
 						<div class="field" id="f-tags">
@@ -312,16 +319,71 @@
 							<input type="text" id="category" placeholder="技术分享" />
 						</div>
 					</div>
-					<div class="field" id="f-location">
-						<label for="location">位置<span class="hint">仅动态</span></label>
-						<input type="text" id="location" placeholder="辽宁" />
+					<div class="row">
+						<div class="field" id="f-draft">
+							<label class="check"><input type="checkbox" id="draft" /> 草稿（不对读者可见）</label>
+						</div>
+						<div class="field" id="f-pinned">
+							<label class="check"><input type="checkbox" id="pinned" /> 置顶</label>
+						</div>
+					</div>
+					<div class="field" id="f-slug">
+						<label for="slug">slug<span class="hint">自定义 URL 路径</span></label>
+						<input type="text" id="slug" placeholder="azuma.zuomu-blog-17，留空用文件名" />
+					</div>
+					<div class="field" id="f-lang">
+						<label for="lang">语言<span class="hint">仅与站点默认不同时设置</span></label>
+						<input type="text" id="lang" placeholder="zh-CN" />
 					</div>
 					<div class="field" id="f-author">
 						<label for="author">作者</label>
 						<input type="text" id="author" placeholder="左沐" />
 					</div>
-					<div class="field hidden" id="f-pinned">
-						<label class="check"><input type="checkbox" id="pinned" /> 置顶这条内容</label>
+					<div class="field" id="f-comment">
+						<label for="comment">评论</label>
+						<select id="comment">
+							<option value="">留空（默认开启）</option>
+							<option value="true">开启</option>
+							<option value="false">关闭</option>
+						</select>
+					</div>
+					<div class="row">
+						<div class="field" id="f-licenseName">
+							<label for="licenseName">许可证名称</label>
+							<input type="text" id="licenseName" placeholder="CC BY-NC-SA 4.0" />
+						</div>
+						<div class="field" id="f-licenseUrl">
+							<label for="licenseUrl">许可证链接</label>
+							<input type="text" id="licenseUrl" placeholder="https://..." />
+						</div>
+					</div>
+					<div class="field" id="f-sourceLink">
+						<label for="sourceLink">文章来源</label>
+						<input type="text" id="sourceLink" placeholder="原文链接" />
+					</div>
+					<div class="row">
+						<div class="field" id="f-password">
+							<label for="password">文章密码<span class="hint">设置后加密</span></label>
+							<input type="password" id="password" autocomplete="new-password" />
+						</div>
+						<div class="field" id="f-passwordHint">
+							<label for="passwordHint">密码提示</label>
+							<input type="text" id="passwordHint" placeholder="显示在密码框上方" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="field" id="f-series">
+							<label for="series">系列</label>
+							<input type="text" id="series" placeholder="系列名称" />
+						</div>
+						<div class="field" id="f-seriesOrder">
+							<label for="seriesOrder">系列序号<span class="hint">升序</span></label>
+							<input type="number" id="seriesOrder" step="1" placeholder="1" />
+						</div>
+					</div>
+					<div class="field" id="f-location">
+						<label for="location">位置<span class="hint">仅动态</span></label>
+						<input type="text" id="location" placeholder="辽宁" />
 					</div>
 				</details>
 
@@ -341,10 +403,20 @@
 
 			$("token").value = localStorage.getItem(TOKEN_KEY) || "";
 
+			// 与文章文档字段表一致（f-location 为动态专属）
+			const ALL_FIELD_IDS = [
+				"f-updated", "f-description", "f-image", "f-tags", "f-category",
+				"f-draft", "f-pinned", "f-slug", "f-lang", "f-author", "f-comment",
+				"f-licenseName", "f-licenseUrl", "f-sourceLink",
+				"f-password", "f-passwordHint", "f-series", "f-seriesOrder",
+				"f-location",
+			];
+			const ARTICLE_FIELD_IDS = ALL_FIELD_IDS.filter((id) => id !== "f-location");
+
 			const typeConf = {
-				post: { title: "文章标题", show: ["f-slug", "f-description", "f-tags", "f-category", "f-author"] },
-				update: { title: "留空则自动命名（更新公告+日期）", show: ["f-slug", "f-description", "f-tags", "f-category", "f-author"] },
-				dynamic: { title: null, show: ["f-location", "f-pinned"] },
+				post: { title: "文章标题", show: ARTICLE_FIELD_IDS },
+				update: { title: "留空则自动命名（更新公告+日期）", show: ARTICLE_FIELD_IDS },
+				dynamic: { title: null, show: ["f-pinned", "f-location"] },
 			};
 
 			function applyType(next) {
@@ -352,7 +424,7 @@
 				const conf = typeConf[next];
 				$("title-field").classList.toggle("hidden", !conf.title);
 				$("title").placeholder = conf.title || "";
-				for (const id of ["f-slug", "f-description", "f-tags", "f-category", "f-location", "f-author", "f-pinned"]) {
+				for (const id of ALL_FIELD_IDS) {
 					$(id).classList.toggle("hidden", !conf.show.includes(id));
 				}
 				document.querySelectorAll(".seg button").forEach((b) => {
@@ -391,13 +463,25 @@
 					type,
 					title,
 					content,
-					slug: $("slug").value,
+					updated: $("updated").value,
 					description: $("description").value,
+					image: $("image").value,
 					tags: $("tags").value,
 					category: $("category").value,
-					location: $("location").value,
-					author: $("author").value,
+					draft: $("draft").checked,
 					pinned: $("pinned").checked,
+					slug: $("slug").value,
+					lang: $("lang").value,
+					author: $("author").value,
+					comment: $("comment").value,
+					licenseName: $("licenseName").value,
+					licenseUrl: $("licenseUrl").value,
+					sourceLink: $("sourceLink").value,
+					password: $("password").value,
+					passwordHint: $("passwordHint").value,
+					series: $("series").value,
+					seriesOrder: $("seriesOrder").value,
+					location: $("location").value,
 				};
 
 				const btn = $("publish");
@@ -413,9 +497,17 @@
 					if (res.ok && data.ok) {
 						localStorage.setItem(TOKEN_KEY, token);
 						showResult("ok", `已提交 · ${data.message}<br/>文件：<code>${data.path}</code>`);
-						$("content").value = "";
-						if (type === "post") $("title").value = "";
-						$("slug").value = "";
+						// 清空与文章一对一的字段，保留可复用的设置类字段（标签/分类/作者/系列）
+						for (const id of [
+							"title", "content", "slug", "updated", "description", "image",
+							"lang", "licenseName", "licenseUrl", "sourceLink",
+							"password", "passwordHint", "seriesOrder",
+						]) {
+							$(id).value = "";
+						}
+						$("draft").checked = false;
+						$("pinned").checked = false;
+						$("comment").value = "";
 					} else {
 						showResult("err", `发布失败：${data.error || `HTTP ${res.status}`}`);
 					}
