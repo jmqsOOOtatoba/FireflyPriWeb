@@ -5,6 +5,12 @@
 		"avatarUrl": "https://avatars.githubusercontent.com/u/43440669?v=4",
 		"license": "MIT"
 	},
+	"jmqsoootatoba/firefly-publisher": {
+		"description": "给静态博客装一个随时随地发文的发布台：口令登录、发文/改稿/删除/预览，Vercel + GitHub API，路径命名全可配置",
+		"language": "JavaScript",
+		"avatarUrl": "https://avatars.githubusercontent.com/u/108704504?v=4",
+		"license": "MIT"
+	},
 	"saicaca/fuwari": {
 		"description": "✨A static blog template built with Astro. ",
 		"language": "Astro",
