@@ -29,6 +29,8 @@ _Hard constraints from user that every session must respect._
   - 新建这三类内容时必须放对应目录，不要放 `posts/` 根目录（根目录下是示例/教程文章）。
 - **视觉/UI 改动的验证流程（用户指定，2026-09；2026-10 再澄清）**：静态检查（type-check、只读 `npx biome check <files>`）跑完后，优先让用户在本地浏览器直接看效果（dev server 本地跑着）。**Playwright 本身可以用**，用户不介意自动化截图/测量；唯一红线是**不许下载安装新浏览器**——一律 `playwright-core` + `channel:"chrome"` 连系统已装的 Chrome。注意 `playwright-cli` 会话易崩，用 Node API 方式调用；dev server 下 networkidle 永不满足，等 `domcontentloaded` 即可。**2026-10-01 起 playwright MCP 已修复可用，浏览器自动化优先走 MCP 工具**（navigate/snapshot/take_screenshot 等，不经过 shell），CLI/Node API 为备选。
 
+- **本地改动前先 `git pull`（用户指定，2026-10-03）**：发布页（`https://pub.mstzuomu.space`，经 Vercel API 直接向本仓库 master 提交文章/公告/动态）写出的文件**不会自动出现在本地目录**。因此**任何本地编辑（改代码/改内容）之前必须先 `git pull`**；改完正常 `git push` 即可，不会覆盖发布页写入的文件（**严禁 `--force`**）。**`git pull` 若因网络失败，必须明确告知用户、等用户解决网络问题并示意后再重试；不许静默反复重试，更不许跳过拉取直接改**（本机 GitHub 连接间歇抖动的分栈应对见下方"本机网络分栈差异"）。
+
 ## Architecture decisions
 _Major design choices with rationale. The "why" matters more than the "what" for future sessions._
 
