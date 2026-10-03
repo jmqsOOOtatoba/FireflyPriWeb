@@ -133,6 +133,12 @@ const getDynamicNavBarConfig = (): NavBarConfig => {
 				external: true,
 				icon: "fa7-brands:cloudflare",
 			},
+			{
+				name: "发布台",
+				url: "https://pub.mstzuomu.space/",
+				external: true,
+				icon: "material-symbols:dashboard",
+			},
 		],
 	});
 
