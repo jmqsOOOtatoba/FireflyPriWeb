@@ -294,6 +294,10 @@
 
 				<details id="extras">
 					<summary>可选字段</summary>
+					<div class="field" id="f-slug">
+						<label for="slug">slug<span class="hint">选填，决定文章 URL；如 azuma.zuomu-blog-17</span></label>
+						<input type="text" id="slug" placeholder="留空则用文件名作为 URL" />
+					</div>
 					<div class="field" id="f-description">
 						<label for="description">描述<span class="hint">文章列表摘要</span></label>
 						<textarea class="short" id="description"></textarea>
@@ -338,8 +342,8 @@
 			$("token").value = localStorage.getItem(TOKEN_KEY) || "";
 
 			const typeConf = {
-				post: { title: "文章标题", show: ["f-description", "f-tags", "f-category", "f-author"] },
-				update: { title: "留空则自动命名（更新公告+日期）", show: ["f-description", "f-tags", "f-category", "f-author"] },
+				post: { title: "文章标题", show: ["f-slug", "f-description", "f-tags", "f-category", "f-author"] },
+				update: { title: "留空则自动命名（更新公告+日期）", show: ["f-slug", "f-description", "f-tags", "f-category", "f-author"] },
 				dynamic: { title: null, show: ["f-location", "f-pinned"] },
 			};
 
@@ -348,7 +352,7 @@
 				const conf = typeConf[next];
 				$("title-field").classList.toggle("hidden", !conf.title);
 				$("title").placeholder = conf.title || "";
-				for (const id of ["f-description", "f-tags", "f-category", "f-location", "f-author", "f-pinned"]) {
+				for (const id of ["f-slug", "f-description", "f-tags", "f-category", "f-location", "f-author", "f-pinned"]) {
 					$(id).classList.toggle("hidden", !conf.show.includes(id));
 				}
 				document.querySelectorAll(".seg button").forEach((b) => {
@@ -387,6 +391,7 @@
 					type,
 					title,
 					content,
+					slug: $("slug").value,
 					description: $("description").value,
 					tags: $("tags").value,
 					category: $("category").value,
@@ -410,6 +415,7 @@
 						showResult("ok", `已提交 · ${data.message}<br/>文件：<code>${data.path}</code>`);
 						$("content").value = "";
 						if (type === "post") $("title").value = "";
+						$("slug").value = "";
 					} else {
 						showResult("err", `发布失败：${data.error || `HTTP ${res.status}`}`);
 					}

@@ -88,6 +88,7 @@ function buildFrontmatter(type, fields, now) {
 	// post / update
 	lines.push(`title: ${yamlStr(fields.title)}`);
 	lines.push(`published: ${now.date}`);
+	if (fields.slug) lines.push(`slug: ${yamlStr(fields.slug)}`);
 	if (type === "update") {
 		lines.push(
 			`tags: ${JSON.stringify(fields.tags?.length ? fields.tags : ["更新公告"])}`,
@@ -271,6 +272,7 @@ export default async function handler(req, res) {
 
 	const fields = {
 		title: finalTitle,
+		slug: String(body.slug ?? "").trim(),
 		description: String(body.description ?? "").trim(),
 		category: String(body.category ?? "").trim(),
 		author: String(body.author ?? "").trim(),
