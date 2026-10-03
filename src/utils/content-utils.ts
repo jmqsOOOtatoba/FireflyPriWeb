@@ -4,6 +4,12 @@ import { i18n } from "@i18n/translation";
 import { getCategoryUrl } from "@utils/url-utils";
 
 // // Retrieve posts and sort them by publication date
+// 同天文章的先后序号：取 id 中最后一个数字段（兼容 slug 形如 azuma.zuomu-blog-16 与文件名 19文章）
+function postIdSeq(id: string): number {
+	const m = id.match(/(\d+)(?!.*\d)/);
+	return m ? Number(m[1]) : 0;
+}
+
 async function getRawSortedPosts() {
 	const allBlogPosts = await getCollection("posts", ({ data }) => {
 		return import.meta.env.PROD ? data.draft !== true : true;
@@ -14,10 +20,13 @@ async function getRawSortedPosts() {
 		if (a.data.pinned && !b.data.pinned) return -1;
 		if (!a.data.pinned && b.data.pinned) return 1;
 
-		// 如果置顶状态相同，则按发布日期排序
-		const dateA = new Date(a.data.published);
-		const dateB = new Date(b.data.published);
-		return dateA > dateB ? -1 : 1;
+		// 其次按发布日期降序
+		const dateA = new Date(a.data.published).getTime();
+		const dateB = new Date(b.data.published).getTime();
+		if (dateA !== dateB) return dateB - dateA;
+
+		// 同一天：按文件名序号降序（19文章 排在 17文章 前），无序号则保持原序
+		return postIdSeq(b.id) - postIdSeq(a.id);
 	});
 	return sorted;
 }
