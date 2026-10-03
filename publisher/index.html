@@ -46,7 +46,7 @@
 				}
 			}
 			* {
-					box-sizing: border-box;
+				box-sizing: border-box;
 			}
 			html,
 			body {
@@ -122,7 +122,8 @@
 				transition: border-color 0.15s;
 			}
 			input:focus,
-			textarea:focus {
+			textarea:focus,
+			select:focus {
 				border-color: var(--accent);
 			}
 			textarea {
@@ -256,6 +257,262 @@
 			footer a {
 				color: var(--muted);
 			}
+
+			/* ---- 顶栏 / 登录 ---- */
+			.topbar {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: 10px;
+				margin-bottom: 16px;
+			}
+			.topbar .seg {
+				margin-bottom: 0;
+				flex: 1;
+				max-width: 340px;
+			}
+			.link-btn {
+				background: none;
+				border: 0;
+				color: var(--muted);
+				font: inherit;
+				font-size: 13px;
+				cursor: pointer;
+				padding: 6px 10px;
+				border-radius: 6px;
+				white-space: nowrap;
+			}
+			.link-btn:hover {
+				color: var(--ink);
+				background: var(--card);
+			}
+
+			/* ---- 管理 ---- */
+			.mg-toolbar {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin-bottom: 12px;
+			}
+			.mg-toolbar .status {
+				font-size: 12px;
+				color: var(--muted);
+			}
+			.btn-sm {
+				border: 1px solid var(--line);
+				background: var(--field-bg);
+				color: var(--ink);
+				border-radius: 8px;
+				padding: 7px 14px;
+				font: inherit;
+				font-size: 13px;
+				cursor: pointer;
+			}
+			.btn-sm:hover {
+				border-color: var(--accent);
+			}
+			.mg-group {
+				margin-bottom: 18px;
+			}
+			.mg-group h4 {
+				font-size: 13px;
+				color: var(--muted);
+				margin: 0 0 8px;
+				font-weight: 600;
+			}
+			.mg-item {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				width: 100%;
+				text-align: left;
+				background: var(--field-bg);
+				border: 1px solid var(--line);
+				border-radius: 8px;
+				padding: 10px 12px;
+				margin-bottom: 8px;
+				cursor: pointer;
+				font: inherit;
+				color: var(--ink);
+			}
+			.mg-item:hover {
+				border-color: var(--accent);
+			}
+			.mg-item .t {
+				flex: 1;
+				min-width: 0;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				font-size: 14px;
+			}
+			.mg-item .n {
+				font-size: 12px;
+				color: var(--muted);
+				font-family: ui-monospace, Consolas, monospace;
+				white-space: nowrap;
+			}
+			.badge {
+				font-size: 11px;
+				padding: 1px 7px;
+				border-radius: 99px;
+				border: 1px solid var(--line);
+				color: var(--muted);
+				white-space: nowrap;
+			}
+			.badge.draft {
+				border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+				color: var(--accent);
+			}
+			.mg-editor-head {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				margin-bottom: 10px;
+			}
+			.mg-editor-head .file {
+				font-family: ui-monospace, Consolas, monospace;
+				font-size: 12px;
+				color: var(--muted);
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+			textarea.editor {
+				min-height: 340px;
+			}
+			.mg-actions {
+				display: flex;
+				gap: 10px;
+				margin-top: 10px;
+			}
+			.btn-danger {
+				border: 1px solid var(--err-line);
+				background: var(--err-bg);
+				color: var(--err);
+				border-radius: 8px;
+				padding: 7px 14px;
+				font: inherit;
+				font-size: 13px;
+				cursor: pointer;
+			}
+			.btn-primary {
+				border: 0;
+				background: var(--accent);
+				color: var(--accent-ink);
+				border-radius: 8px;
+				padding: 7px 16px;
+				font: inherit;
+				font-size: 13px;
+				font-weight: 600;
+				cursor: pointer;
+			}
+			.btn-primary:disabled,
+			.btn-sm:disabled,
+			.btn-danger:disabled {
+				opacity: 0.55;
+				cursor: not-allowed;
+			}
+			#mg-preview {
+				margin-top: 14px;
+				border-top: 1px dashed var(--line);
+				padding-top: 12px;
+			}
+			.fm-note {
+				font-family: ui-monospace, Consolas, monospace;
+				font-size: 11px;
+				color: var(--muted);
+				white-space: pre-wrap;
+				word-break: break-all;
+				background: var(--bg);
+				border: 1px solid var(--line);
+				border-radius: 8px;
+				padding: 8px 10px;
+				margin-bottom: 12px;
+				max-height: 120px;
+				overflow: auto;
+			}
+			.md-body {
+				font-size: 15px;
+				line-height: 1.75;
+			}
+			.md-body > :first-child {
+				margin-top: 0;
+			}
+			.md-body h1,
+			.md-body h2,
+			.md-body h3,
+			.md-body h4 {
+				line-height: 1.35;
+				margin: 1.2em 0 0.5em;
+			}
+			.md-body h1 {
+				font-size: 1.4em;
+			}
+			.md-body h2 {
+				font-size: 1.25em;
+			}
+			.md-body h3 {
+				font-size: 1.1em;
+			}
+			.md-body p,
+			.md-body ul,
+			.md-body ol {
+				margin: 0.7em 0;
+			}
+			.md-body ul,
+			.md-body ol {
+				padding-left: 1.5em;
+			}
+			.md-body pre {
+				background: var(--bg);
+				border: 1px solid var(--line);
+				border-radius: 8px;
+				padding: 12px;
+				overflow: auto;
+				font-size: 13px;
+			}
+			.md-body code {
+				font-family: ui-monospace, Consolas, monospace;
+				font-size: 0.92em;
+				background: var(--bg);
+				padding: 1px 5px;
+				border-radius: 4px;
+			}
+			.md-body pre code {
+				background: none;
+				padding: 0;
+			}
+			.md-body blockquote {
+				border-left: 3px solid var(--accent);
+				margin: 0.8em 0;
+				padding: 2px 0 2px 12px;
+				color: var(--muted);
+			}
+			.md-body img {
+				max-width: 100%;
+				border-radius: 8px;
+			}
+			.md-body a {
+				color: var(--accent);
+			}
+			.md-body table {
+				border-collapse: collapse;
+				width: 100%;
+				margin: 0.8em 0;
+				font-size: 14px;
+			}
+			.md-body th,
+			.md-body td {
+				border: 1px solid var(--line);
+				padding: 6px 10px;
+				text-align: left;
+			}
+			.md-body hr {
+				border: 0;
+				border-top: 1px solid var(--line);
+				margin: 1.4em 0;
+			}
 		</style>
 	</head>
 	<body>
@@ -265,259 +522,183 @@
 				<p>写好 Markdown，选类型，一键提交到博客仓库自动上线</p>
 			</header>
 
-			<div class="card">
+			<!-- 登录 -->
+			<div class="card" id="view-login">
 				<div class="field">
-					<label for="token">访问口令</label>
+					<label for="login-token">访问口令</label>
 					<input
 						type="password"
-						id="token"
-						placeholder="发布口令（与服务端 PUBLISH_TOKEN 一致）"
+						id="login-token"
+						placeholder="请输入发布台口令"
 						autocomplete="current-password"
 					/>
 				</div>
-
-				<div class="seg" role="tablist" aria-label="内容类型">
-					<button type="button" data-type="post" class="active">文章</button>
-					<button type="button" data-type="update">更新公告</button>
-					<button type="button" data-type="dynamic">动态</button>
-				</div>
-
-				<div class="field" id="title-field">
-					<label for="title">标题</label>
-					<input type="text" id="title" placeholder="文章标题" />
-				</div>
-
-				<div class="field">
-					<label for="content">正文 <span class="hint">Markdown，图片贴外链</span></label>
-					<textarea
-						id="content"
-						placeholder="## 小标题&#10;&#10;在这里粘贴写好的 Markdown 正文……"
-					></textarea>
-				</div>
-
-				<details id="extras">
-					<summary>可选字段（留空则不写入文章）</summary>
-					<div class="field" id="f-updated">
-						<label for="updated">更新日期<span class="hint">未设置则默认使用发布日期</span></label>
-						<input type="date" id="updated" />
-					</div>
-					<div class="field" id="f-description">
-						<label for="description">描述<span class="hint">显示在首页文章卡片上</span></label>
-						<textarea class="short" id="description"></textarea>
-					</div>
-					<div class="field" id="f-image">
-						<label for="image">封面图片<span class="hint">路径或外链</span></label>
-						<input type="text" id="image" placeholder="https://... 或 /images/cover.jpg" />
-					</div>
-					<div class="row">
-						<div class="field" id="f-tags">
-							<label for="tags">标签<span class="hint">逗号分隔</span></label>
-							<input type="text" id="tags" placeholder="教程, Windows" />
-						</div>
-						<div class="field" id="f-category">
-							<label for="category">分类</label>
-							<input type="text" id="category" placeholder="技术分享" />
-						</div>
-					</div>
-					<div class="row">
-						<div class="field" id="f-draft">
-							<label class="check"><input type="checkbox" id="draft" /> 草稿（不对读者可见）</label>
-						</div>
-						<div class="field" id="f-pinned">
-							<label class="check"><input type="checkbox" id="pinned" /> 置顶</label>
-						</div>
-					</div>
-					<div class="field" id="f-slug">
-						<label for="slug">slug<span class="hint">自定义 URL 路径</span></label>
-						<input type="text" id="slug" placeholder="azuma.zuomu-blog-17，留空用文件名" />
-					</div>
-					<div class="field" id="f-lang">
-						<label for="lang">语言<span class="hint">仅与站点默认不同时设置</span></label>
-						<input type="text" id="lang" placeholder="zh-CN" />
-					</div>
-					<div class="field" id="f-author">
-						<label for="author">作者</label>
-						<input type="text" id="author" placeholder="左沐" />
-					</div>
-					<div class="field" id="f-comment">
-						<label for="comment">评论</label>
-						<select id="comment">
-							<option value="">留空（默认开启）</option>
-							<option value="true">开启</option>
-							<option value="false">关闭</option>
-						</select>
-					</div>
-					<div class="row">
-						<div class="field" id="f-licenseName">
-							<label for="licenseName">许可证名称</label>
-							<input type="text" id="licenseName" placeholder="CC BY-NC-SA 4.0" />
-						</div>
-						<div class="field" id="f-licenseUrl">
-							<label for="licenseUrl">许可证链接</label>
-							<input type="text" id="licenseUrl" placeholder="https://..." />
-						</div>
-					</div>
-					<div class="field" id="f-sourceLink">
-						<label for="sourceLink">文章来源</label>
-						<input type="text" id="sourceLink" placeholder="原文链接" />
-					</div>
-					<div class="row">
-						<div class="field" id="f-password">
-							<label for="password">文章密码<span class="hint">设置后加密</span></label>
-							<input type="password" id="password" autocomplete="new-password" />
-						</div>
-						<div class="field" id="f-passwordHint">
-							<label for="passwordHint">密码提示</label>
-							<input type="text" id="passwordHint" placeholder="显示在密码框上方" />
-						</div>
-					</div>
-					<div class="row">
-						<div class="field" id="f-series">
-							<label for="series">系列</label>
-							<input type="text" id="series" placeholder="系列名称" />
-						</div>
-						<div class="field" id="f-seriesOrder">
-							<label for="seriesOrder">系列序号<span class="hint">升序</span></label>
-							<input type="number" id="seriesOrder" step="1" placeholder="1" />
-						</div>
-					</div>
-					<div class="field" id="f-location">
-						<label for="location">位置<span class="hint">仅动态</span></label>
-						<input type="text" id="location" placeholder="辽宁" />
-					</div>
-				</details>
-
-				<button type="button" class="publish-btn" id="publish">发布</button>
-				<div class="result hidden" id="result"></div>
+				<button type="button" class="publish-btn" id="login-btn">登录</button>
+				<div class="result hidden" id="login-result"></div>
 			</div>
 
-			<footer>
-				内容经 GitHub 自动提交至博客仓库，构建约 3~5 分钟后生效
-			</footer>
+			<!-- 主界面 -->
+			<div id="view-main" class="hidden">
+				<div class="topbar">
+					<div class="seg" role="tablist" aria-label="功能页">
+						<button type="button" data-tab="publish" class="active">发布</button>
+						<button type="button" data-tab="manage">管理</button>
+					</div>
+					<button type="button" class="link-btn" id="logout-btn">退出登录</button>
+				</div>
+
+				<!-- 发布 -->
+				<div class="card" id="tab-publish">
+					<div class="seg" role="tablist" aria-label="内容类型">
+						<button type="button" data-type="post" class="active">文章</button>
+						<button type="button" data-type="update">更新公告</button>
+						<button type="button" data-type="dynamic">动态</button>
+					</div>
+
+					<div class="field" id="title-field">
+						<label for="title">标题</label>
+						<input type="text" id="title" placeholder="文章标题" />
+					</div>
+
+					<div class="field">
+						<label for="content">正文 <span class="hint">Markdown，图片贴外链</span></label>
+						<textarea
+							id="content"
+							placeholder="## 小标题&#10;&#10;在这里粘贴写好的 Markdown 正文……"
+						></textarea>
+					</div>
+
+					<details id="extras">
+						<summary>可选字段（留空则不写入文章）</summary>
+						<div class="field" id="f-updated">
+							<label for="updated">更新日期<span class="hint">未设置则默认使用发布日期</span></label>
+							<input type="date" id="updated" />
+						</div>
+						<div class="field" id="f-description">
+							<label for="description">描述<span class="hint">显示在首页文章卡片上</span></label>
+							<textarea class="short" id="description"></textarea>
+						</div>
+						<div class="field" id="f-image">
+							<label for="image">封面图片<span class="hint">路径或外链</span></label>
+							<input type="text" id="image" placeholder="https://... 或 /images/cover.jpg" />
+						</div>
+						<div class="row">
+							<div class="field" id="f-tags">
+								<label for="tags">标签<span class="hint">逗号分隔</span></label>
+								<input type="text" id="tags" placeholder="教程, Windows" />
+							</div>
+							<div class="field" id="f-category">
+								<label for="category">分类</label>
+								<input type="text" id="category" placeholder="技术分享" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="field" id="f-draft">
+								<label class="check"><input type="checkbox" id="draft" /> 草稿（不对读者可见）</label>
+							</div>
+							<div class="field" id="f-pinned">
+								<label class="check"><input type="checkbox" id="pinned" /> 置顶</label>
+							</div>
+						</div>
+						<div class="field" id="f-slug">
+							<label for="slug">slug<span class="hint">自定义 URL 路径</span></label>
+							<input type="text" id="slug" placeholder="azuma.zuomu-blog-17，留空用文件名" />
+						</div>
+						<div class="field" id="f-lang">
+							<label for="lang">语言<span class="hint">仅与站点默认不同时设置</span></label>
+							<input type="text" id="lang" placeholder="zh-CN" />
+						</div>
+						<div class="field" id="f-author">
+							<label for="author">作者</label>
+							<input type="text" id="author" placeholder="左沐" />
+						</div>
+						<div class="field" id="f-comment">
+							<label for="comment">评论</label>
+							<select id="comment">
+								<option value="">留空（默认开启）</option>
+								<option value="true">开启</option>
+								<option value="false">关闭</option>
+							</select>
+						</div>
+						<div class="row">
+							<div class="field" id="f-licenseName">
+								<label for="licenseName">许可证名称</label>
+								<input type="text" id="licenseName" placeholder="CC BY-NC-SA 4.0" />
+							</div>
+							<div class="field" id="f-licenseUrl">
+								<label for="licenseUrl">许可证链接</label>
+								<input type="text" id="licenseUrl" placeholder="https://..." />
+							</div>
+						</div>
+						<div class="field" id="f-sourceLink">
+							<label for="sourceLink">文章来源</label>
+							<input type="text" id="sourceLink" placeholder="原文链接" />
+						</div>
+						<div class="row">
+							<div class="field" id="f-password">
+								<label for="password">文章密码<span class="hint">设置后加密</span></label>
+								<input type="password" id="password" autocomplete="new-password" />
+							</div>
+							<div class="field" id="f-passwordHint">
+								<label for="passwordHint">密码提示</label>
+								<input type="text" id="passwordHint" placeholder="显示在密码框上方" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="field" id="f-series">
+								<label for="series">系列</label>
+								<input type="text" id="series" placeholder="系列名称" />
+							</div>
+							<div class="field" id="f-seriesOrder">
+								<label for="seriesOrder">系列序号<span class="hint">升序</span></label>
+								<input type="number" id="seriesOrder" step="1" placeholder="1" />
+							</div>
+						</div>
+						<div class="field" id="f-location">
+							<label for="location">位置<span class="hint">仅动态</span></label>
+							<input type="text" id="location" placeholder="辽宁" />
+						</div>
+					</details>
+
+					<button type="button" class="publish-btn" id="publish">发布</button>
+					<div class="result hidden" id="result"></div>
+				</div>
+
+				<!-- 管理 -->
+				<div class="card hidden" id="tab-manage">
+					<!-- 列表态 -->
+					<div id="mg-list">
+						<div class="mg-toolbar">
+							<span class="status" id="mg-status"></span>
+							<button type="button" class="btn-sm" id="mg-refresh">刷新列表</button>
+						</div>
+						<div id="mg-groups"></div>
+					</div>
+					<!-- 编辑态 -->
+					<div id="mg-editor" class="hidden">
+						<div class="mg-editor-head">
+							<button type="button" class="btn-sm" id="mg-back">← 返回</button>
+							<span class="file" id="mg-file"></span>
+						</div>
+						<textarea id="mg-content" class="editor" spellcheck="false"></textarea>
+						<div class="mg-actions">
+							<button type="button" class="btn-sm" id="mg-preview-btn">预览</button>
+							<button type="button" class="btn-primary" id="mg-save">保存</button>
+							<button type="button" class="btn-danger" id="mg-delete">删除</button>
+						</div>
+						<div id="mg-preview" class="hidden">
+							<div class="fm-note" id="mg-fm"></div>
+							<div class="md-body" id="mg-rendered"></div>
+						</div>
+						<div class="result hidden" id="mg-result"></div>
+					</div>
+				</div>
+			</div>
+
+			<footer>内容经 GitHub 自动提交至博客仓库，构建约 3~5 分钟后生效</footer>
 		</div>
 
-		<script>
-			const $ = (id) => document.getElementById(id);
-			const TOKEN_KEY = "firefly_publish_token";
-			let type = "post";
-
-			$("token").value = localStorage.getItem(TOKEN_KEY) || "";
-
-			// 与文章文档字段表一致（f-location 为动态专属）
-			const ALL_FIELD_IDS = [
-				"f-updated", "f-description", "f-image", "f-tags", "f-category",
-				"f-draft", "f-pinned", "f-slug", "f-lang", "f-author", "f-comment",
-				"f-licenseName", "f-licenseUrl", "f-sourceLink",
-				"f-password", "f-passwordHint", "f-series", "f-seriesOrder",
-				"f-location",
-			];
-			const ARTICLE_FIELD_IDS = ALL_FIELD_IDS.filter((id) => id !== "f-location");
-
-			const typeConf = {
-				post: { title: "文章标题", show: ARTICLE_FIELD_IDS },
-				update: { title: "留空则自动命名（更新公告+日期）", show: ARTICLE_FIELD_IDS },
-				dynamic: { title: null, show: ["f-pinned", "f-location"] },
-			};
-
-			function applyType(next) {
-				type = next;
-				const conf = typeConf[next];
-				$("title-field").classList.toggle("hidden", !conf.title);
-				$("title").placeholder = conf.title || "";
-				for (const id of ALL_FIELD_IDS) {
-					$(id).classList.toggle("hidden", !conf.show.includes(id));
-				}
-				document.querySelectorAll(".seg button").forEach((b) => {
-					b.classList.toggle("active", b.dataset.type === next);
-				});
-			}
-			document.querySelectorAll(".seg button").forEach((b) => {
-				b.addEventListener("click", () => applyType(b.dataset.type));
-			});
-			applyType("post");
-
-			function showResult(kind, html) {
-				const el = $("result");
-				el.className = `result ${kind}`;
-				el.innerHTML = html;
-			}
-
-			$("publish").addEventListener("click", async () => {
-				const token = $("token").value.trim();
-				const content = $("content").value;
-				const title = $("title").value.trim();
-				if (!token) {
-					showResult("err", "请先填写访问口令");
-					return;
-				}
-				if (type === "post" && !title) {
-					showResult("err", "文章标题不能为空");
-					return;
-				}
-				if (!content.trim()) {
-					showResult("err", "正文内容不能为空");
-					return;
-				}
-
-				const payload = {
-					type,
-					title,
-					content,
-					updated: $("updated").value,
-					description: $("description").value,
-					image: $("image").value,
-					tags: $("tags").value,
-					category: $("category").value,
-					draft: $("draft").checked,
-					pinned: $("pinned").checked,
-					slug: $("slug").value,
-					lang: $("lang").value,
-					author: $("author").value,
-					comment: $("comment").value,
-					licenseName: $("licenseName").value,
-					licenseUrl: $("licenseUrl").value,
-					sourceLink: $("sourceLink").value,
-					password: $("password").value,
-					passwordHint: $("passwordHint").value,
-					series: $("series").value,
-					seriesOrder: $("seriesOrder").value,
-					location: $("location").value,
-				};
-
-				const btn = $("publish");
-				btn.disabled = true;
-				btn.textContent = "发布中…";
-				try {
-					const res = await fetch("/api/publish", {
-						method: "POST",
-						headers: { "Content-Type": "application/json", "x-publish-token": token },
-						body: JSON.stringify(payload),
-					});
-					const data = await res.json().catch(() => ({}));
-					if (res.ok && data.ok) {
-						localStorage.setItem(TOKEN_KEY, token);
-						showResult("ok", `已提交 · ${data.message}<br/>文件：<code>${data.path}</code>`);
-						// 清空与文章一对一的字段，保留可复用的设置类字段（标签/分类/作者/系列）
-						for (const id of [
-							"title", "content", "slug", "updated", "description", "image",
-							"lang", "licenseName", "licenseUrl", "sourceLink",
-							"password", "passwordHint", "seriesOrder",
-						]) {
-							$(id).value = "";
-						}
-						$("draft").checked = false;
-						$("pinned").checked = false;
-						$("comment").value = "";
-					} else {
-						showResult("err", `发布失败：${data.error || `HTTP ${res.status}`}`);
-					}
-				} catch (e) {
-					showResult("err", `网络错误：${e.message}`);
-				} finally {
-					btn.disabled = false;
-					btn.textContent = "发布";
-				}
-			});
-		</script>
+		<script src="/vendor/marked.umd.js"></script>
+		<script src="/app.js"></script>
 	</body>
 </html>
