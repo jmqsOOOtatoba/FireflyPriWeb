@@ -220,14 +220,32 @@ const stats = [
     }
   }
 
-  // 不蒜子 v3 官方脚本会 querySelectorAll 按 id 批量写入所有同 id 元素，
-  // 此镜像作为兜底：把 getElementById 命中的第一份数值同步到所有
-  // data-busuanzi-key 元素，避免任何一份停留在占位符 "-"。
+  // 不蒜子 v3 换库导致历史计数清零（2026-10 迁移），站内续接迁移前的累计值展示。
+  // 数值为用户口述约数（PV≈2000+、UV≈1000+），想调整直接改这里。
+  const BUSUANZI_OFFSETS = { site_pv: 2000, site_uv: 1000 };
+
+  function withOffset(raw, offset) {
+    const n = Number(raw);
+    return Number.isFinite(n) ? String(n + offset) : raw;
+  }
+
+  // 不蒜子 v3 官方脚本会 querySelectorAll 按 id 批量写入所有同 id 元素（原始计数），
+  // 此处把原始值加历史偏移后镜像到全部 data-busuanzi-key 元素。
+  // data-busuanzi-raw 缓存最近一次识别到的原始值：只有当元素文本 ≠ 按该原始值
+  // 算出的展示值时，才认定不蒜子又写入了新原始值——否则偏移后的展示值会被
+  // 误判为新原始值而反复叠加。
   function syncBusuanziValues() {
     ["site_pv", "site_uv"].forEach((key) => {
       const source = document.getElementById(`busuanzi_${key}`);
       if (!source) return;
-      const value = source.textContent;
+      const current = source.textContent.trim();
+      if (!/^\d/.test(current)) return; // 占位符 "-"、拒绝文案等非数字不处理
+      const offset = BUSUANZI_OFFSETS[key] || 0;
+      const lastRaw = source.getAttribute("data-busuanzi-raw");
+      if (lastRaw === null || current !== withOffset(lastRaw, offset)) {
+        source.setAttribute("data-busuanzi-raw", current);
+      }
+      const value = withOffset(source.getAttribute("data-busuanzi-raw"), offset);
       document.querySelectorAll(`[data-busuanzi-key="${key}"]`).forEach((element) => {
         if (element.textContent !== value) {
           element.textContent = value;
