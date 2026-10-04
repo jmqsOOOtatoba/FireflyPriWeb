@@ -357,6 +357,14 @@ export default defineConfig({
 			],
 		}),
 	},
+
+	// Astro 构建行为：全部 CSS 内联进 HTML（非 vite.build）
+	// 三个阻塞 CSS（约 38KB gzip）随首字节到达，消除 3 个渲染阻塞请求（Lighthouse 估算 ~250ms）；
+	// 阻塞 CSS 均无 url() 引用，跨页面内联无相对路径问题
+	build: {
+		inlineStylesheets: "always",
+	},
+
 	vite: {
 		plugins: [tailwindcss()],
 		server: {
