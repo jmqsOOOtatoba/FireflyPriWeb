@@ -97,3 +97,22 @@ _Cross-task facts that survive across sessions. Promoted from session checkpoint
 
 ### Dead ends
 
+## 会话交接：性能优化 A–F（2026-10-04）
+
+- **A~F 六项全部完成并推送**：
+  - A 字体子集化 `3691383a`（3.1MB TTF → 212KB woff2；根因：`fontConfig.subsetFonts` 漏登记 `--font-hanyi-wenhei`，脚本流水线本来就在）
+  - C preconnect 三源（同在 `3691383a`；会改变 HTML 行号，旧 Lighthouse 坐标整体偏移）
+  - D CSS 全内联 `f875aef9`（`astro.config.mjs` **顶层** `build.inlineStylesheets: "always"`；写进 `vite.build` 无效且静默）
+  - B 封面图接图床尺寸 API：图床 = CloudFlare-ImgBed，**后台需开启「系统设置→安全设置→访问管理→图片尺寸处理」**（曾 403 `Image resizing is disabled`）；博客端 `siteConfig.imageOptimization.resizeHosts=["tu.mstzuomu.space"]` + `image-utils.ts` 的 `RESIZE_WIDTHS/canResizeRemote/buildResizeUrl` + `CoverImage.astro` srcset 双档（828/1656）+ `data-resize-fallback` 一次性回退保险丝；单张封面 330KB→48.5–141KB。**注意 `sizes` 必须按真实显示宽给（列表卡 770px），沿用本地图旧值 320px 会让 Retina 错选 828w 发糊**
+  - E 强制重排归零 `d6ceae0a`（新工具 `src/utils/after-first-paint.ts`：轮询真实 FCP + **每帧串行放行一个回调**；14 文件 +280/−121）。根因五类：解析期读 `window.innerWidth`（移动模拟下强制首次全量布局！PostPage/壁纸sync/指示器，改 matchMedia 或删冗余宽度分支）、`pageYOffset||documentElement.scrollTop` 短路到几何读（5+ 处改 `window.scrollY`）、`document.fonts.ready` getter 本身强制样式结算（连 typeof guard 都算访问）、PostPage transition 开关体操（解析期元素无计算样式 transition 不会触发，直接砍）、读写交错（壁纸 sync 两阶段批处理+getElementsBy*、歌词高亮先读后写等）
+  - F Chrome 独有掉帧 = **真 Chrome `Local State` 中 `hardware_acceleration_mode.enabled: false`**（硬件加速被关），Edge 默认开；同机真 Chrome/真 Edge 用同一 FPS harness 对打双满分，站点侧无需改码；用户已开启并确认恢复
+- **完整技术复盘（全部命令、CDP/FPS 脚本骨架、测量坑）** = 站内文章 `src/content/posts/txt/18文章.md`（commit `4b61295e`）。动性能相关代码前先读它
+- 测量前必知（本轮实测教训）：
+  - Lighthouse 默认**移动视口 + 4 倍 CPU 降速**，数字比桌面裸测大数倍，跨环境先对齐条件
+  - **MCP 浏览器窗口被遮挡 = 2fps + paint 条目全空**，一切帧率/绘制测量前先 `page.bringToFront()`（本轮最大时间陷阱）
+  - 强制重排定位以 **CDP Tracing 完整栈**为准（cats 要含 `disabled-by-default-devtools.timeline.stack`，`stack[0]` 是最内层帧）；LH 行号 0-based、列号时而脚本相对，只当粗定位
+  - 本机无独立 Chrome 时 Lighthouse 用 `$env:CHROME_PATH = "...Microsoft\Edge\Application\msedge.exe"`
+  - 排查行为异常先 `git stash` 建基线同环境对照，再怀疑自己的改动
+- 遗留可选项：文章页 `twikoo-custom.css`(8.9KB 不挡首屏)、GreatVibes 死文件、`<380px` 强制网格的 CSS 兜底、mi-fds 两张封面未接尺寸 API、18文章封面图未配
+- 待验证：部署后重跑 Lighthouse 对比 A~E 累计效果（目标：forced-reflow 稳定 score 1、LCP/总传输量显著回落）
+
