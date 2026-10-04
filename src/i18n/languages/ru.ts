@@ -414,6 +414,7 @@ export const ru: Translation = {
 	// Стиль карточек
 	[Key.cardSettings]: "Стиль карточек",
 	[Key.cardBorder]: "Рамка и тень карточек",
+	[Key.cardBorderWidth]: "Толщина рамки",
 	[Key.cardFollowTheme]: "Карточки跟随主题色",
 
 	// Макет списка сообщений

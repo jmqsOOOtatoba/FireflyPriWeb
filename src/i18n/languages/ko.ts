@@ -411,6 +411,7 @@ export const ko: Translation = {
 	// 카드 스타일
 	[Key.cardSettings]: "카드 스타일",
 	[Key.cardBorder]: "카드 테두리와 그림자",
+	[Key.cardBorderWidth]: "테두리 두께",
 	[Key.cardFollowTheme]: "카드 테마 색상 따르기",
 
 	// Post List Layout

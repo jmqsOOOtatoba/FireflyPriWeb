@@ -410,6 +410,7 @@ export const ja: Translation = {
 	// カードスタイル
 	[Key.cardSettings]: "カードスタイル",
 	[Key.cardBorder]: "カードのボーダーと影",
+	[Key.cardBorderWidth]: "ボーダーの太さ",
 	[Key.cardFollowTheme]: "カードのテーマカラー追随",
 
 	// 投稿リストレイアウト

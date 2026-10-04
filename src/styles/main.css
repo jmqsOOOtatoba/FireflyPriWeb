@@ -248,15 +248,18 @@ html {
     }
 
 
-    /* 开启边框和阴影效果时的样式 */
+    /* 开启边框和阴影效果时的样式（宽度由 --card-border-width 控制，默认 2px，可在显示设置面板调节） */
     .enable-card-border .card-base {
-        @apply transition-all duration-300 border border-(--line-divider) shadow-xs;
+        @apply transition-all duration-300 border border-black shadow-xs;
+        border-width: var(--card-border-width, 2px);
     }
     .enable-card-border .card-base-transparent {
-        @apply transition-all duration-300 border border-(--line-divider) shadow-xs;
+        @apply transition-all duration-300 border border-black shadow-xs;
+        border-width: var(--card-border-width, 2px);
     }
     .enable-card-border .btn-card {
-        @apply transition-all duration-300 border border-(--line-divider) shadow-xs;
+        @apply transition-all duration-300 border border-black shadow-xs;
+        border-width: var(--card-border-width, 2px);
     }
 
     /* 导航栏样式适配 */

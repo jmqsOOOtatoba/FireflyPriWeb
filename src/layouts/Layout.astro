@@ -591,6 +591,12 @@ const ogImageAlt = propsOgImageAlt ?? pageTitle;
         var follow = stored !== null ? stored === "true" : defaultFollowTheme;
         if (follow) document.body.classList.add("card-follow-theme-hue");
         else document.body.classList.remove("card-follow-theme-hue");
+
+        stored = localStorage.getItem("cardBorderWidth");
+        var borderWidth = stored !== null ? Number.parseFloat(stored) : NaN;
+        if (!Number.isNaN(borderWidth) && borderWidth >= 0 && borderWidth <= 5) {
+          document.documentElement.style.setProperty("--card-border-width", borderWidth + "px");
+        }
       })();
     </script>
 

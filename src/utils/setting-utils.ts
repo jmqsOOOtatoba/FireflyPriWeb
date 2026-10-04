@@ -926,6 +926,57 @@ export function setCardBorderEnabled(enabled: boolean): void {
 	}
 }
 
+// Card border width functions
+const CARD_BORDER_WIDTH_MIN = 0;
+const CARD_BORDER_WIDTH_MAX = 5;
+
+export function getDefaultCardBorderWidth(): number {
+	return 2;
+}
+
+export function getStoredCardBorderWidth(): number {
+	if (
+		typeof localStorage === "undefined" ||
+		typeof localStorage.getItem !== "function"
+	) {
+		return getDefaultCardBorderWidth();
+	}
+	const stored = localStorage.getItem("cardBorderWidth");
+	if (stored === null) {
+		return getDefaultCardBorderWidth();
+	}
+	const parsed = Number.parseFloat(stored);
+	if (Number.isNaN(parsed)) {
+		return getDefaultCardBorderWidth();
+	}
+	return clampNumber(parsed, CARD_BORDER_WIDTH_MIN, CARD_BORDER_WIDTH_MAX);
+}
+
+export function applyCardBorderWidthToDocument(width: number): void {
+	if (typeof document === "undefined") {
+		return;
+	}
+	document.documentElement.style.setProperty(
+		"--card-border-width",
+		`${clampNumber(width, CARD_BORDER_WIDTH_MIN, CARD_BORDER_WIDTH_MAX)}px`,
+	);
+}
+
+export function setCardBorderWidth(width: number): void {
+	const safeWidth = clampNumber(
+		width,
+		CARD_BORDER_WIDTH_MIN,
+		CARD_BORDER_WIDTH_MAX,
+	);
+	if (
+		typeof localStorage !== "undefined" &&
+		typeof localStorage.setItem === "function"
+	) {
+		localStorage.setItem("cardBorderWidth", String(safeWidth));
+	}
+	applyCardBorderWidthToDocument(safeWidth);
+}
+
 // Card follow theme functions
 export function getDefaultCardFollowThemeEnabled(): boolean {
 	return siteConfig.card?.followTheme ?? false;

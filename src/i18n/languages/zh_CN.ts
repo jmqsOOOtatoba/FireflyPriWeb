@@ -403,6 +403,7 @@ export const zh_CN: Translation = {
 	// 卡片样式
 	[Key.cardSettings]: "卡片样式",
 	[Key.cardBorder]: "卡片边框和阴影",
+	[Key.cardBorderWidth]: "边框粗细",
 	[Key.cardFollowTheme]: "卡片跟随主题色",
 
 	// 文章布局

@@ -11,6 +11,7 @@ import {
 	getDefaultBannerCarouselEnabled,
 	getDefaultBannerTitleEnabled,
 	getDefaultCardBorderEnabled,
+	getDefaultCardBorderWidth,
 	getDefaultCardFollowThemeEnabled,
 	getDefaultFullscreenLayout,
 	getDefaultGradientEnabled,
@@ -24,6 +25,7 @@ import {
 	getStoredBannerCarouselEnabled,
 	getStoredBannerTitleEnabled,
 	getStoredCardBorderEnabled,
+	getStoredCardBorderWidth,
 	getStoredCardFollowThemeEnabled,
 	getStoredFullscreenLayout,
 	getStoredGradientEnabled,
@@ -36,6 +38,7 @@ import {
 	setBannerCarouselEnabled,
 	setBannerTitleEnabled,
 	setCardBorderEnabled,
+	setCardBorderWidth,
 	setCardFollowThemeEnabled,
 	setFullscreenLayout,
 	setGradientEnabled,
@@ -112,6 +115,8 @@ let overlayCardOpacity = $state(getDefaultOverlayCardOpacity());
 const defaultOverlayCardOpacity = getDefaultOverlayCardOpacity();
 let cardBorderEnabled = $state(false);
 const defaultCardBorderEnabled = getDefaultCardBorderEnabled();
+let cardBorderWidth = $state(getStoredCardBorderWidth());
+const defaultCardBorderWidth = getDefaultCardBorderWidth();
 let cardFollowThemeEnabled = $state(false);
 const defaultCardFollowThemeEnabled = getDefaultCardFollowThemeEnabled();
 
@@ -188,6 +193,7 @@ let bannerSettingsIsDefault = $derived(
 );
 let cardSettingsIsDefault = $derived(
 	(!isCardBorderSwitchable || cardBorderEnabled === defaultCardBorderEnabled) &&
+		(!isCardBorderSwitchable || cardBorderWidth === defaultCardBorderWidth) &&
 		(!isCardFollowThemeSwitchable ||
 			cardFollowThemeEnabled === defaultCardFollowThemeEnabled),
 );
@@ -449,6 +455,10 @@ function resetCardSettings() {
 		cardBorderEnabled = defaultCardBorderEnabled;
 		setCardBorderEnabled(defaultCardBorderEnabled);
 	}
+	if (isCardBorderSwitchable && cardBorderWidth !== defaultCardBorderWidth) {
+		cardBorderWidth = defaultCardBorderWidth;
+		setCardBorderWidth(defaultCardBorderWidth);
+	}
 	if (
 		isCardFollowThemeSwitchable &&
 		cardFollowThemeEnabled !== defaultCardFollowThemeEnabled
@@ -456,6 +466,8 @@ function resetCardSettings() {
 		cardFollowThemeEnabled = defaultCardFollowThemeEnabled;
 		setCardFollowThemeEnabled(defaultCardFollowThemeEnabled);
 	}
+
+	requestAnimationFrame(refreshAllRangeProgress);
 }
 
 function switchWallpaperMode(newMode: WALLPAPER_MODE) {
@@ -632,6 +644,12 @@ $effect(() => {
 });
 
 $effect(() => {
+	if (isCardBorderSwitchable) {
+		setCardBorderWidth(cardBorderWidth);
+	}
+});
+
+$effect(() => {
 	if (wallpaperMode === WALLPAPER_OVERLAY) {
 		if (isOverlayOpacitySwitchable) {
 			setOverlayOpacity(overlayOpacity);
@@ -783,6 +801,24 @@ $effect(() => {
 							 class:left-5={cardBorderEnabled}></div>
 					</div>
 				</button>
+				<div class="rounded-md bg-(--btn-regular-bg) p-2">
+					<div class="flex items-center justify-between mb-1">
+						<span class="text-xs font-medium text-(--btn-content) opacity-80">{i18n(I18nKey.cardBorderWidth)}</span>
+						<span class="text-xs text-(--btn-content)">{cardBorderWidth}px</span>
+					</div>
+					<input
+						aria-label={i18n(I18nKey.cardBorderWidth)}
+						type="range"
+						min={0}
+						max={5}
+						step={0.5}
+						value={cardBorderWidth}
+						oninput={(e) => {
+							cardBorderWidth = Number((e.currentTarget as HTMLInputElement).value);
+						}}
+						class="slider w-full overlay-slider"
+					/>
+				</div>
 				{/if}
 				{#if isCardFollowThemeSwitchable}
 				<button

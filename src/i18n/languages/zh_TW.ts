@@ -405,6 +405,7 @@ export const zh_TW: Translation = {
 	// 卡片樣式
 	[Key.cardSettings]: "卡片樣式",
 	[Key.cardBorder]: "卡片邊框和陰影",
+	[Key.cardBorderWidth]: "邊框粗細",
 	[Key.cardFollowTheme]: "卡片跟隨主題色",
 
 	// 文章佈局

@@ -403,6 +403,7 @@ enum I18nKey {
 	// 卡片样式
 	cardSettings = "cardSettings",
 	cardBorder = "cardBorder",
+	cardBorderWidth = "cardBorderWidth",
 	cardFollowTheme = "cardFollowTheme",
 
 	// 文章布局
