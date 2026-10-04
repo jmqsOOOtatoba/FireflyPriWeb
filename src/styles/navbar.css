@@ -44,12 +44,25 @@
 #navbar>div {
     background-color: var(--card-bg);
     border: 1px solid transparent;
-    border-radius: 0 0 0.75rem 0.75rem;
+    border-radius: 9999px;
     --navbar-surface-blur: 0px;
     /* 给下面的 ::before 当定位包含块 */
     position: relative;
+    /* 间隙条点击穿透由 wrapper 承担，bar 及内部面板/按钮恢复可点 */
+    pointer-events: auto;
     /* 勿加 will-change/z-index，避免 ::before 采样失效 */
     @apply navbar-surface-transition;
+}
+
+/* 悬浮间距：整条导航栏下移，不再贴顶，配合 9999px 圆角形成悬浮胶囊。
+   间距放在 wrapper 的 padding-top 而非 bar 的 margin：
+   navbar-hidden 的 -translate-y-full 按 wrapper 自身高度平移，
+   padding 计入高度，下移多少就能完整隐藏多少，不会在顶部残留 12px 边缘。
+   pointer-events：间隙条是 wrapper 的 padding，整体设为 none 让点击穿透到下层，
+   bar 自身设回 auto（未分层选择器优先于 Tailwind 工具类） */
+#navbar-wrapper {
+    padding-top: 0.75rem;
+    pointer-events: none;
 }
 
 /* ============================================
@@ -72,9 +85,9 @@
 
 /* 通用滚动阴影：下滑到内容区时给导航栏加向下投影，与内容区分层。
    #navbar > div 的 box-shadow 会被各壁纸/透明模式规则（main.css 的 @layer components、特异性更高）覆盖，
-   所以把投影加到没有冲突的父级 #navbar 上；#navbar 本身无 border-radius，需同步圆角让阴影随底部圆角 */
+   所以把投影加到没有冲突的父级 #navbar 上；#navbar 本身无圆角，需同步 9999px 让阴影随胶囊外形 */
 #navbar {
-    border-radius: 0 0 0.75rem 0.75rem;
+    border-radius: 9999px;
 }
 
 #navbar.navbar-sticky-shadow {
@@ -101,7 +114,7 @@ html[data-has-wallpaper] #navbar[data-transparent-mode="semifull"]:not(.scrolled
     html[data-has-wallpaper] #navbar[data-transparent-mode="semi"]>div {
         --navbar-surface-blur: var(--navbar-glass-blur, 20px) !important;
         background: color-mix(in oklch, var(--card-bg) calc(var(--opacity-45) * 100%), transparent) !important;
-        border-radius: 0 0 0.75rem 0.75rem !important;
+        border-radius: 9999px !important;
         box-shadow: inset 0 1px 0 var(--navbar-glass-highlight), 0 1px 0 var(--navbar-glass-hairline) !important;
     }
 
@@ -110,7 +123,7 @@ html[data-has-wallpaper] #navbar[data-transparent-mode="semifull"]:not(.scrolled
         --navbar-surface-blur: 0px !important;
         background: transparent !important;
         border: none !important;
-        border-radius: 0 0 0.75rem 0.75rem !important;
+        border-radius: 9999px !important;
         box-shadow: none !important;
     }
 
@@ -118,7 +131,7 @@ html[data-has-wallpaper] #navbar[data-transparent-mode="semifull"]:not(.scrolled
     html[data-has-wallpaper] #navbar[data-transparent-mode="semifull"].scrolled>div {
         --navbar-surface-blur: var(--navbar-glass-blur, 20px) !important;
         background: color-mix(in oklch, var(--card-bg) calc(var(--opacity-45) * 100%), transparent) !important;
-        border-radius: 0 0 0.75rem 0.75rem !important;
+        border-radius: 9999px !important;
         box-shadow: inset 0 1px 0 var(--navbar-glass-highlight), 0 1px 0 var(--navbar-glass-hairline) !important;
     }
 }
@@ -133,7 +146,7 @@ html[data-has-wallpaper] #navbar[data-transparent-mode="semifull"]:not(.scrolled
     html[data-has-wallpaper] #navbar[data-transparent-mode="semi"][data-is-home="true"]>div {
         --navbar-surface-blur: var(--navbar-glass-blur, 20px) !important;
         background: color-mix(in oklch, var(--card-bg) calc(var(--opacity-45) * 100%), transparent) !important;
-        border-radius: 0 0 0.75rem 0.75rem !important;
+        border-radius: 9999px !important;
         box-shadow: inset 0 1px 0 var(--navbar-glass-highlight), 0 1px 0 var(--navbar-glass-hairline) !important;
     }
 
@@ -142,7 +155,7 @@ html[data-has-wallpaper] #navbar[data-transparent-mode="semifull"]:not(.scrolled
         --navbar-surface-blur: 0px !important;
         background: transparent !important;
         border: none !important;
-        border-radius: 0 0 0.75rem 0.75rem !important;
+        border-radius: 9999px !important;
         box-shadow: none !important;
     }
 
@@ -150,7 +163,7 @@ html[data-has-wallpaper] #navbar[data-transparent-mode="semifull"]:not(.scrolled
     html[data-has-wallpaper] #navbar[data-transparent-mode="semifull"][data-is-home="true"].scrolled>div {
         --navbar-surface-blur: var(--navbar-glass-blur, 20px) !important;
         background: color-mix(in oklch, var(--card-bg) calc(var(--opacity-45) * 100%), transparent) !important;
-        border-radius: 0 0 0.75rem 0.75rem !important;
+        border-radius: 9999px !important;
         box-shadow: inset 0 1px 0 var(--navbar-glass-highlight), 0 1px 0 var(--navbar-glass-hairline) !important;
     }
 }
@@ -206,18 +219,13 @@ html[data-has-wallpaper] #navbar[data-transparent-mode="semifull"]:not(.scrolled
 }
 
 /* ============================================
- * 移动端去掉底部圆角
+ * 移动端：保持胶囊圆角，并给 top-row 补左右悬浮间距
+ * （组件里 <768px 是 px-0，bar 会贴屏幕边缘，胶囊两端必须留空才成形）
  * ============================================ */
 @media (max-width: 767px) {
-    #navbar>div {
-        border-radius: 0 !important;
-    }
-
-    /* 覆盖 banner 模式 semi / semifull 下的圆角 */
-    html[data-has-wallpaper] #navbar[data-transparent-mode="semi"][data-is-home="true"]>div,
-    html[data-has-wallpaper] #navbar[data-transparent-mode="semifull"][data-is-home="true"]>div,
-    html[data-has-wallpaper] #navbar[data-transparent-mode="semifull"][data-is-home="true"].scrolled>div {
-        border-radius: 0 !important;
+    #top-row {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
     }
 }
 

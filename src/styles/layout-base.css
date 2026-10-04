@@ -137,7 +137,7 @@
 
   /* banner 模式 top-row 占位高度 */
   html[data-wallpaper-mode="banner"] #top-row {
-    height: calc(var(--banner-height-home) - 4.5rem);
+    height: calc(var(--banner-height-home) - 4rem);
     @apply transition-all duration-300;
   }
 
@@ -195,7 +195,7 @@
     left: 0 !important;
     right: 0 !important;
     z-index: 80 !important;
-    height: 4.5rem !important;
+    height: 4rem !important;
   }
 
   body.sticky-navbar #navbar-wrapper {
@@ -218,7 +218,7 @@
     left: 0 !important;
     right: 0 !important;
     z-index: 80 !important;
-    height: 4.5rem !important;
+    height: 4rem !important;
   }
   body.dynamic-navbar #navbar-wrapper {
     position: static !important;
@@ -241,7 +241,7 @@
 
 @media (max-width: 1023px) {
   body.sticky-navbar #top-row {
-    height: 4.5rem !important;
+    height: 4rem !important;
   }
 }
 
