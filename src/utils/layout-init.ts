@@ -15,6 +15,7 @@ import {
 	updateMainGridCols,
 	updateSidebarComponentsVisibility,
 } from "@/utils/grid-layout-utils";
+import { afterFirstPaint } from "@/utils/after-first-paint";
 import { initIconLoader } from "@/utils/icon-loader";
 import { initImageLoadFadeIn } from "@/utils/lqip-utils";
 import { initReadingProgress } from "@/utils/reading-progress";
@@ -55,8 +56,9 @@ export function initLayout(): void {
 	setupSwupTransitions();
 	initFullscreenWallpaper();
 	registerContentOverflowListeners();
-	// 滚动路径不再读取布局；先在初始化时填充侧边栏 top 容器可见性缓存
-	refreshSidebarStickyState();
+	// 滚动路径不再读取布局；侧边栏 top 容器可见性缓存的首次填充含几何读取，
+	// 加载期执行会强制全量布局——推迟到首绘后（FCP 前不可能发生有意义的滚动）
+	afterFirstPaint(refreshSidebarStickyState);
 	initScroll();
 	initReadingProgress();
 	initTouchCodeCopyReveal();
@@ -73,16 +75,22 @@ export function initLayout(): void {
 	// Initialize wallpaper mode
 	if (document.readyState === "loading") {
 		document.addEventListener("DOMContentLoaded", () => {
-			updateMainGridCols();
-			updateSidebarComponentsVisibility();
+			// 网格列数/侧栏可见性含几何与计算样式读取，加载期会强制全量布局；
+			// 推迟到首绘后（FCP 后读取近乎零成本，交互前必然完成）
+			afterFirstPaint(() => {
+				updateMainGridCols();
+				updateSidebarComponentsVisibility();
+			});
 			initWallpaperMode();
 			initThemeListener();
 			initIconLoader();
 			syncFullscreenStateAfterInit();
 		});
 	} else {
-		updateMainGridCols();
-		updateSidebarComponentsVisibility();
+		afterFirstPaint(() => {
+			updateMainGridCols();
+			updateSidebarComponentsVisibility();
+		});
 		initWallpaperMode();
 		initThemeListener();
 		initIconLoader();

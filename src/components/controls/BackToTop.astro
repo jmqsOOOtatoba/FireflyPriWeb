@@ -33,8 +33,8 @@ import FloatingButton from "@/components/common/FloatingButton.astro";
 
       setupScrollListener() {
         const updateVisibility = () => {
-          const scrollTop =
-            window.pageYOffset || document.documentElement.scrollTop;
+          // 只用 window.scrollY，避免 documentElement.scrollTop 触发强制布局
+          const scrollTop = window.scrollY;
 
           // 当滚动超过200px时显示按钮
           if (scrollTop > 200) {

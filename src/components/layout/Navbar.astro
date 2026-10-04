@@ -382,7 +382,8 @@ function initSemifullScrollDetection() {
             return;
         }
 
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        // 只用 window.scrollY，避免 documentElement.scrollTop 在加载期触发强制布局
+        const scrollTop = window.scrollY;
         const threshold = 50; // 滚动阈值，可以根据需要调整
         // 使用批量DOM操作优化性能
         if (scrollTop > threshold) {

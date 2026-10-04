@@ -24,7 +24,9 @@ import { Icon } from "astro-icon/components";
     function updateVisibility() {
       var indicator = document.getElementById("scroll-down-indicator");
       if (!indicator) return;
-      var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      // 只用 window.scrollY：documentElement.scrollTop 是几何读取，
+      // 加载期样式未结算时会触发强制同步布局（强制重排）
+      var scrollTop = window.scrollY;
       if (scrollTop > 100) {
         indicator.classList.add("hide");
       } else {
@@ -48,7 +50,11 @@ import { Icon } from "astro-icon/components";
     function updatePosition() {
       var indicator = document.getElementById("scroll-down-indicator");
       if (!indicator) return;
-      if (window.innerWidth > 1023 || !/EdgA\//i.test(navigator.userAgent)) {
+      // 断点判断用 matchMedia：加载期读 innerWidth 会强制首次布局（移动模拟实测 ~31ms）
+      var isWide = window.matchMedia
+        ? window.matchMedia("(min-width: 1024px)").matches
+        : window.innerWidth > 1023;
+      if (isWide || !/EdgA\//i.test(navigator.userAgent)) {
         indicator.style.removeProperty("bottom");
         return;
       }
@@ -70,7 +76,23 @@ import { Icon } from "astro-icon/components";
     var wrapper = document.getElementById("wallpaper-wrapper");
     if (wrapper) wrapper.addEventListener("transitionend", updatePosition);
 
-    updateVisibility();
-    updatePosition();
+    // 等到首次内容绘制后再做初始测量：scrollY 与 getBoundingClientRect
+    // 在样式未结算的加载期会强制全量布局；FCP 之后读取近乎零成本。
+    // 轮询 paint 条目而非双 rAF——弱性能设备上首帧可能被丢弃
+    (function afterFirstPaint(cb) {
+      var frames = 0;
+      var check = function () {
+        var paints = performance.getEntriesByType("paint");
+        for (var i = 0; i < paints.length; i++) {
+          if (paints[i].name === "first-contentful-paint") { cb(); return; }
+        }
+        if (++frames >= 120) { cb(); return; }
+        requestAnimationFrame(check);
+      };
+      check();
+    })(function () {
+      updateVisibility();
+      updatePosition();
+    });
   })();
 </script>

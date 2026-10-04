@@ -213,50 +213,41 @@ const wallpaperPosition = state.isFullscreenMode
                 return mode === WALLPAPER_BANNER || mode === 'fullscreen';
             }
 
-            // 图片淡入：Layout 里的全局 initImageLoadFadeIn 只在解析期扫一次，
-            // 之后克隆进来的图片得自己接管，否则会一直停在 opacity-0
-            function fadeInWhenLoaded(root) {
-                var ph = root.querySelector('.lqip-placeholder');
-                var img = root.querySelector('img');
-                if (!img) return;
-                function done() {
-                    img.style.opacity = '1';
-                    if (ph) ph.classList.add('loaded');
-                }
-                if (img.complete && img.naturalWidth > 0) {
-                    done();
-                } else {
-                    img.addEventListener('load', done, { once: true });
-                    img.addEventListener('error', function () {
-                        if (ph) ph.classList.add('loaded');
-                    }, { once: true });
-                }
-            }
-
             // 把 <template> 里的图片实例化进 DOM —— 插入的那一刻才开始下载
+            // 淡入接管所需的 img/ph 在插入前从 frag 取出，插入后不再查询（避免强制刷新样式）
             function materialize(slideEl, high) {
                 if (!slideEl) return false;
                 var tpl = slideEl.querySelector('template');
                 if (!tpl) return false;
                 var frag = tpl.content.cloneNode(true);
-                if (high) {
-                    var img = frag.querySelector('img');
+                var img = frag.querySelector('img');
+                var ph = frag.querySelector('.lqip-placeholder');
+                if (high && img) {
                     // 必须在插入前写，插入即发起请求
-                    if (img) {
-                        img.setAttribute('fetchpriority', 'high');
-                        // 这张是 LCP 元素，不做淡入：图片没下完时 <img> 本来就不画东西，
-                        // 那 500ms 过渡只是把已经能看的画面又藏半秒，Chrome 会把 LCP 往后记。
-                        img.classList.remove('opacity-0', 'transition-opacity', 'duration-500', 'ease-out');
-                        img.style.opacity = '1';
-                    }
+                    img.setAttribute('fetchpriority', 'high');
+                    // 这张是 LCP 元素，不做淡入：图片没下完时 <img> 本来就不画东西，
+                    // 那 500ms 过渡只是把已经能看的画面又藏半秒，Chrome 会把 LCP 往后记。
+                    img.classList.remove('opacity-0', 'transition-opacity', 'duration-500', 'ease-out');
+                    img.style.opacity = '1';
                     // LQIP 占位层是 absolute + z-index:0，盖在 img 上面，
                     // 它那 0.5s 淡出同样会挡住 LCP
-                    var ph = frag.querySelector('.lqip-placeholder');
                     if (ph) ph.style.transition = 'none';
                 }
                 slideEl.appendChild(frag);
                 tpl.remove();
-                fadeInWhenLoaded(slideEl);
+                if (!img) return true;
+                // Layout 的全局淡入只扫解析期的图片，克隆进来的要自己接管
+                function done() {
+                    img.style.opacity = '1';
+                    if (ph) ph.classList.add('loaded');
+                }
+                if (img.complete && img.naturalWidth > 0) done();
+                else {
+                    img.addEventListener('load', done, { once: true });
+                    img.addEventListener('error', function () {
+                        if (ph) ph.classList.add('loaded');
+                    }, { once: true });
+                }
                 return true;
             }
 
@@ -474,12 +465,13 @@ const wallpaperPosition = state.isFullscreenMode
             var container = document.getElementById('banner-images-container');
             if (!container) return;
 
-            function materialize(slot, high) {
-                var tpl = slot.querySelector('template');
-                if (!tpl) return;
+            // tpl 由 sync 先行收集（读阶段），本函数只做写，避免"改 DOM → 再查询"
+            // 的读写交错强制刷新样式（加载期强制重排的主要来源）
+            function materialize(slot, tpl, high) {
                 var frag = tpl.content.cloneNode(true);
                 var img = frag.querySelector('img');
-                var phFrag = frag.querySelector('.lqip-placeholder');
+                // 插入前从 frag 取占位层，插入后不再 slot.querySelector
+                var ph = frag.querySelector('.lqip-placeholder');
                 if (img && high) {
                     img.setAttribute('fetchpriority', 'high');
                     // 这张是 LCP 元素，不做淡入：图片没下完时 <img> 本来就不画东西，
@@ -487,13 +479,12 @@ const wallpaperPosition = state.isFullscreenMode
                     img.classList.remove('opacity-0', 'transition-opacity', 'duration-500', 'ease-out');
                     img.style.opacity = '1';
                     // LQIP 占位层盖在 img 上面（z-index:0），它那 0.5s 淡出同样会挡住 LCP
-                    if (phFrag) phFrag.style.transition = 'none';
+                    if (ph) ph.style.transition = 'none';
                 }
                 slot.appendChild(frag);
                 tpl.remove();
-                // Layout 的全局淡入只扫解析期的图片，克隆进来的要自己接管
-                var ph = slot.querySelector('.lqip-placeholder');
                 if (!img) return;
+                // Layout 的全局淡入只扫解析期的图片，克隆进来的要自己接管
                 function done() {
                     img.style.opacity = '1';
                     if (ph) ph.classList.add('loaded');
@@ -508,14 +499,23 @@ const wallpaperPosition = state.isFullscreenMode
             }
 
             function sync() {
-                var all = container.querySelectorAll('.banner-image-slot');
-                var isLg = window.innerWidth >= 1024;
+                // 读阶段：getElementsBy* 是纯 DOM 查询（不触发样式结算）；
+                // 断点判断用 matchMedia 而非 window.innerWidth——解析期读 innerWidth
+                // 在移动模拟下会强制首次全量布局（移动端实测 ~26ms 强制重排）
+                var all = container.getElementsByClassName('banner-image-slot');
+                var isLg = window.matchMedia
+                    ? window.matchMedia('(min-width: 1024px)').matches
+                    : window.innerWidth >= 1024;
+                var jobs = [];
                 for (var i = 0; i < all.length; i++) {
                     var el = all[i];
                     if (isLg && el.classList.contains('lg:hidden')) continue;
                     if (!isLg && el.classList.contains('hidden') && !el.classList.contains('lg:hidden')) continue;
-                    materialize(el, true);
+                    var tpl = el.getElementsByTagName('template')[0];
+                    if (tpl) jobs.push([el, tpl]);
                 }
+                // 写阶段：只插入，不做任何布局/样式查询
+                for (var j = 0; j < jobs.length; j++) materialize(jobs[j][0], jobs[j][1], true);
             }
 
             sync();

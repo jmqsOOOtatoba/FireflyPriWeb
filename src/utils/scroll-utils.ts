@@ -4,6 +4,7 @@ import {
 	BANNER_HEIGHT_HOME,
 	BANNER_HEIGHT_NON_HOME,
 } from "@/constants/constants";
+import { afterFirstPaint } from "@/utils/after-first-paint";
 import { isBannerMode, isFullscreenMode } from "@/utils/banner-utils";
 import { updateSidebarStickySpacing } from "@/utils/grid-layout-utils";
 import { updateReadingProgress } from "@/utils/reading-progress";
@@ -20,7 +21,9 @@ export function scrollFunction(): void {
 		return;
 	}
 
-	const scrollTop = document.documentElement.scrollTop;
+	// 只用 window.scrollY：documentElement.scrollTop 是几何读取，
+	// 样式未结算时会强制全量布局（该函数初始化即被调用，曾是最大强制重排来源）
+	const scrollTop = window.scrollY;
 	const bannerHeight = window.innerHeight * (BANNER_HEIGHT / 100);
 	const navbarElement = document.getElementById("navbar");
 
@@ -129,6 +132,8 @@ export function initScroll(): void {
 		{ passive: true },
 	);
 
-	// 初始化滚动状态（例如从历史位置恢复时）
-	scrollFunction();
+	// 初始化滚动状态（例如从历史位置恢复时）：
+	// scrollFunction 内部读取 scrollY/rect，加载期执行会强制全量布局，
+	// 等到首绘后再跑；此后滚动事件均在样式已结算状态下执行，读取近乎零成本
+	afterFirstPaint(scrollFunction);
 }

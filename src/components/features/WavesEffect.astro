@@ -7,6 +7,7 @@
 
 <script>
 	import type { WavesManagerLike } from "@/types/waves";
+	import { afterFirstPaint } from "@/utils/after-first-paint";
 	import { WavesRenderer } from "@/utils/waves-draw";
 
 	// ===========================================================================
@@ -335,7 +336,13 @@
 		}
 		window.wavesInitialized = true;
 
-		initWaves();
+		// 首次内容绘制后的下一帧再初始化：额外一帧让同帧到达的图片 load/LQIP
+		// 写入先走完自然绘制结算，measure/getComputedStyle 的读取就不会撞上脏样式
+		afterFirstPaint(() => {
+			requestAnimationFrame(() => {
+				initWaves();
+			});
+		});
 
 		// 防御性重校验:Swup 切页后若 canvas 脱离 DOM(容器被意外替换),则重建。
 		// 当前 #header-waves 不在 Swup 容器内、跨导航持久存在,正常是 no-op。

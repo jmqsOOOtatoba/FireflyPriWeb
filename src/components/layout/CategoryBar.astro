@@ -168,6 +168,8 @@ function initialActive(categoryName: string): {
 </style>
 
 <script>
+  import { afterFirstPaint } from "@/utils/after-first-paint";
+
   let delayedCategoryBarScrollTimer: number | undefined;
 
   function getCategoryBarState(bar: HTMLElement, currentUrl: URL) {
@@ -410,9 +412,14 @@ function initialActive(categoryName: string): {
     }
   }
 
-  updateCategoryBar();
-  initCategoryBarInteractions();
-  initScrollFeatures();
+  // 首次内容绘制后再做初始测量与滚动定位：updateCategoryBar/scrollActiveCategoryIntoView
+  // 读取 offsetLeft/scrollWidth 等几何值，加载期（样式未结算）会强制全量布局；
+  // FCP 之后读取近乎零成本，监听绑定晚几百毫秒不影响交互
+  afterFirstPaint(() => {
+    updateCategoryBar();
+    initCategoryBarInteractions();
+    initScrollFeatures();
+  });
   // 防止 Swup 切页重跑脚本时重复注册监听器/hooks
   if (!window.__categoryBarInit) {
     window.__categoryBarInit = true;

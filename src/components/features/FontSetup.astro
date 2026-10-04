@@ -94,14 +94,22 @@ const codeFontFamily = codeFontVar
 />
 
 <script>
+  import { afterFirstPaint } from "@/utils/after-first-paint";
+
   // 字体加载完成事件
-  if (document.fonts && typeof document.fonts.ready !== "undefined") {
-    document.fonts.ready
-      .then(() => {
-        document.dispatchEvent(new CustomEvent("fontsLoaded"));
-      })
-      .catch((error) => {
-        console.warn("Font loading failed:", error);
-      });
+  // 首次内容绘制后再访问 document.fonts.ready：该 getter 本身一旦被访问就会
+  // 强制全量样式结算（加载期移动端实测是强制重排的最大单点，300ms+）；
+  // FCP 之后样式已自然结算，访问近乎零成本。fontsLoaded 无即时消费方，
+  // 推迟无副作用；若字体已加载完，.then 会立即回调。
+  if (document.fonts) {
+    afterFirstPaint(() => {
+      document.fonts.ready
+        .then(() => {
+          document.dispatchEvent(new CustomEvent("fontsLoaded"));
+        })
+        .catch((error) => {
+          console.warn("Font loading failed:", error);
+        });
+    });
   }
 </script>

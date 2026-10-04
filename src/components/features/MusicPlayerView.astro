@@ -56,6 +56,20 @@ const viewConfigStr = JSON.stringify({
 (function () {
     var cfg = JSON.parse(viewConfigStr);
 
+    // is:inline 脚本无法 import：内嵌 FCP 门闩（详见 src/utils/after-first-paint.ts）
+    function afterFirstPaint(cb) {
+        var frames = 0;
+        var check = function () {
+            var paints = performance.getEntriesByType("paint");
+            for (var i = 0; i < paints.length; i++) {
+                if (paints[i].name === "first-contentful-paint") { cb(); return; }
+            }
+            if (++frames >= 120) { cb(); return; }
+            requestAnimationFrame(check);
+        };
+        check();
+    }
+
     var mgr = window.__fireflyMusic;
     if (!mgr) return;
 
@@ -241,10 +255,14 @@ const viewConfigStr = JSON.stringify({
             }
 
             // Reset cover rotation
+            // 动画重启原本用 offsetWidth 强制同步重排；等到首绘后执行，
+            // 此时样式已自然结算，读取近乎零成本，肉眼无感
             ui.cover.classList.remove('animate-spin-slow');
-            void ui.cover.offsetWidth;
-            ui.cover.classList.add('animate-spin-slow');
-            ui.cover.style.animationPlayState = 'paused';
+            afterFirstPaint(function () {
+                void ui.cover.offsetWidth;
+                ui.cover.classList.add('animate-spin-slow');
+                ui.cover.style.animationPlayState = 'paused';
+            });
 
             // Reset progress
             ui.progressBar.style.width = '0%';
@@ -255,7 +273,15 @@ const viewConfigStr = JSON.stringify({
         }
 
         // ── Virtual scroll helpers (absolute-position based) ──────
-        var PRIMARY_COLOR = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim() || '#6366f1';
+        // 惰性读取：getComputedStyle 会强制样式结算，推迟到首次使用（通常在空闲期），
+        // 避免脚本求值阶段（加载窗口内）触发强制重排
+        var _primaryColor = null;
+        function getPrimaryColor() {
+            if (_primaryColor === null) {
+                _primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim() || '#6366f1';
+            }
+            return _primaryColor;
+        }
 
         function vsApplyActiveStyle(el, isActive) {
             var overlay = el.querySelector('.item-active-overlay');
@@ -268,7 +294,7 @@ const viewConfigStr = JSON.stringify({
                 el.setAttribute('aria-current', 'true');
                 overlay.classList.remove('hidden');
                 overlay.classList.add('flex');
-                title.style.color = PRIMARY_COLOR;
+                title.style.color = getPrimaryColor();
                 if (isPlaying) {
                     eqBars.classList.remove('hidden');
                     eqBars.classList.add('flex');
@@ -456,6 +482,16 @@ const viewConfigStr = JSON.stringify({
             if (index === local.currentLrcIndex) return;
             local.currentLrcIndex = index;
 
+            // 先读几何值再改 class：class 变更会弄脏样式，
+            // 之后再读 offsetHeight/clientHeight 就会强制同步刷新（强制重排）
+            var targetLine = ui.lrcContainer.querySelector('.lrc-line[data-index="' + index + '"]');
+            var containerHeight = 0, lineOffset = 0, lineHeight = 0;
+            if (targetLine) {
+                containerHeight = ui.lrcContainer.clientHeight;
+                lineOffset = targetLine.offsetTop;
+                lineHeight = targetLine.offsetHeight;
+            }
+
             var lines = ui.lrcContainer.querySelectorAll('.lrc-line');
             lines.forEach(function (line, i) {
                 if (i === index) {
@@ -467,16 +503,10 @@ const viewConfigStr = JSON.stringify({
                 }
             });
 
-            // Auto-scroll unless user is scrolling
-            if (index !== -1 && !local.isUserScrolling) {
-                var line = ui.lrcContainer.querySelector('.lrc-line[data-index="' + index + '"]');
-                if (line) {
-                    var containerHeight = ui.lrcContainer.clientHeight;
-                    var lineOffset = line.offsetTop;
-                    var lineHeight = line.offsetHeight;
-                    var targetScroll = lineOffset - (containerHeight / 2) + (lineHeight / 2);
-                    ui.lrcContainer.scrollTo({ top: targetScroll, behavior: 'smooth' });
-                }
+            // Auto-scroll unless user is scrolling（用上面缓存的几何值，不再回头读）
+            if (index !== -1 && !local.isUserScrolling && targetLine) {
+                var targetScroll = lineOffset - (containerHeight / 2) + (lineHeight / 2);
+                ui.lrcContainer.scrollTo({ top: targetScroll, behavior: 'smooth' });
             }
         }
 

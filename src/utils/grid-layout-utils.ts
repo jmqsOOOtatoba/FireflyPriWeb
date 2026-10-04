@@ -135,7 +135,8 @@ export function refreshSidebarStickyState(): void {
 // 根据当前滚动位置动态更新侧边栏 sticky 顶部偏移。
 // 滚动路径：仅切换滚动相关的 top-0/top-4，不再读取布局（hasVisibleTop 由 refreshSidebarStickyState 缓存）
 export function updateSidebarStickySpacing(): void {
-	const scrollTop = document.documentElement.scrollTop || window.scrollY || 0;
+	// 只用 window.scrollY：documentElement.scrollTop 是几何读取，会强制布局
+	const scrollTop = window.scrollY || 0;
 	const isScrolled = scrollTop > 2;
 
 	(["left", "right"] as const).forEach((side) => {

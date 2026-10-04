@@ -1,4 +1,5 @@
 import { backgroundWallpaper } from "@/config";
+import { afterFirstPaint } from "@/utils/after-first-paint";
 import { pathsEqual, url } from "@/utils/url-utils";
 
 // 全屏壁纸模式：首页标题随滚动平滑上移并渐变消失（首屏完整显示，下滑淡出；壁纸保持 fixed）
@@ -50,7 +51,8 @@ export function updateFullscreenTitleParallax(): void {
 		setTitleParallaxStyle(overlay, "", "");
 		return;
 	}
-	const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+	// 只用 window.scrollY，避免 documentElement.scrollTop 在加载期触发强制布局
+	const scrollY = window.scrollY;
 	// 标题随滚动上移，同时透明度渐变到 0（渐变消失，不弹跳）
 	const fadeScroll = window.innerHeight * TITLE_FADE_RATIO;
 	const ratio = Math.min(scrollY / fadeScroll, 1);
@@ -117,7 +119,8 @@ export function syncFullscreenBlur(): void {
 		setBlurIfChanged(wrapper, `${safeMax}px`);
 		return;
 	}
-	const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+	// 只用 window.scrollY，避免 documentElement.scrollTop 在加载期触发强制布局
+	const scrollY = window.scrollY;
 	const ratio = Math.min(scrollY / BLUR_RAMP_SCROLL, 1);
 	setBlurIfChanged(wrapper, `${quantizeBlur(ratio * safeMax)}px`);
 }
@@ -155,18 +158,30 @@ export function initFullscreenWallpaper(): void {
 		passive: true,
 	});
 	window.addEventListener("wallpaperModeChange", () => {
-		requestAnimationFrame(updateFullscreenTitleParallax);
-		syncFullscreenBlur();
+		// initWallpaperMode 在加载期会派发本事件：视差/模糊读取 scrollY，
+		// 首绘前执行会强制全量布局。afterFirstPaint 在 FCP 后同步执行，
+		// 运行时切换（用户操作）不受影响，仅加载期那次被推迟
+		afterFirstPaint(() => {
+			updateFullscreenTitleParallax();
+			syncFullscreenBlur();
+		});
 	});
 	window.addEventListener("fullscreenLayoutChange", () => {
-		requestAnimationFrame(updateFullscreenTitleParallax);
-		syncFullscreenBlur();
+		afterFirstPaint(() => {
+			updateFullscreenTitleParallax();
+			syncFullscreenBlur();
+		});
 		syncFullscreenOverlays();
 	});
 	window.addEventListener("wallpaperModeChange", syncFullscreenOverlays);
-	updateFullscreenTitleParallax(); // 初始加载（浏览器可能恢复滚动位置）
-	syncFullscreenOverlays(); // 初始加载时同步非首页覆盖层状态
-	syncFullscreenBlur(); // 初始加载时同步壁纸模糊状态
+	// 初始同步推迟到首次内容绘制后：这三个函数读取 scrollY/getComputedStyle，
+	// 加载期调用会强制全量样式与布局（强制重排）；FCP 之后读取近乎零成本，
+	// 仍能在用户首次滚动前校正恢复的滚动位置与模糊状态
+	afterFirstPaint(() => {
+		updateFullscreenTitleParallax(); // 初始加载（浏览器可能恢复滚动位置）
+		syncFullscreenBlur(); // 初始加载时同步壁纸模糊状态
+	});
+	syncFullscreenOverlays(); // 只写属性/样式无布局读取，可保持同步
 
 	// 设置面板调整模糊滑块（--overlay-blur 变化）时，同步全屏壁纸的 --fullscreen-blur，
 	// 否则非首页的模糊只在滚动/切页时才更新，滑块会表现为失效
@@ -186,7 +201,11 @@ export function initFullscreenWallpaper(): void {
 
 /** 模式初始化后同步（此时 data-wallpaper-mode 才是运行时模式） */
 export function syncFullscreenStateAfterInit(): void {
-	syncFullscreenBlur();
-	syncFullscreenOverlays();
-	updateFullscreenTitleParallax();
+	// 等到首次内容绘制后执行：内部读取 scrollY/getComputedStyle，
+	// 加载期调用会强制全量样式与布局；FCP 之后读取近乎零成本
+	afterFirstPaint(() => {
+		syncFullscreenBlur();
+		syncFullscreenOverlays();
+		updateFullscreenTitleParallax();
+	});
 }
