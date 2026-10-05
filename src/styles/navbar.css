@@ -422,12 +422,6 @@ html[data-has-wallpaper] #navbar[data-transparent-mode="semi"].navbar-sticky-sha
     opacity: 0;
 }
 
-/* 收拢态从快捷面板唤起搜索时，桌面用的导航栏搜索框已被帘式收起，
-   面板内给移动端用的输入框（默认 lg:hidden）顶上，否则 PC 端子卡里没地方输入 */
-#navbar.navbar-collapsed #search-bar-inside {
-    display: flex;
-}
-
 #navbar.navbar-collapsed .navbar-seg-right {
     padding-left: calc(0.625rem - var(--card-border-width, 2px));
     padding-right: calc(0.625rem - var(--card-border-width, 2px));

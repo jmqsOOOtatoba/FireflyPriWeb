@@ -425,7 +425,7 @@ function loadButtonScript() {
             document.getElementById(triggerId)?.click();
         }
 
-        // 搜索子卡在桌面端复用面板内的输入框（navbar.css 收拢态放开它的 lg:hidden）；
+        // 面板内输入框全端可见（原 PC 收拢态放开 lg:hidden 的规则已随内嵌搜索框移除一并删除）；
         // inert 由 MutationObserver 在微任务里解除，焦点延到宏任务再给
         if (action === "search") {
             setTimeout(() => {

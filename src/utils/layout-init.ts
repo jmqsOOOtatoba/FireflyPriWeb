@@ -55,11 +55,7 @@ export function initLayout(): void {
 		"display-settings-switch",
 		"scheme-switch",
 	]);
-	setClickOutsideToClose("search-panel", [
-		"search-panel",
-		"search-bar",
-		"search-switch",
-	]);
+	setClickOutsideToClose("search-panel", ["search-panel", "search-switch"]);
 	setClickOutsideToClose("wallpaper-mode-panel", [
 		"wallpaper-mode-panel",
 		"wallpaper-mode-switch",
