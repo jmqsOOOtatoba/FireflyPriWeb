@@ -404,7 +404,10 @@ html[data-has-wallpaper] #navbar[data-transparent-mode="semi"].navbar-sticky-sha
 .navbar-right-controls {
     display: flex;
     align-items: center;
-    max-width: 30rem;
+    /* 贴合实际内容宽（最多 5 个 2.75rem 控件 = 13.75rem）留 0.25rem 余量：
+       原值 30rem 时 max-width→0 的过渡前 60ms 都在 480→224 的“死区”里空转
+       （内容没被钳制，宽度不变），随后 220px 全挤进剩余时长猛缩——肉眼即卡顿 */
+    max-width: 14rem;
     overflow: hidden;
     opacity: 1;
     transition:
@@ -427,27 +430,32 @@ html[data-has-wallpaper] #navbar[data-transparent-mode="semi"].navbar-sticky-sha
     padding-right: calc(0.625rem - var(--card-border-width, 2px));
 }
 
-/* 收拢时汉堡按钮淡入；可见性由下方媒体查询接管 */
-#navbar.navbar-collapsed .navbar-seg-right #nav-menu-switch {
-    animation: navbar-collapse-fade 0.3s ease;
+/* 汉堡按钮显隐：移动端常显；≥1024 仅收拢态显示。
+   历史一：原实现是按钮上的 lg:hidden!——Tailwind 分层内 important 在层序反转下必胜，
+   收拢态的未分层覆盖永远赢不了 → PC 端收拢后无图标、细条、点不到；
+   改为普通规则后由特异性接管，无需 important 角力。
+   历史二（2026-10-05 修卡顿）：原值 display:none → display:flex 单帧切换，
+   收拢首帧右段宽度凭空 +2.75rem（汉堡瞬间占位），叠加控件组 max-width 死区，
+   肉眼即“卡顿”（逐帧实测：t=0 跳 +44px → 冻结 ~60ms → 单帧 -57px 猛缩）。
+   改为 width/visibility 连续过渡：汉堡从 0 长出，与控件组帘收同步交接；
+   visibility 随行过渡（宽度动画播完才真正隐藏），保证非收拢态不进 Tab 焦点与
+   a11y 树。未分层 width:0 压过 utilities 层的 w-11，无需 important（层序反转只
+   对 !important 生效，这里不需要）。
+   原 navbar-collapse-fade 淡入动画一并删除：opacity 已由 transition 接管，
+   且动画在移动端会把常显的汉堡每次收拢都从 0 重闪一遍 */
+.navbar-seg-right #nav-menu-switch {
+    overflow: hidden;
+    transition:
+        width 0.36s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.25s ease,
+        visibility 0.36s;
 }
 
-/* 汉堡按钮显隐：移动端常显；≥1024 仅收拢态显示。
-   原实现是按钮上的 lg:hidden!：Tailwind 分层内 important 在层序反转下必胜，
-   收拢态的未分层覆盖永远赢不了 → PC 端收拢后无图标、细条、点不到。
-   改为普通规则后由特异性接管，无需 important 角力 */
 @media (min-width: 1024px) {
     #navbar:not(.navbar-collapsed) .navbar-seg-right #nav-menu-switch {
-        display: none;
-    }
-}
-
-@keyframes navbar-collapse-fade {
-    from {
+        width: 0;
         opacity: 0;
-    }
-
-    to {
-        opacity: 1;
+        visibility: hidden;
+        pointer-events: none;
     }
 }
