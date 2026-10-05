@@ -416,6 +416,8 @@ export const ru: Translation = {
 	[Key.cardBorder]: "Рамка и тень карточек",
 	[Key.cardBorderWidth]: "Толщина рамки",
 	[Key.cardFollowTheme]: "Карточки跟随主题色",
+	[Key.displaySettings]: "Настройки отображения",
+	[Key.lightDarkMode]: "Светлая/тёмная тема",
 
 	// Макет списка сообщений
 	[Key.postListLayout]: "Макет списка сообщений",

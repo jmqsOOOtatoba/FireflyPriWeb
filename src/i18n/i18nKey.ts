@@ -406,6 +406,10 @@ enum I18nKey {
 	cardBorderWidth = "cardBorderWidth",
 	cardFollowTheme = "cardFollowTheme",
 
+	// 导航栏快捷面板（PC 收拢态汉堡菜单）
+	displaySettings = "displaySettings",
+	lightDarkMode = "lightDarkMode",
+
 	// 文章布局
 	postListLayout = "postListLayout",
 	postListLayoutList = "postListLayoutList",

@@ -90,6 +90,8 @@ function registerSwupHooks(): void {
 			}
 
 			const navbar = document.getElementById("navbar-wrapper");
+			// 收拢态不跨页残留：切页先恢复完整胶囊，滚动逻辑会按新页滚动位置重新判断
+			document.getElementById("navbar")?.classList.remove("navbar-collapsed");
 			if (navbar && navbarMode === "dynamic") {
 				// 切页时先显示导航栏，避免新页从隐藏态开始；滚动逻辑会随滚动位置重新判断
 				navbar.classList.remove("navbar-hidden");

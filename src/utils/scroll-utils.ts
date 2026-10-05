@@ -46,14 +46,26 @@ export function scrollFunction(): void {
 		});
 	}
 
+	// 滚动方向（收拢动画与动态显隐共用）：每帧同步 lastScrollTop
+	const delta = scrollTop - lastScrollTop;
+	lastScrollTop = scrollTop;
+
+	// 三段胶囊收拢：向下滚动且超过 80px 时左右段收成圆形，上滑或回顶恢复
+	if (navbarElement) {
+		operations.push(() => {
+			navbarElement.classList.toggle(
+				"navbar-collapsed",
+				scrollTop > 80 && delta > 0,
+			);
+		});
+	}
+
 	if (navbarMode === "fixed" && navbar) {
 		operations.push(() => {
 			navbar.classList.remove("navbar-hidden");
 		});
 	} else if (navbarMode === "dynamic" && navbar) {
 		// 动态：下滑隐藏 / 轻微上滑立即显示 / 滚回顶部(<80px)常显
-		const delta = scrollTop - lastScrollTop;
-		lastScrollTop = scrollTop;
 		operations.push(() => {
 			const isHome = document.body.classList.contains("is-home");
 			// 壁纸/hero 边界：banner 首页 65vh、非首页 45vh；fullscreen 仅首页整屏（100lvh），非首页无 hero 为 0。

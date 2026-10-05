@@ -176,7 +176,7 @@
 
   .navbar-hidden {
     /* 隐藏只滑动不淡出：opacity<1 会让祖先成为 backdrop root，
-       导航栏毛玻璃（#navbar > div::before 的 backdrop-filter）期间无法采样页面、显示无模糊白底，
+       导航栏毛玻璃（.navbar-seg::before 的 backdrop-filter）期间无法采样页面、显示无模糊白底，
        透明度回到 1 时模糊才突然出现（表现为白闪）。transform 不创建 backdrop root，毛玻璃全程生效。
        位移 -100% 使导航栏整体移出视口上方，避免残留边缘 */
     @apply -translate-y-full;

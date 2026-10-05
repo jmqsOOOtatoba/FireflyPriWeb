@@ -413,6 +413,8 @@ export const ko: Translation = {
 	[Key.cardBorder]: "카드 테두리와 그림자",
 	[Key.cardBorderWidth]: "테두리 두께",
 	[Key.cardFollowTheme]: "카드 테마 색상 따르기",
+	[Key.displaySettings]: "디스플레이 설정",
+	[Key.lightDarkMode]: "라이트/다크 모드",
 
 	// Post List Layout
 	[Key.postListLayout]: "게시글 목록 레이아웃",

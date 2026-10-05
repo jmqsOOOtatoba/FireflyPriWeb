@@ -10,8 +10,84 @@ interface Props {
 
 const processedLinks = Astro.props.links;
 const navTitle = siteConfig.navbar.title || siteConfig.title;
+const mobileMenuStyle = siteConfig.navbar.mobileMenuStyle ?? "card";
 ---
-<div id="nav-menu-panel" class:list={["float-panel-closed fixed inset-0 z-1100"]} data-floating-panel data-floating-panel-trigger="nav-menu-switch" data-floating-panel-scroll-lock inert aria-hidden="true">
+{mobileMenuStyle === "card" && (
+<div
+    id="nav-menu-panel"
+    class="float-panel float-panel-closed transition-all fixed right-4 top-21 z-50 px-2 py-2 max-h-[80vh] overflow-y-auto nav-menu--card"
+    data-floating-panel
+    data-floating-panel-trigger="nav-menu-switch"
+    inert
+    aria-hidden="true"
+>
+    {processedLinks.map((link, index) => (
+        <div>
+            {link.children && link.children.length > 0 ? (
+                /* 有子菜单的项目：卡片版手风琴 */
+                <div class="mobile-dropdown" data-mobile-dropdown>
+                    <button
+                        class="group flex justify-between items-center py-2 pl-3 pr-1 rounded-lg gap-8 w-full text-left
+                            hover:bg-(--btn-plain-bg-hover) active:bg-(--btn-plain-bg-active) transition"
+                        data-mobile-dropdown-trigger
+                        aria-expanded="false"
+                        aria-controls={`mobile-submenu-${index}`}
+                    >
+                        <div class="flex items-center transition text-black/75 dark:text-white/75 font-bold group-hover:text-(--primary) group-active:text-(--primary)">
+                            {link.icon && <Icon name={link.icon} class="text-[1.1rem] mr-2" />}
+                            {link.name}
+                        </div>
+                        <Icon name="material-symbols:keyboard-arrow-down-rounded"
+                              class="transition text-[1.25rem] text-(--primary) mobile-dropdown-arrow duration-200"
+                        />
+                    </button>
+                    <div id={`mobile-submenu-${index}`} class="mobile-submenu" data-mobile-submenu inert aria-hidden="true">
+                        {link.children.map((child) => (
+                            <a
+                                href={child.external ? child.url : url(child.url)}
+                                data-nav-href={child.external ? undefined : url(child.url)}
+                                class="group flex justify-between items-center py-2 pl-6 pr-1 rounded-lg gap-8
+                                    hover:bg-(--btn-plain-bg-hover) active:bg-(--btn-plain-bg-active) transition"
+                                target={child.external ? "_blank" : null}
+                            >
+                                <div class="flex items-center transition text-black/60 dark:text-white/60 font-medium group-hover:text-(--primary) group-active:text-(--primary)">
+                                    {child.icon && <Icon name={child.icon} class="text-[1.1rem] mr-2" />}
+                                    {child.name}
+                                </div>
+                                {child.external && <Icon name="fa7-solid:arrow-up-right-from-square"
+                                      class="transition text-[0.75rem] text-black/25 dark:text-white/25 -translate-x-1"
+                                />}
+                            </a>
+                        ))}
+                    </div>
+                </div>
+            ) : (
+                /* 普通链接项目 */
+                <a
+                    href={link.external ? link.url : url(link.url)}
+                    data-nav-href={link.external ? undefined : url(link.url)}
+                    class="group flex justify-between items-center py-2 pl-3 pr-1 rounded-lg gap-8
+                        hover:bg-(--btn-plain-bg-hover) active:bg-(--btn-plain-bg-active) transition"
+                    target={link.external ? "_blank" : null}
+                >
+                    <div class="flex items-center transition text-black/75 dark:text-white/75 font-bold group-hover:text-(--primary) group-active:text-(--primary)">
+                        {link.icon && <Icon name={link.icon} class="text-[1.1rem] mr-2" />}
+                        {link.name}
+                    </div>
+                    {!link.external && <Icon name="material-symbols:chevron-right-rounded"
+                          class="transition text-[1.25rem] text-(--primary)"
+                    />}
+                    {link.external && <Icon name="fa7-solid:arrow-up-right-from-square"
+                          class="transition text-[0.75rem] text-black/25 dark:text-white/25 -translate-x-1"
+                    />}
+                </a>
+            )}
+        </div>
+    ))}
+</div>
+)}
+{mobileMenuStyle !== "card" && (
+<div id="nav-menu-panel" class="float-panel-closed fixed inset-0 z-1100 nav-menu--drawer" data-floating-panel data-floating-panel-trigger="nav-menu-switch" data-floating-panel-scroll-lock inert aria-hidden="true">
     <!-- 遮罩（scrim）：点击关闭 -->
     <div class="mobile-menu-scrim" aria-hidden="true"></div>
     <!-- 抽屉：MD3 侧边导航，右侧滑入，占满整高，内部滚动 -->
@@ -84,6 +160,7 @@ const navTitle = siteConfig.navbar.title || siteConfig.title;
         </nav>
     </aside>
 </div>
+)}
 
 <style>
     @reference "../../styles/main.css";
@@ -102,8 +179,8 @@ const navTitle = siteConfig.navbar.title || siteConfig.title;
         margin-top: 4px; /* 触发器与子项之间留距 */
     }
 
-    /* MD3 抽屉：面板改成透明全屏定位层，动画放在「遮罩/抽屉」子层上 */
-    #nav-menu-panel {
+    /* ---- MD3 抽屉：面板改成透明全屏定位层，动画放在「遮罩/抽屉」子层上（仅 drawer 模式） ---- */
+    #nav-menu-panel.nav-menu--drawer {
         top: 0;
         bottom: 0;
         border-radius: 0; /* 覆盖 .float-panel 的圆角，避免遮罩四角被裁剪 */
@@ -115,7 +192,7 @@ const navTitle = siteConfig.navbar.title || siteConfig.title;
         transition: none;
     }
     /* 关闭态：整体不可点，但不再整体淡出/下移（动画由子层负责） */
-    #nav-menu-panel.float-panel-closed {
+    #nav-menu-panel.nav-menu--drawer.float-panel-closed {
         opacity: 1;
         transform: none;
         pointer-events: none;
@@ -325,19 +402,19 @@ const navTitle = siteConfig.navbar.title || siteConfig.title;
         }
     });
 
-    // 点击抽屉内的导航链接后关闭抽屉：内部链接走 Swup 切页、外部链接另开新标签页，
-    // 两种情况都该收起来。面板在 swup 容器外、跨页持久存在（MainGridLayout 里是 body 直系子元素），
-    // 不主动关的话切页后抽屉会一直开着。仅匹配 <a>，手风琴触发器是 <button>，触发展开时不关。
+    // 点击菜单内的导航链接后关闭面板：内部链接走 Swup 切页、外部链接另开新标签页，
+    // 两种情况都该收起来。面板在 swup 容器外、跨页持久存在，不主动关的话切页后菜单会一直开着。
+    // 选择器锚在 #nav-menu-panel 上，卡片/抽屉两种样式通用；仅匹配 <a>，手风琴触发器是 <button>。
     document.addEventListener("click", (e) => {
         const t = e.target;
-        if (t instanceof Element && t.closest(".mobile-menu-drawer a[href]")) {
+        if (t instanceof Element && t.closest("#nav-menu-panel a[href]")) {
             document.getElementById("nav-menu-panel")?.classList.add("float-panel-closed");
         }
     });
 
     function markActiveNav() {
         const path = location.pathname;
-        document.querySelectorAll(".mobile-menu-item[data-nav-href]").forEach((item) => {
+        document.querySelectorAll("[data-nav-href]").forEach((item) => {
             const href = item.getAttribute("data-nav-href");
             let active = false;
             if (href) {

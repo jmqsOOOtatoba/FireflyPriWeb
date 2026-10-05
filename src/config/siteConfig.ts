@@ -116,6 +116,9 @@ export const siteConfig: SiteConfig = {
 		widthFull: false,
 		// 导航菜单对齐方式，left：左对齐，center：居中
 		menuAlign: "center",
+		// 移动端汉堡菜单样式："card" 浮层卡片（旧版，锚定在导航栏下方右侧的圆角卡片）
+		// "drawer" 全屏抽屉（上游重构版，MD3 侧滑 + 遮罩）
+		mobileMenuStyle: "card",
 		// 导航栏图标和标题是否跟随主题色
 		followTheme: false,
 		// 导航栏模式navbarMode：

@@ -1,3 +1,4 @@
+import { afterFirstPaint } from "@/utils/after-first-paint";
 import {
 	registerContentOverflowListeners,
 	scheduleContentOverflowEnhancements,
@@ -15,7 +16,6 @@ import {
 	updateMainGridCols,
 	updateSidebarComponentsVisibility,
 } from "@/utils/grid-layout-utils";
-import { afterFirstPaint } from "@/utils/after-first-paint";
 import { initIconLoader } from "@/utils/icon-loader";
 import { initImageLoadFadeIn } from "@/utils/lqip-utils";
 import { initReadingProgress } from "@/utils/reading-progress";
@@ -37,8 +37,24 @@ export function initLayout(): void {
 		"display-setting",
 		"display-settings-switch",
 	]);
-	// nav-menu-panel 现为全屏抽屉（inset-0），点击外部永不触发且由遮罩点击关闭，
-	// 不再注册 click-outside（见 NavMenuPanel.astro 的 document 委托）。
+	// 卡片模式（mobileMenuStyle: "card"）依赖 click-outside 关闭；
+	// 抽屉模式面板全屏覆盖、点击恒在面板内，此监听永不触发（无副作用），故两种模式都注册。
+	setClickOutsideToClose("nav-menu-panel", [
+		"nav-menu-panel",
+		"nav-menu-switch",
+	]);
+	// PC 收拢态汉堡的控件快捷面板：点击面板与汉堡之外即关闭。
+	// 五个控件触发按钮也要忽略——快捷面板行点击会程序化 .click() 它们，
+	// 合成 click 冒泡到 document 时若按「点外面」处理，会把快捷面板误关（video 行无子卡时最明显）
+	setClickOutsideToClose("navbar-quick-panel", [
+		"navbar-quick-panel",
+		"nav-menu-switch",
+		"search-switch",
+		"music-player-switch",
+		"bg-player-toggle",
+		"display-settings-switch",
+		"scheme-switch",
+	]);
 	setClickOutsideToClose("search-panel", [
 		"search-panel",
 		"search-bar",

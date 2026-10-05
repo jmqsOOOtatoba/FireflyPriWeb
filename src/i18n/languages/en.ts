@@ -415,6 +415,8 @@ export const en: Translation = {
 	[Key.cardBorder]: "Card Border & Shadow",
 	[Key.cardBorderWidth]: "Border Width",
 	[Key.cardFollowTheme]: "Card Follow Theme Color",
+	[Key.displaySettings]: "Display Settings",
+	[Key.lightDarkMode]: "Light / Dark Mode",
 
 	// Post List Layout
 	[Key.postListLayout]: "Post List Layout",

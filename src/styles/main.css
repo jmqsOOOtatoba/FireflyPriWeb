@@ -200,19 +200,19 @@ html {
     }
     
     /* 导航栏主题切换保护 - 仅在非 View Transitions 模式下禁用过渡 */
-    .is-theme-transitioning:not(.use-view-transition) #navbar > div,
-    .is-theme-transitioning:not(.use-view-transition) #navbar[data-transparent-mode] > div,
-    .is-theme-transitioning:not(.use-view-transition) #navbar[data-transparent-mode].scrolled > div,
-    .is-theme-transitioning:not(.use-view-transition) body.wallpaper-transparent #navbar > div,
-    .is-theme-transitioning:not(.use-view-transition) body.wallpaper-transparent #navbar[data-transparent-mode] > div,
-    .is-theme-transitioning:not(.use-view-transition) body.wallpaper-transparent #navbar[data-transparent-mode].scrolled > div {
+    .is-theme-transitioning:not(.use-view-transition) #navbar > .navbar-seg,
+    .is-theme-transitioning:not(.use-view-transition) #navbar[data-transparent-mode] > .navbar-seg,
+    .is-theme-transitioning:not(.use-view-transition) #navbar[data-transparent-mode].scrolled > .navbar-seg,
+    .is-theme-transitioning:not(.use-view-transition) body.wallpaper-transparent #navbar > .navbar-seg,
+    .is-theme-transitioning:not(.use-view-transition) body.wallpaper-transparent #navbar[data-transparent-mode] > .navbar-seg,
+    .is-theme-transitioning:not(.use-view-transition) body.wallpaper-transparent #navbar[data-transparent-mode].scrolled > .navbar-seg {
         transition: none !important;
         backdrop-filter: none !important;
         -webkit-backdrop-filter: none !important;
     }
 
     /* 导航栏的毛玻璃层挂在 ::before 上（见 navbar.css），要单独关掉 */
-    .is-theme-transitioning:not(.use-view-transition) #navbar > div::before {
+    .is-theme-transitioning:not(.use-view-transition) #navbar > .navbar-seg::before {
         transition: none !important;
         backdrop-filter: none !important;
         -webkit-backdrop-filter: none !important;
@@ -263,7 +263,7 @@ html {
     }
 
     /* 导航栏样式适配 */
-    .enable-card-border #navbar > div:not(.absolute) {
+    .enable-card-border #navbar > .navbar-seg:not(.absolute) {
         @apply transition-all duration-300 border shadow-xs;
         /* 与卡片边框同款：颜色跟随 --card-border-color（亮黑/暗白），宽度跟随 --card-border-width 滑块
            （!important 压过 navbar.css 的未分层 1px 透明边框） */
@@ -271,8 +271,9 @@ html {
         border-width: var(--card-border-width, 2px) !important;
     }
 
-    /* 壁纸模式切换期间禁止导航栏边框和阴影闪现 */
-    .is-wallpaper-transitioning #navbar > div {
+    /* 壁纸模式切换期间禁止导航栏边框和阴影闪现（含 ::after 滚动投影） */
+    .is-wallpaper-transitioning #navbar > .navbar-seg,
+    .is-wallpaper-transitioning #navbar > .navbar-seg::after {
         border-color: transparent !important;
         box-shadow: none !important;
         transition: none !important;
@@ -293,69 +294,70 @@ html {
     }
  
     
-    .wallpaper-transparent #navbar > div {
+    .wallpaper-transparent #navbar > .navbar-seg {
         background-color: var(--card-bg-transparent) !important;
         /* overlay 导航栏也带边缘线 */
         box-shadow: inset 0 1px 0 var(--navbar-glass-highlight), 0 1px 0 var(--navbar-glass-hairline) !important;
     }
 
     /* 全屏壁纸首页动态透明（semifull）：顶部透明，下滑后显示卡片底色。
-       需要比上面 wallpaper-transparent 的固定底色更高特异性，才能让顶部透明生效 */
-    html[data-wallpaper-mode="fullscreen"] #navbar[data-transparent-mode="semifull"]:not(.scrolled) > div {
+       需要比上面 wallpaper-transparent 的固定底色更高特异性，才能让顶部透明生效（含 ::after 滚动投影） */
+    html[data-wallpaper-mode="fullscreen"] #navbar[data-transparent-mode="semifull"]:not(.scrolled) > .navbar-seg,
+    html[data-wallpaper-mode="fullscreen"] #navbar[data-transparent-mode="semifull"]:not(.scrolled) > .navbar-seg::after {
         background: transparent !important;
         --navbar-surface-blur: 0px !important;
         box-shadow: none !important;
     }
 
     /* 全屏 semi 玻璃 */
-    html[data-wallpaper-mode="fullscreen"] #navbar[data-transparent-mode="semi"] > div {
+    html[data-wallpaper-mode="fullscreen"] #navbar[data-transparent-mode="semi"] > .navbar-seg {
         --navbar-surface-blur: var(--navbar-glass-blur, 20px) !important;
         box-shadow: inset 0 1px 0 var(--navbar-glass-highlight), 0 1px 0 var(--navbar-glass-hairline) !important;
     }
-    :root.dark[data-wallpaper-mode="fullscreen"] #navbar[data-transparent-mode="semi"] > div {
+    :root.dark[data-wallpaper-mode="fullscreen"] #navbar[data-transparent-mode="semi"] > .navbar-seg {
         box-shadow: inset 0 1px 0 var(--navbar-glass-highlight), 0 1px 0 var(--navbar-glass-hairline) !important;
     }
     /* 全屏 semifull 滚动后玻璃化 */
-    html[data-wallpaper-mode="fullscreen"] #navbar[data-transparent-mode="semifull"].scrolled > div {
+    html[data-wallpaper-mode="fullscreen"] #navbar[data-transparent-mode="semifull"].scrolled > .navbar-seg {
         --navbar-surface-blur: var(--navbar-glass-blur, 20px) !important;
         box-shadow: inset 0 1px 0 var(--navbar-glass-highlight), 0 1px 0 var(--navbar-glass-hairline) !important;
     }
-    :root.dark[data-wallpaper-mode="fullscreen"] #navbar[data-transparent-mode="semifull"].scrolled > div {
+    :root.dark[data-wallpaper-mode="fullscreen"] #navbar[data-transparent-mode="semifull"].scrolled > .navbar-seg {
         box-shadow: inset 0 1px 0 var(--navbar-glass-highlight), 0 1px 0 var(--navbar-glass-hairline) !important;
     }
     /* 全屏 semi 滚动后加回投影 */
-    html[data-wallpaper-mode="fullscreen"] #navbar[data-transparent-mode="semi"].navbar-sticky-shadow > div {
+    html[data-wallpaper-mode="fullscreen"] #navbar[data-transparent-mode="semi"].navbar-sticky-shadow > .navbar-seg {
         box-shadow: inset 0 1px 0 var(--navbar-glass-highlight), 0 1px 0 var(--navbar-glass-hairline) !important;
     }
-    :root.dark[data-wallpaper-mode="fullscreen"] #navbar[data-transparent-mode="semi"].navbar-sticky-shadow > div {
+    :root.dark[data-wallpaper-mode="fullscreen"] #navbar[data-transparent-mode="semi"].navbar-sticky-shadow > .navbar-seg {
         box-shadow: inset 0 1px 0 var(--navbar-glass-highlight), 0 1px 0 var(--navbar-glass-hairline) !important;
     }
 
     /* none 模式带边缘线 */
-    html[data-wallpaper-mode="none"] #navbar[data-transparent-mode="none"] > div {
+    html[data-wallpaper-mode="none"] #navbar[data-transparent-mode="none"] > .navbar-seg {
         box-shadow: inset 0 1px 0 var(--navbar-glass-highlight), 0 1px 0 var(--navbar-glass-hairline) !important;
     }
-    html[data-wallpaper-mode="none"] #navbar[data-transparent-mode="none"].navbar-sticky-shadow > div {
+    html[data-wallpaper-mode="none"] #navbar[data-transparent-mode="none"].navbar-sticky-shadow > .navbar-seg {
         box-shadow: inset 0 1px 0 var(--navbar-glass-highlight), 0 1px 0 var(--navbar-glass-hairline) !important;
     }
-    :root.dark[data-wallpaper-mode="none"] #navbar[data-transparent-mode="none"].navbar-sticky-shadow > div {
+    :root.dark[data-wallpaper-mode="none"] #navbar[data-transparent-mode="none"].navbar-sticky-shadow > .navbar-seg {
         box-shadow: inset 0 1px 0 var(--navbar-glass-highlight), 0 1px 0 var(--navbar-glass-hairline) !important;
     }
 
     /* 全屏壁纸模式：导航栏去掉 outline（原 border:none 已移除——
        边框现在是刻意设计（266 行纯黑卡片边框），需在全屏模式下持续可见；
        切页/切模式的闪现由 .is-wallpaper-transitioning 的透明边框规则兜底） */
-    html[data-wallpaper-mode="fullscreen"] #navbar > div {
+    html[data-wallpaper-mode="fullscreen"] #navbar > .navbar-seg {
         outline: none !important;
     }
 
     /* overlay 滚动后：模糊 + 投影 + 线 */
-    .wallpaper-transparent #navbar.navbar-sticky-shadow > div {
+    .wallpaper-transparent #navbar.navbar-sticky-shadow > .navbar-seg {
         --navbar-surface-blur: 20px !important;
         box-shadow: inset 0 1px 0 var(--navbar-glass-highlight), 0 1px 0 var(--navbar-glass-hairline) !important;
     }
 
-    :root.dark .wallpaper-transparent #navbar.navbar-sticky-shadow > div {
+    :root.dark .wallpaper-transparent #navbar.navbar-sticky-shadow > .navbar-seg {
         --navbar-surface-blur: 20px !important;
         box-shadow: inset 0 1px 0 var(--navbar-glass-highlight), 0 1px 0 var(--navbar-glass-hairline) !important;
     }

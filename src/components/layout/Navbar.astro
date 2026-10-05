@@ -123,7 +123,14 @@ const logoVariants = await Promise.all(
 		})),
 );
 ---
-<div id="navbar" class="z-50" style={`--navbar-glass-blur: ${navbarBlur}px;`} data-transparent-mode={navbarTransparentMode} data-is-home={isHomePageCheck} data-full-width={navbarWidthFull}>
+<div
+    id="navbar"
+    class:list={[className, "z-50 grid grid-cols-[1fr_auto_1fr] items-center gap-x-3"]}
+    style={`--navbar-glass-blur: ${navbarBlur}px;`}
+    data-transparent-mode={navbarTransparentMode}
+    data-is-home={isHomePageCheck}
+    data-full-width={navbarWidthFull}
+>
     <script is:inline define:vars={{
       bannerTMode: backgroundWallpaper.banner?.navbar?.transparentMode || "semi",
       bannerBlur: backgroundWallpaper.banner?.navbar?.blur ?? 20,
@@ -155,90 +162,127 @@ const logoVariants = await Promise.all(
         navbar.style.setProperty("--navbar-glass-blur", `${blur}px`);
       })();
     </script>
-    <div class:list={[
-        className,
-        "overflow-visible! h-16 px-4"
-    ]}>
-        <div class="mx-auto h-full w-full max-w-(--page-width) grid grid-cols-[auto_minmax(0,1fr)_auto] items-center">
-            <a href={url('/')} class="btn-plain scale-animation rounded-lg h-13 px-3 md:px-5 font-bold active:scale-95">
-                <div class:list={[
-                    "flex flex-row items-center text-md",
-                    siteConfig.navbar.followTheme ? "text-(--primary)" : "dark:text-white text-black"
-                ]} style="font-family: var(--font-navbar-title, inherit)">
-                                    {logoConfig?.type === "icon" ? (
-                                        <Icon name={logoConfig.value || "material-symbols:home-pin-outline"} class="navbar-logo text-[1.75rem] mb-1 mr-2" />
-                                    ) : logoIsImage && logoVariants.length > 0 ? (
-                                        logoVariants.map((variant) => variant.image ? (
-                                            <Picture
-                                                src={variant.image}
-                                                alt={logoAlt}
-                                                class={variant.class}
-                                                data-logo-theme={variant.theme}
-                                                formats={getImageFormats()}
-                                                fallbackFormat={getFallbackFormat()}
-                                                widths={[28, 56]}
-                                                loading="eager"
-                                                fetchpriority="high"
-                                            />
-                                        ) : (
-                                            <img src={variant.src} alt={logoAlt} class={variant.class} data-logo-theme={variant.theme} fetchpriority="high" />
-                                        ))
-                                    ) : (
-                                        <Icon name="material-symbols:home-pin-outline" class="navbar-logo text-[1.75rem] mb-1 mr-2" />
-                                    )}
-                    {navbarTitle}
-                </div>
-            </a>
+    <!-- 三段独立胶囊：左标识 / 中菜单 / 右控件。三段都是 #navbar 的直接子 div 并带 .navbar-seg，
+         边框、毛玻璃、明暗透明态等表面规则统一按该类挂钩（见 navbar.css / main.css） -->
+    <div class="navbar-seg navbar-seg-left overflow-visible! h-16 px-1.5 flex items-center justify-self-start">
+        <a href={url('/')} class="btn-plain scale-animation rounded-lg h-13 px-3 md:px-5 font-bold active:scale-95">
             <div class:list={[
-                "hidden lg:flex items-center space-x-1 col-start-2",
-                isNavbarMenuCentered
-                    ? "justify-center"
-                    : "justify-start pl-2"
-            ]}>
-                {links.map((l) => {
-                    return <DropdownMenu link={l} />;
-                })}
+                "flex flex-row items-center text-md",
+                siteConfig.navbar.followTheme ? "text-(--primary)" : "dark:text-white text-black"
+            ]} style="font-family: var(--font-navbar-title, inherit)">
+                                {logoConfig?.type === "icon" ? (
+                                    <Icon name={logoConfig.value || "material-symbols:home-pin-outline"} class="navbar-logo text-[1.75rem] mb-1 mr-2" />
+                                ) : logoIsImage && logoVariants.length > 0 ? (
+                                    logoVariants.map((variant) => variant.image ? (
+                                        <Picture
+                                            src={variant.image}
+                                            alt={logoAlt}
+                                            class={variant.class}
+                                            data-logo-theme={variant.theme}
+                                            formats={getImageFormats()}
+                                            fallbackFormat={getFallbackFormat()}
+                                            widths={[28, 56]}
+                                            loading="eager"
+                                            fetchpriority="high"
+                                        />
+                                    ) : (
+                                        <img src={variant.src} alt={logoAlt} class={variant.class} data-logo-theme={variant.theme} fetchpriority="high" />
+                                    ))
+                                ) : (
+                                    <Icon name="material-symbols:home-pin-outline" class="navbar-logo text-[1.75rem] mb-1 mr-2" />
+                                )}
+                <span class="navbar-title-text">{navbarTitle}</span>
             </div>
-            <div class="flex col-start-3 justify-self-end">
-                <!--<SearchPanel client:load>-->
-                <Search
-                    client:load
-                />
-                {musicPlayerConfig.showInNavbar && (
-                    <button aria-label={i18n(I18nKey.music)} aria-controls="music-nav-panel" aria-expanded="false" class="btn-plain scale-animation rounded-lg h-11 w-11 active:scale-90" id="music-player-switch">
-                        <Icon name="material-symbols:music-note-rounded" class="text-[1.25rem]"></Icon>
-                    </button>
-                )}
-                {backgroundWallpaper.playerEnable && backgroundWallpaper.mode !== "none" && (
-                    <button
-                        aria-label={i18n(I18nKey.videoPlay)}
-						class="btn-plain scale-animation rounded-lg h-11 w-11 active:scale-90 hidden md:flex"
-                        id="bg-player-toggle"
-                        data-i18n-play={i18n(I18nKey.videoPlay)}
-                        data-i18n-pause={i18n(I18nKey.videoPause)}
-                    >
-                        <span class="bg-player-icon-play"><Icon name="material-symbols:play-arrow-rounded" class="text-[1.5rem]" /></span>
-                        <span class="bg-player-icon-pause hidden"><Icon name="material-symbols:pause-rounded" class="text-[1.5rem]" /></span>
-                    </button>
-                )}
-                {hasDisplaySettings && (
-                        <button aria-label="Display Settings" aria-controls="display-setting" aria-expanded="false" class="btn-plain scale-animation rounded-lg h-11 w-11 active:scale-90" id="display-settings-switch">
-                            <Icon name="material-symbols:palette-outline" class="text-[1.25rem]"></Icon>
-                        </button>
-                )}
-                {/* @ts-ignore */}
-                <LightDarkSwitch client:load></LightDarkSwitch>
-                <button aria-label="Menu" aria-controls="nav-menu-panel" aria-expanded="false" name="Nav Menu" class="btn-plain scale-animation rounded-lg w-11 h-11 active:scale-90 lg:hidden!" id="nav-menu-switch">
-                    <Icon name="material-symbols:menu-rounded" class="text-[1.25rem]"></Icon>
+        </a>
+    </div>
+    <div class:list={[
+        "navbar-seg navbar-seg-center overflow-visible! h-16 px-1.5 hidden lg:flex items-center space-x-1 col-start-2",
+        isNavbarMenuCentered
+            ? "justify-self-center"
+            : "justify-self-start"
+    ]}>
+        {links.map((l) => {
+            return <DropdownMenu link={l} />;
+        })}
+    </div>
+    <div class="navbar-seg navbar-seg-right overflow-visible! h-16 px-1.5 flex items-center col-start-3 justify-self-end">
+        <!-- 控件组：收拢动画时整体帘式收起（max-width→0），仅留下方汉堡按钮 -->
+        <div class="navbar-right-controls">
+            <!--<SearchPanel client:load>-->
+            <Search
+                client:load
+            />
+            {musicPlayerConfig.showInNavbar && (
+                <button aria-label={i18n(I18nKey.music)} aria-controls="music-nav-panel" aria-expanded="false" class="btn-plain scale-animation rounded-lg h-11 w-11 active:scale-90" id="music-player-switch">
+                    <Icon name="material-symbols:music-note-rounded" class="text-[1.25rem]"></Icon>
                 </button>
-            </div>
+            )}
+            {backgroundWallpaper.playerEnable && backgroundWallpaper.mode !== "none" && (
+                <button
+                    aria-label={i18n(I18nKey.videoPlay)}
+					class="btn-plain scale-animation rounded-lg h-11 w-11 active:scale-90 hidden md:flex"
+                    id="bg-player-toggle"
+                    data-i18n-play={i18n(I18nKey.videoPlay)}
+                    data-i18n-pause={i18n(I18nKey.videoPause)}
+                >
+                    <span class="bg-player-icon-play"><Icon name="material-symbols:play-arrow-rounded" class="text-[1.5rem]" /></span>
+                    <span class="bg-player-icon-pause hidden"><Icon name="material-symbols:pause-rounded" class="text-[1.5rem]" /></span>
+                </button>
+            )}
+            {hasDisplaySettings && (
+                    <button aria-label="Display Settings" aria-controls="display-setting" aria-expanded="false" class="btn-plain scale-animation rounded-lg h-11 w-11 active:scale-90" id="display-settings-switch">
+                        <Icon name="material-symbols:palette-outline" class="text-[1.25rem]"></Icon>
+                    </button>
+            )}
+            {/* @ts-ignore */}
+            <LightDarkSwitch client:load></LightDarkSwitch>
+            {musicPlayerConfig.showInNavbar && (
+                <div id="music-nav-panel" class="float-panel float-panel-closed absolute transition-all right-16 p-2 pt-4.5 w-80 z-50" data-floating-panel data-floating-panel-trigger="music-player-switch" inert aria-hidden="true">
+                    <MusicPlayer />
+                </div>
+            )}
+            {isDisplaySettingsEnabled && <DisplaySettings client:load></DisplaySettings>}
         </div>
-        {musicPlayerConfig.showInNavbar && (
-            <div id="music-nav-panel" class="float-panel float-panel-closed absolute transition-all right-16 p-2 pt-4.5 w-80 z-50" data-floating-panel data-floating-panel-trigger="music-player-switch" inert aria-hidden="true">
-                <MusicPlayer />
-            </div>
-        )}
-        {isDisplaySettingsEnabled && <DisplaySettings client:load></DisplaySettings>}
+        <button aria-label="Menu" aria-controls="nav-menu-panel" aria-expanded="false" name="Nav Menu" class="btn-plain scale-animation rounded-lg w-11 h-11 active:scale-90" id="nav-menu-switch">
+            <Icon name="material-symbols:menu-rounded" class="text-[1.25rem]"></Icon>
+        </button>
+        <!-- PC 收拢态快捷面板：中段菜单（主页—链接）在桌面端常显，汉堡改开「右段被隐藏的控件」；
+             移动端中段隐藏，汉堡仍开导航链接菜单（由 loadButtonScript 按视口分流） -->
+        <div
+            id="navbar-quick-panel"
+            class="float-panel float-panel-closed absolute top-full right-0 mt-2 w-max min-w-52 p-1.5 z-50"
+            data-floating-panel
+            data-floating-panel-trigger="nav-menu-switch"
+            inert
+            aria-hidden="true"
+        >
+            <button class="group flex items-center gap-3 w-full py-2 pl-3 pr-2 rounded-lg text-left hover:bg-(--btn-plain-bg-hover) active:bg-(--btn-plain-bg-active) transition" data-quick-action="search">
+                <Icon name="material-symbols:search-rounded" class="text-[1.1rem] shrink-0" />
+                <span class="text-sm font-bold text-black/75 dark:text-white/75 group-hover:text-(--primary) group-active:text-(--primary) whitespace-nowrap">{i18n(I18nKey.search)}</span>
+            </button>
+            {musicPlayerConfig.showInNavbar && (
+                <button class="group flex items-center gap-3 w-full py-2 pl-3 pr-2 rounded-lg text-left hover:bg-(--btn-plain-bg-hover) active:bg-(--btn-plain-bg-active) transition" data-quick-action="music">
+                    <Icon name="material-symbols:music-note-rounded" class="text-[1.1rem] shrink-0" />
+                    <span class="text-sm font-bold text-black/75 dark:text-white/75 group-hover:text-(--primary) group-active:text-(--primary) whitespace-nowrap">{i18n(I18nKey.music)}</span>
+                </button>
+            )}
+            {backgroundWallpaper.playerEnable && backgroundWallpaper.mode !== "none" && (
+                <button class="group flex items-center gap-3 w-full py-2 pl-3 pr-2 rounded-lg text-left hover:bg-(--btn-plain-bg-hover) active:bg-(--btn-plain-bg-active) transition" data-quick-action="video">
+                    <Icon name="material-symbols:play-circle-rounded" class="text-[1.1rem] shrink-0" />
+                    <span class="text-sm font-bold text-black/75 dark:text-white/75 group-hover:text-(--primary) group-active:text-(--primary) whitespace-nowrap">{i18n(I18nKey.videoPlay)}</span>
+                </button>
+            )}
+            {hasDisplaySettings && (
+                <button class="group flex items-center gap-3 w-full py-2 pl-3 pr-2 rounded-lg text-left hover:bg-(--btn-plain-bg-hover) active:bg-(--btn-plain-bg-active) transition" data-quick-action="display">
+                    <Icon name="material-symbols:palette-outline" class="text-[1.1rem] shrink-0" />
+                    <span class="text-sm font-bold text-black/75 dark:text-white/75 group-hover:text-(--primary) group-active:text-(--primary) whitespace-nowrap">{i18n(I18nKey.displaySettings)}</span>
+                </button>
+            )}
+            <button class="group flex items-center gap-3 w-full py-2 pl-3 pr-2 rounded-lg text-left hover:bg-(--btn-plain-bg-hover) active:bg-(--btn-plain-bg-active) transition" data-quick-action="theme">
+                <Icon name="material-symbols:contrast-rounded" class="text-[1.1rem] shrink-0" />
+                <span class="text-sm font-bold text-black/75 dark:text-white/75 group-hover:text-(--primary) group-active:text-(--primary) whitespace-nowrap">{i18n(I18nKey.lightDarkMode)}</span>
+            </button>
+        </div>
     </div>
 </div>
 
@@ -257,9 +301,17 @@ function loadButtonScript() {
     let menuBtn = document.getElementById("nav-menu-switch");
     if (menuBtn) {
         menuBtn.onclick = function () {
-            let menuPanel = document.getElementById("nav-menu-panel");
-            if (menuPanel) {
-                menuPanel.classList.toggle("float-panel-closed");
+            let navPanel = document.getElementById("nav-menu-panel");
+            let quickPanel = document.getElementById("navbar-quick-panel");
+            // 桌面端（≥lg，中段「主页—链接」菜单常显）：汉堡只在收拢态出现，
+            // 打开的是右段被隐藏的控件快捷面板；移动端中段隐藏，仍开导航链接菜单
+            let isDesktop = window.matchMedia("(min-width: 1024px)").matches;
+            if (isDesktop && quickPanel) {
+                quickPanel.classList.toggle("float-panel-closed");
+                navPanel && navPanel.classList.add("float-panel-closed");
+            } else if (navPanel) {
+                navPanel.classList.toggle("float-panel-closed");
+                quickPanel && quickPanel.classList.add("float-panel-closed");
             }
         };
     }
@@ -343,6 +395,43 @@ function loadButtonScript() {
                 }
             }
         });
+    });
+
+    // 快捷面板行点击：保持收拢态，直接弹出对应子控件卡（即原控件按钮弹的那张卡）。
+    // 子卡在收拢态可见由 navbar.css 的 :has 规则保证（控件组 opacity 让位给已打开的 .float-panel）。
+    // stopImmediatePropagation：layout-init 注册更晚的 document click-outside 监听若继续跑，
+    // 会把同一事件里刚打开的子卡立刻关掉（表现为「点了没反应，只看见导航栏」）。
+    document.addEventListener("click", function (event) {
+        if (!(event.target instanceof Element)) return;
+        const row = event.target.closest("#navbar-quick-panel [data-quick-action]");
+        if (!row) return;
+        event.stopImmediatePropagation();
+
+        const action = row.getAttribute("data-quick-action");
+        const triggerByAction: Record<string, string> = {
+            search: "search-switch",
+            music: "music-player-switch",
+            video: "bg-player-toggle",
+            display: "display-settings-switch",
+            theme: "scheme-switch",
+        };
+        const triggerId = action ? triggerByAction[action] : undefined;
+
+        // 有子卡的行：关快捷卡、换弹子卡；video 只切换播放没有子卡，快捷卡留着当状态面板
+        if (action !== "video") {
+            document.getElementById("navbar-quick-panel")?.classList.add("float-panel-closed");
+        }
+        if (triggerId) {
+            document.getElementById(triggerId)?.click();
+        }
+
+        // 搜索子卡在桌面端复用面板内的输入框（navbar.css 收拢态放开它的 lg:hidden）；
+        // inert 由 MutationObserver 在微任务里解除，焦点延到宏任务再给
+        if (action === "search") {
+            setTimeout(() => {
+                document.querySelector<HTMLInputElement>("#search-bar-inside input")?.focus();
+            }, 0);
+        }
     });
 }
 

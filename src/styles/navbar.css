@@ -34,21 +34,22 @@
     border-color 0.36s cubic-bezier(0.22, 1, 0.36, 1),
     box-shadow 0.36s cubic-bezier(0.22, 1, 0.36, 1),
     --navbar-surface-blur 0.36s cubic-bezier(0.22, 1, 0.36, 1),
-    border-radius 0.36s cubic-bezier(0.22, 1, 0.36, 1);
+    border-radius 0.36s cubic-bezier(0.22, 1, 0.36, 1),
+    padding 0.36s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* ============================================
  * 基础导航栏样式
  * 适用: 所有模式，所有设备
  * ============================================ */
-#navbar>div {
+#navbar>.navbar-seg {
     background-color: var(--card-bg);
     border: 1px solid transparent;
     border-radius: 9999px;
     --navbar-surface-blur: 0px;
-    /* 给下面的 ::before 当定位包含块 */
+    /* 给下面的 ::before 当定位包含块（也是内部浮层面板的定位基准） */
     position: relative;
-    /* 间隙条点击穿透由 wrapper 承担，bar 及内部面板/按钮恢复可点 */
+    /* 间隙条（wrapper padding 与三段之间的空隙）点击穿透，段内按钮/面板恢复可点 */
     pointer-events: auto;
     /* 勿加 will-change/z-index，避免 ::before 采样失效 */
     @apply navbar-surface-transition;
@@ -72,7 +73,7 @@
  * inset: 0 只盖到 padding box，是为了不遮住 .enable-card-border 下的可见边框。
  * 注意：滤镜必须挂在本 ::before 上（移到本体会让内部面板毛玻璃失效）。
  * ============================================ */
-#navbar>div::before {
+#navbar>.navbar-seg::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -83,23 +84,27 @@
     backdrop-filter: blur(var(--navbar-surface-blur, 0px));
 }
 
-/* 通用滚动阴影：下滑到内容区时给导航栏加向下投影，与内容区分层。
-   #navbar > div 的 box-shadow 会被各壁纸/透明模式规则（main.css 的 @layer components、特异性更高）覆盖，
-   所以把投影加到没有冲突的父级 #navbar 上；#navbar 本身无圆角，需同步 9999px 让阴影随胶囊外形 */
-#navbar {
-    border-radius: 9999px;
-}
-
-#navbar.navbar-sticky-shadow {
+/* 通用滚动阴影：下滑到内容区时给三段胶囊加向下投影，与内容区分层。
+   各段自身的 box-shadow 会被壁纸/透明模式的玻璃边缘规则（main.css @layer components、特异性更高）覆盖，
+   所以投影挂在各段的 ::after 上（伪元素不参与元素级 box-shadow 竞争），阴影随胶囊外形、三段各自独立；
+   透明/过渡态的隐身规则需同步把 ::after 影子关掉（见 semifull 相关规则） */
+#navbar.navbar-sticky-shadow > .navbar-seg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: -2;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
-:root.dark #navbar.navbar-sticky-shadow {
+:root.dark #navbar.navbar-sticky-shadow > .navbar-seg::after {
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
 }
 
-/* semifull 模式的透明阶段不单独显示 sticky shadow，避免 8px 和 50px 两段跳变 */
-html[data-has-wallpaper] #navbar[data-transparent-mode="semifull"]:not(.scrolled).navbar-sticky-shadow>div {
+/* semifull 模式的透明阶段不单独显示 sticky shadow，避免 8px 和 50px 两段跳变（含 ::after 影子） */
+html[data-has-wallpaper] #navbar[data-transparent-mode="semifull"]:not(.scrolled).navbar-sticky-shadow>.navbar-seg,
+html[data-has-wallpaper] #navbar[data-transparent-mode="semifull"]:not(.scrolled).navbar-sticky-shadow>.navbar-seg::after {
     box-shadow: none !important;
 }
 
@@ -111,7 +116,7 @@ html[data-has-wallpaper] #navbar[data-transparent-mode="semifull"]:not(.scrolled
 @media (min-width: 1024px) {
 
     /* "semi" */
-    html[data-has-wallpaper] #navbar[data-transparent-mode="semi"]>div {
+    html[data-has-wallpaper] #navbar[data-transparent-mode="semi"]>.navbar-seg {
         --navbar-surface-blur: var(--navbar-glass-blur, 20px) !important;
         background: color-mix(in oklch, var(--card-bg) calc(var(--opacity-45) * 100%), transparent) !important;
         border-radius: 9999px !important;
@@ -119,7 +124,7 @@ html[data-has-wallpaper] #navbar[data-transparent-mode="semifull"]:not(.scrolled
     }
 
     /* "semifull" (static) */
-    html[data-has-wallpaper] #navbar[data-transparent-mode="semifull"]>div {
+    html[data-has-wallpaper] #navbar[data-transparent-mode="semifull"]>.navbar-seg {
         --navbar-surface-blur: 0px !important;
         background: transparent !important;
         border: none !important;
@@ -128,7 +133,7 @@ html[data-has-wallpaper] #navbar[data-transparent-mode="semifull"]:not(.scrolled
     }
 
     /* "semifull" (scrolled) */
-    html[data-has-wallpaper] #navbar[data-transparent-mode="semifull"].scrolled>div {
+    html[data-has-wallpaper] #navbar[data-transparent-mode="semifull"].scrolled>.navbar-seg {
         --navbar-surface-blur: var(--navbar-glass-blur, 20px) !important;
         background: color-mix(in oklch, var(--card-bg) calc(var(--opacity-45) * 100%), transparent) !important;
         border-radius: 9999px !important;
@@ -143,7 +148,7 @@ html[data-has-wallpaper] #navbar[data-transparent-mode="semifull"]:not(.scrolled
 @media (max-width: 1023px) {
 
     /* "semi" */
-    html[data-has-wallpaper] #navbar[data-transparent-mode="semi"][data-is-home="true"]>div {
+    html[data-has-wallpaper] #navbar[data-transparent-mode="semi"][data-is-home="true"]>.navbar-seg {
         --navbar-surface-blur: var(--navbar-glass-blur, 20px) !important;
         background: color-mix(in oklch, var(--card-bg) calc(var(--opacity-45) * 100%), transparent) !important;
         border-radius: 9999px !important;
@@ -151,7 +156,7 @@ html[data-has-wallpaper] #navbar[data-transparent-mode="semifull"]:not(.scrolled
     }
 
     /* "semifull" (static) */
-    html[data-has-wallpaper] #navbar[data-transparent-mode="semifull"][data-is-home="true"]>div {
+    html[data-has-wallpaper] #navbar[data-transparent-mode="semifull"][data-is-home="true"]>.navbar-seg {
         --navbar-surface-blur: 0px !important;
         background: transparent !important;
         border: none !important;
@@ -160,7 +165,7 @@ html[data-has-wallpaper] #navbar[data-transparent-mode="semifull"]:not(.scrolled
     }
 
     /* "semifull" (scrolled) */
-    html[data-has-wallpaper] #navbar[data-transparent-mode="semifull"][data-is-home="true"].scrolled>div {
+    html[data-has-wallpaper] #navbar[data-transparent-mode="semifull"][data-is-home="true"].scrolled>.navbar-seg {
         --navbar-surface-blur: var(--navbar-glass-blur, 20px) !important;
         background: color-mix(in oklch, var(--card-bg) calc(var(--opacity-45) * 100%), transparent) !important;
         border-radius: 9999px !important;
@@ -174,20 +179,20 @@ html[data-has-wallpaper] #navbar[data-transparent-mode="semifull"]:not(.scrolled
 @media (min-width: 1024px) {
 
     /* "semi" */
-    :root.dark[data-has-wallpaper] #navbar[data-transparent-mode="semi"]>div {
+    :root.dark[data-has-wallpaper] #navbar[data-transparent-mode="semi"]>.navbar-seg {
         background: color-mix(in oklch, var(--card-bg) calc(var(--opacity-45) * 100%), transparent) !important;
         box-shadow: inset 0 1px 0 var(--navbar-glass-highlight), 0 1px 0 var(--navbar-glass-hairline) !important;
     }
 
     /* "semifull" (static) */
-    :root.dark[data-has-wallpaper] #navbar[data-transparent-mode="semifull"]>div {
+    :root.dark[data-has-wallpaper] #navbar[data-transparent-mode="semifull"]>.navbar-seg {
         background: transparent !important;
         border: none !important;
         box-shadow: none !important;
     }
 
     /* "semifull" (scrolled) */
-    :root.dark[data-has-wallpaper] #navbar[data-transparent-mode="semifull"].scrolled>div {
+    :root.dark[data-has-wallpaper] #navbar[data-transparent-mode="semifull"].scrolled>.navbar-seg {
         background: color-mix(in oklch, var(--card-bg) calc(var(--opacity-45) * 100%), transparent) !important;
         box-shadow: inset 0 1px 0 var(--navbar-glass-highlight), 0 1px 0 var(--navbar-glass-hairline) !important;
     }
@@ -199,20 +204,20 @@ html[data-has-wallpaper] #navbar[data-transparent-mode="semifull"]:not(.scrolled
 @media (max-width: 1023px) {
 
     /* "semi" */
-    :root.dark[data-has-wallpaper] #navbar[data-transparent-mode="semi"][data-is-home="true"]>div {
+    :root.dark[data-has-wallpaper] #navbar[data-transparent-mode="semi"][data-is-home="true"]>.navbar-seg {
         background: color-mix(in oklch, var(--card-bg) calc(var(--opacity-45) * 100%), transparent) !important;
         box-shadow: inset 0 1px 0 var(--navbar-glass-highlight), 0 1px 0 var(--navbar-glass-hairline) !important;
     }
 
     /* "semifull" (static) */
-    :root.dark[data-has-wallpaper] #navbar[data-transparent-mode="semifull"][data-is-home="true"]>div {
+    :root.dark[data-has-wallpaper] #navbar[data-transparent-mode="semifull"][data-is-home="true"]>.navbar-seg {
         background: transparent !important;
         border: none !important;
         box-shadow: none !important;
     }
 
     /* "semifull" (scrolled) */
-    :root.dark[data-has-wallpaper] #navbar[data-transparent-mode="semifull"][data-is-home="true"].scrolled>div {
+    :root.dark[data-has-wallpaper] #navbar[data-transparent-mode="semifull"][data-is-home="true"].scrolled>.navbar-seg {
         background: color-mix(in oklch, var(--card-bg) calc(var(--opacity-45) * 100%), transparent) !important;
         box-shadow: inset 0 1px 0 var(--navbar-glass-highlight), 0 1px 0 var(--navbar-glass-hairline) !important;
     }
@@ -230,8 +235,9 @@ html[data-has-wallpaper] #navbar[data-transparent-mode="semifull"]:not(.scrolled
 }
 
 
-/* 页面切换期间强制 semifull 保持透明，避免自动回顶时出现背景闪烁 */
-.is-page-transitioning[data-has-wallpaper] #navbar[data-transparent-mode="semifull"]:not(.scrolled)>div {
+/* 页面切换期间强制 semifull 保持透明，避免自动回顶时出现背景闪烁（含 ::after 影子） */
+.is-page-transitioning[data-has-wallpaper] #navbar[data-transparent-mode="semifull"]:not(.scrolled)>.navbar-seg,
+.is-page-transitioning[data-has-wallpaper] #navbar[data-transparent-mode="semifull"]:not(.scrolled)>.navbar-seg::after {
     --navbar-surface-blur: 0px !important;
     background: transparent !important;
     border: none !important;
@@ -247,7 +253,7 @@ html[data-has-wallpaper] #navbar[data-transparent-mode="semifull"]:not(.scrolled
  * 模糊半径跟随 navbar.blur（Layout.astro 注入到 :root 的 --navbar-panel-blur），
  * 但带一个最小值 —— 导航栏可以用 blur: 0 关掉毛玻璃，面板则始终保留毛玻璃。
  *
- * 能生效的前提是导航栏自身的滤镜已经下移到 #navbar>div::before（见文件顶部），
+ * 能生效的前提是导航栏自身的滤镜已经下移到 #navbar>.navbar-seg::before（见文件顶部），
  * 面板不再被祖先的 backdrop root 截断。
  *
  * 纯色背景模式（data-wallpaper-mode="none"）底下没有可模糊的对象，
@@ -312,8 +318,11 @@ body.wallpaper-transparent #navbar-wrapper #navbar[data-full-width="true"] > div
 }
 
 @media (max-width: 767px) {
+    /* 面板包含块已变成右段胶囊（宽度远小于整条），left 锚点会把面板推出屏幕，
+       改为贴右段右缘展开（视觉上仍在页面右侧） */
     #navbar > div #search-panel {
-        left: var(--navbar-panel-inset);
+        left: auto;
+        right: 0;
     }
 }
 
@@ -327,9 +336,124 @@ body.wallpaper-transparent #navbar-wrapper #navbar[data-full-width="true"] > div
 }
 
 /* semi 滚动后加回投影 */
-html[data-has-wallpaper] #navbar[data-transparent-mode="semi"].navbar-sticky-shadow>div {
+html[data-has-wallpaper] #navbar[data-transparent-mode="semi"].navbar-sticky-shadow>.navbar-seg {
     box-shadow: inset 0 1px 0 var(--navbar-glass-highlight), 0 1px 0 var(--navbar-glass-hairline) !important;
 }
-:root.dark[data-has-wallpaper] #navbar[data-transparent-mode="semi"].navbar-sticky-shadow>div {
+:root.dark[data-has-wallpaper] #navbar[data-transparent-mode="semi"].navbar-sticky-shadow>.navbar-seg {
     box-shadow: inset 0 1px 0 var(--navbar-glass-highlight), 0 1px 0 var(--navbar-glass-hairline) !important;
+}
+
+/* ============================================
+ * 下滑收拢动画（scroll-utils 滚动时挂/摘 .navbar-collapsed）
+ * 触发：向下滚动且 scrollTop > 80；上滑或回顶恢复。
+ * 形变：胶囊 9999px 圆角不变，外宽收到与高度相等（h-16 = 4rem）即成正圆。
+ * 正圆公式（border-box：高度 4rem 含边框，宽度=两侧内边距+内容+两侧边框）：
+ * - 左段：图标盒 1.75rem → 内边距 = (4rem - 2*边框宽 - 1.75rem)/2 = 1.125rem - 边框宽
+ * - 右段：汉堡 2.75rem → 内边距 = 0.625rem - 边框宽
+ * 边框宽取 --card-border-width，滑块调粗后圆依然精确
+ * - 站名/控件组用 max-width 帘式收起；中段菜单不受影响
+ * ============================================ */
+.navbar-seg-left .navbar-title-text {
+    max-width: 20rem;
+    overflow: hidden;
+    white-space: nowrap;
+    opacity: 1;
+    transition:
+        max-width 0.36s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.25s ease;
+}
+
+#navbar.navbar-collapsed .navbar-seg-left .navbar-title-text {
+    max-width: 0;
+    opacity: 0;
+}
+
+/* 图标盒固定尺寸：图片/图标两种 logo 形态下收拢宽度都精确 */
+.navbar-seg-left .navbar-logo,
+.navbar-seg-left a img {
+    width: 1.75rem;
+    height: 1.75rem;
+    object-fit: contain;
+}
+
+.navbar-seg-left .navbar-logo {
+    transition: margin-right 0.36s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+#navbar.navbar-collapsed .navbar-seg-left .navbar-logo {
+    margin-right: 0;
+}
+
+.navbar-seg-left > a {
+    transition:
+        padding 0.36s cubic-bezier(0.22, 1, 0.36, 1),
+        color 0.15s ease,
+        background-color 0.15s ease;
+}
+
+#navbar.navbar-collapsed .navbar-seg-left > a {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+#navbar.navbar-collapsed .navbar-seg-left {
+    padding-left: calc(1.125rem - var(--card-border-width, 2px));
+    padding-right: calc(1.125rem - var(--card-border-width, 2px));
+}
+
+.navbar-right-controls {
+    display: flex;
+    align-items: center;
+    max-width: 30rem;
+    overflow: hidden;
+    opacity: 1;
+    transition:
+        max-width 0.36s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.25s ease;
+}
+
+#navbar.navbar-collapsed .navbar-right-controls {
+    max-width: 0;
+}
+/* 淡出只在没有任何子浮层面板打开时启用：opacity 作用于整棵子树，
+   收拢态从快捷面板弹出搜索/音乐/显示/亮暗子卡时，opacity:0 会把绝对定位的
+   子卡一起藏掉（max-width 裁不到它们——定位包含块是 .navbar-seg，不是本控件组） */
+#navbar.navbar-collapsed:not(:has(.navbar-right-controls .float-panel:not(.float-panel-closed))) .navbar-right-controls {
+    opacity: 0;
+}
+
+/* 收拢态从快捷面板唤起搜索时，桌面用的导航栏搜索框已被帘式收起，
+   面板内给移动端用的输入框（默认 lg:hidden）顶上，否则 PC 端子卡里没地方输入 */
+#navbar.navbar-collapsed #search-bar-inside {
+    display: flex;
+}
+
+#navbar.navbar-collapsed .navbar-seg-right {
+    padding-left: calc(0.625rem - var(--card-border-width, 2px));
+    padding-right: calc(0.625rem - var(--card-border-width, 2px));
+}
+
+/* 收拢时汉堡按钮淡入；可见性由下方媒体查询接管 */
+#navbar.navbar-collapsed .navbar-seg-right #nav-menu-switch {
+    animation: navbar-collapse-fade 0.3s ease;
+}
+
+/* 汉堡按钮显隐：移动端常显；≥1024 仅收拢态显示。
+   原实现是按钮上的 lg:hidden!：Tailwind 分层内 important 在层序反转下必胜，
+   收拢态的未分层覆盖永远赢不了 → PC 端收拢后无图标、细条、点不到。
+   改为普通规则后由特异性接管，无需 important 角力 */
+@media (min-width: 1024px) {
+    #navbar:not(.navbar-collapsed) .navbar-seg-right #nav-menu-switch {
+        display: none;
+    }
+}
+
+@keyframes navbar-collapse-fade {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }

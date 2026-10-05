@@ -405,6 +405,8 @@ export const zh_CN: Translation = {
 	[Key.cardBorder]: "卡片边框和阴影",
 	[Key.cardBorderWidth]: "边框粗细",
 	[Key.cardFollowTheme]: "卡片跟随主题色",
+	[Key.displaySettings]: "显示设置",
+	[Key.lightDarkMode]: "亮暗模式",
 
 	// 文章布局
 	[Key.postListLayout]: "文章布局",
