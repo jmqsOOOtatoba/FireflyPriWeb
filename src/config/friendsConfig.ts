@@ -143,6 +143,15 @@ export const friendsConfig: FriendLink[] = [
 		enabled: true,
 	},
 	{
+		title: "HZH",
+		desc: "Welcome to HZH",
+		siteurl: "https://clannad.top",
+		imgurl: "https://clannad.top/favicon.png",
+		tags: ["Blog"],
+		weight: 100,
+		enabled: true
+	},
+	{
 		title: "Firefly Docs",
 		imgurl: "https://docs-firefly.cuteleaf.cn/logo.png",
 		desc: "Firefly主题模板文档",
