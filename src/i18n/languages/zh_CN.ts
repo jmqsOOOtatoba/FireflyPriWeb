@@ -404,6 +404,7 @@ export const zh_CN: Translation = {
 	[Key.cardSettings]: "卡片样式",
 	[Key.cardBorder]: "卡片边框和阴影",
 	[Key.cardBorderWidth]: "边框粗细",
+	[Key.uttuCursor]: "自定义光标",
 	[Key.cardFollowTheme]: "卡片跟随主题色",
 	[Key.displaySettings]: "显示设置",
 	[Key.lightDarkMode]: "亮暗模式",

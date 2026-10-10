@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UTTU 风格改造可行性评估 · Firefly</title>
+<style>
+  :root{
+    /* ===== 提取自 uttu.merui.net 的 reverse 橙色阶 ===== */
+    --reverse-300:#edb184;
+    --reverse-400:#e58752;
+    --reverse-500:#df6931;
+    --reverse-600:#d05126;
+    --reverse-700:#ad3e21;
+    --reverse-800:#8a3322;
+    --reverse-900:#702c1e;
+    /* ===== foundation 奶油色阶 ===== */
+    --foundation-50:#f9f6f3;
+    --foundation-100:#ece5d9;
+    --foundation-200:#e2d7c6;
+    --foundation-300:#cfbca2;
+    /* ===== 深色底 ===== */
+    --panel:#292929;
+    --panel-deep:#1a1919;
+    --ink-black:#010100;
+    --bg:#131211;
+    --serif:"Playfair Display","Noto Serif SC",Georgia,"Times New Roman",serif;
+    --sans:"Work Sans",-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+    --mono:"JetBrains Mono",Consolas,monospace;
+    --radius:.375rem;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--sans);
+    background:var(--bg);
+    color:var(--foundation-100);
+    line-height:1.7;
+    font-size:15px;
+    overflow-x:hidden;
+    /* 噪点纹理（UTTU 的签名背景） */
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E"),
+      radial-gradient(1200px 500px at 50% -10%, rgba(223,105,49,.08), transparent 60%);
+  }
+  /* 轻量雨丝（UTTU 首页 rain 效果的极简复刻） */
+  .rain{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+  .rain i{
+    position:absolute;top:-60px;width:1px;height:46px;
+    background:linear-gradient(#fff0,#ffffffb3);
+    animation:fall linear infinite;opacity:.25;
+  }
+  @keyframes fall{to{transform:translateY(110vh)}}
+  .wrap{position:relative;z-index:1;max-width:920px;margin:0 auto;padding:56px 24px 80px}
+
+  /* ===== 排版 ===== */
+  .hero{border-bottom:5px solid var(--foundation-100);padding-bottom:36px;margin-bottom:44px}
+  .kicker{
+    font-size:12px;letter-spacing:.32em;color:var(--reverse-400);
+    text-transform:uppercase;margin-bottom:14px;
+  }
+  h1{
+    font-family:var(--serif);font-weight:700;font-size:clamp(30px,5vw,46px);
+    line-height:1.25;letter-spacing:.01em;
+  }
+  h1 em{font-style:italic;color:var(--reverse-500)}
+  .hero p{margin-top:16px;color:var(--foundation-300);max-width:640px}
+  .meta{margin-top:18px;font-size:12px;color:#ffffff66;font-family:var(--mono)}
+
+  h2{
+    font-family:var(--serif);font-size:24px;font-weight:700;
+    margin:52px 0 8px;display:flex;align-items:center;gap:12px;
+  }
+  h2::before{content:"";width:14px;height:14px;background:var(--reverse-500);transform:rotate(45deg);flex:none}
+  .sub{color:var(--foundation-300);font-size:13.5px;margin-bottom:20px}
+
+  .panel{
+    background:var(--panel-deep);
+    border:5px solid var(--foundation-100);
+    border-radius:var(--radius);
+    padding:24px 26px;
+    margin-bottom:18px;
+  }
+  .panel.accent{border-color:var(--reverse-500)}
+  .panel h3{font-family:var(--serif);font-size:18px;margin-bottom:10px}
+  .panel h3 .tag{
+    font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:.12em;
+    background:var(--reverse-500);color:#fff;padding:2px 8px;border-radius:2px;
+    vertical-align:3px;margin-right:8px;
+  }
+  .panel p+p{margin-top:10px}
+  .muted{color:var(--foundation-300);font-size:13.5px}
+
+  /* ===== 色板 ===== */
+  .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:10px;margin-top:14px}
+  .sw{border-radius:var(--radius);overflow:hidden;border:1px solid #ffffff1a;background:#00000040}
+  .sw .chip{height:56px}
+  .sw .info{padding:7px 9px;font-size:11px;font-family:var(--mono);color:var(--foundation-300)}
+  .sw .info b{display:block;color:var(--foundation-100);font-size:12px}
+
+  /* ===== 表格 ===== */
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:6px}
+  th,td{padding:11px 12px;text-align:left;border-bottom:1px solid #ece5d926;vertical-align:top}
+  th{font-size:11px;letter-spacing:.14em;color:var(--reverse-400);text-transform:uppercase;font-weight:600}
+  td:first-child{color:var(--foundation-100);font-weight:600;white-space:nowrap}
+  td{color:var(--foundation-300)}
+  td .ok{color:var(--reverse-400)}
+  td .warn{color:#e0c060}
+  .tablebox{overflow-x:auto;border:5px solid var(--foundation-100);border-radius:var(--radius);background:var(--panel-deep);padding:6px 18px 10px}
+
+  /* ===== 分层路线 ===== */
+  .tiers{display:grid;gap:14px;margin-top:8px}
+  .tier{
+    display:grid;grid-template-columns:74px 1fr;gap:18px;
+    background:var(--panel-deep);border:5px solid var(--foundation-100);
+    border-radius:var(--radius);padding:18px 20px;
+    transition:border-color .15s,transform .15s;
+  }
+  .tier:hover{border-color:var(--reverse-500);transform:translateY(-2px)}
+  .tier .lvl{
+    font-family:var(--serif);font-size:30px;font-weight:800;color:var(--reverse-500);
+    text-align:center;line-height:1;padding-top:4px;
+  }
+  .tier .lvl small{display:block;font-family:var(--sans);font-size:10px;color:var(--foundation-300);letter-spacing:.1em;margin-top:6px}
+  .tier h4{font-size:15px;margin-bottom:6px}
+  .tier p{font-size:13.5px;color:var(--foundation-300)}
+  .tier .eff{
+    display:inline-block;margin-top:10px;font-size:11px;font-family:var(--mono);
+    background:#ece5d914;border:1px solid #ece5d933;padding:3px 9px;border-radius:99px;color:var(--foundation-200);
+  }
+  .tier .eff.hard{border-color:var(--reverse-500);color:var(--reverse-300)}
+
+  /* ===== 结论横幅 ===== */
+  .verdict{
+    background:linear-gradient(135deg,var(--reverse-600),var(--reverse-800));
+    border:5px solid var(--foundation-100);border-radius:var(--radius);
+    padding:28px 30px;margin-top:8px;
+  }
+  .verdict .big{font-family:var(--serif);font-size:34px;font-weight:800}
+  .verdict .big em{font-style:italic;color:var(--foundation-100)}
+  .verdict p{margin-top:10px;font-size:14px;color:#f9f6f3e6}
+
+  ul.clean{list-style:none;margin-top:8px}
+  ul.clean li{padding:7px 0 7px 22px;position:relative;font-size:13.5px;color:var(--foundation-300);border-bottom:1px dashed #ece5d91a}
+  ul.clean li::before{content:"▸";position:absolute;left:2px;color:var(--reverse-500)}
+  ul.clean li b{color:var(--foundation-100)}
+
+  footer{
+    margin-top:64px;border-top:1px solid #ece5d933;padding-top:18px;
+    font-size:12px;color:#ffffff59;font-family:var(--mono);
+  }
+  @media (max-width:640px){
+    .tier{grid-template-columns:1fr}
+    .tier .lvl{text-align:left;display:flex;gap:10px;align-items:baseline}
+    .tier .lvl small{margin-top:0}
+  }
+</style>
+</head>
+<body>
+<div class="rain" aria-hidden="true" id="rain"></div>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="kicker">Feasibility Report · 可行性评估</div>
+    <h1>把 Firefly 改造成 <em>UTTU</em> 风格，<br>可行吗？</h1>
+    <p>基于对 <b>uttu.merui.net</b> 前端样式的静态源码分析（HTML + 两份生产 CSS，共约 101 万字符），对照本仓库（Astro 7 + Tailwind 4 + Stylus）的现有主题架构，给出分层改造评估。</p>
+    <div class="meta">分析日期 2026-10-10 · 数据来源 /_astro/BaseLayout.DKH0N26w.css · /_astro/index.BtSDwVcQ.css</div>
+  </header>
+
+  <div class="verdict">
+    <div class="big">结论：<em>可行，且性价比分层明显</em></div>
+    <p>两站同为 Astro + Tailwind 4 技术栈，设计令牌（颜色 / 字体 / 圆角）可以直接映射进 Firefly 的 <code>@theme</code> 与 <code>variables.styl</code>。建议按 L1→L4 分层推进：L1–L2 是「换个皮肤」，风险低；L3–L4 是「换成游戏菜单」，会动内容架构，需单独评审。<b>不建议像素级复刻</b>——UTTU 是《重返未来：1999》同人档案站，其图像素材、菜单式首页与博客的内容形态并不匹配。</p>
+  </div>
+
+  <h2>UTTU 的设计 DNA</h2>
+  <p class="sub">从生产 CSS 中提取的实际生效值，不是目测估计。</p>
+
+  <div class="panel">
+    <h3><span class="tag">COLOR</span>色板：暖橙主色 + 奶油纸白 + 近黑底</h3>
+    <p class="muted">品牌橙色阶以 Tailwind 自定义 <code>reverse-*</code> 命名，正文与描边统一使用奶油色 <code>foundation-*</code>，背景是带噪点的暖黑。整站没有冷色，色温非常统一。</p>
+    <div class="swatches">
+      <div class="sw"><div class="chip" style="background:#edb184"></div><div class="info"><b>reverse-300</b>#edb184</div></div>
+      <div class="sw"><div class="chip" style="background:#e58752"></div><div class="info"><b>reverse-400</b>#e58752</div></div>
+      <div class="sw"><div class="chip" style="background:#df6931"></div><div class="info"><b>reverse-500</b>#df6931 ★</div></div>
+      <div class="sw"><div class="chip" style="background:#d05126"></div><div class="info"><b>reverse-600</b>#d05126</div></div>
+      <div class="sw"><div class="chip" style="background:#ad3e21"></div><div class="info"><b>reverse-700</b>#ad3e21</div></div>
+      <div class="sw"><div class="chip" style="background:#8a3322"></div><div class="info"><b>reverse-800</b>#8a3322</div></div>
+      <div class="sw"><div class="chip" style="background:#ece5d9"></div><div class="info"><b>foundation-100</b>#ece5d9</div></div>
+      <div class="sw"><div class="chip" style="background:#cfbca2"></div><div class="info"><b>foundation-300</b>#cfbca2</div></div>
+      <div class="sw"><div class="chip" style="background:#292929"></div><div class="info"><b>panel</b>#292929</div></div>
+      <div class="sw"><div class="chip" style="background:#1a1919"></div><div class="info"><b>panel-deep</b>#1a1919</div></div>
+      <div class="sw"><div class="chip" style="background:#010100"></div><div class="info"><b>ink-black</b>#010100</div></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3><span class="tag">TYPE</span>字体：衬线展示 + 无衬线正文 + 装饰体</h3>
+    <table>
+      <tr><th>字体</th><th>用途</th><th>说明</th></tr>
+      <tr><td>Work Sans Variable</td><td>全局正文（html 默认 font-family）</td><td>可变字重 100–900，按 unicode-range 切子集</td></tr>
+      <tr><td>Playfair Display Variable</td><td>标题 / 弹窗大字（衬线）</td><td>弹窗标题「future」斜体橙字即出自这套</td></tr>
+      <tr><td>Cinzel Decorative</td><td>装饰性大写标题</td><td>古典刻本感，UTTU logo 区风格</td></tr>
+      <tr><td>Raleway Variable</td><td>辅助无衬线</td><td>次级信息</td></tr>
+      <tr><td>Noto Serif JP / Noto Sans (CJK)</td><td>中日韩文本</td><td>可切换（data-cjk-pref），还有无障碍字体选项 Atkinson Hyperlegible / OpenDyslexic</td></tr>
+    </table>
+  </div>
+
+  <div class="panel">
+    <h3><span class="tag">LAYOUT</span>结构：游戏主菜单式首页</h3>
+    <ul class="clean">
+      <li><b>图片按钮导航</b>——Story / Profiles / Music / Gallery 全是预渲染 webp 图片（如 btn-story.webp 371×126），带 4° 旋转摆放，不是 HTML 文字按钮。</li>
+      <li><b>5px 奶油描边</b>——面板统一 <code>border-foundation-100</code> 5px 实线框，圆角很小（0.25–0.375rem），是「卡纸/档案卡」质感，不是现代大圆角卡片。</li>
+      <li><b>噪点暗底</b>——全页近黑暖底 + 噪点纹理，背景艺术图 webp（bg-home 等）分层叠放。</li>
+      <li><b>进场弹窗</b>——首访先出设置弹窗（语言 / 光标 / Loader 皮肤），游戏化仪式感。</li>
+    </ul>
+  </div>
+
+  <div class="panel">
+    <h3><span class="tag">MOTION</span>动效：克制但有性格</h3>
+    <ul class="clean">
+      <li><b>雨丝</b>——首页固定容器内 1px 白色渐变线条按 keyframes 下落，移动端自动关闭。</li>
+      <li><b>自定义光标</b>——<code>cursor:none</code> + #custom-cursor 双层伪元素跟随，可在设置里关闭。</li>
+      <li><b>clip-path 分段揭示</b>——标题按 segment0→4 的 inset 动画逐段「刷」出来。</li>
+      <li><b>过渡参数</b>——颜色过渡 150ms 居多；按钮 <code>bg-reverse-500 hover:bg-reverse-700</code>；黑胶唱片图片常旋。另有 Astro View Transitions（data-astro-transition-scope）负责切页。</li>
+    </ul>
+  </div>
+
+  <h2>与 Firefly 的架构对照</h2>
+  <p class="sub">决定「能不能改」的是技术栈，决定「该不该改」的是内容形态。</p>
+
+  <div class="tablebox">
+    <table>
+      <tr><th>维度</th><th>UTTU（目标风格）</th><th>Firefly（现状）</th><th>兼容性</th></tr>
+      <tr><td>框架</td><td>Astro（View Transitions）</td><td>Astro 7 + Svelte 岛屿 + Swup</td><td class="ok">同栈，无迁移成本</td></tr>
+      <tr><td>样式系统</td><td>Tailwind 4 + 自定义色阶（hex）</td><td>Tailwind 4 + Stylus + CSS 变量（oklch 色相可调）</td><td class="ok">token 可直接映射</td></tr>
+      <tr><td>主题模型</td><td>固定暗色单主题（另有国服开关等）</td><td>亮 / 暗双主题 + 全局色相滑块</td><td class="warn">需决定保留双主题还是切单暗色</td></tr>
+      <tr><td>正文可读性</td><td>奶油字 #ece5d9 / 近黑底，对比度高</td><td>亮色为主，文章页 prose 体系</td><td class="ok">暗底奶油字对博客完全成立</td></tr>
+      <tr><td>导航形态</td><td>图片按钮游戏菜单</td><td>文字导航 + 侧栏组件（播放器/天气/看板娘）</td><td class="warn">图片菜单需要美术资源，且挤占功能位</td></tr>
+      <tr><td>品牌资产</td><td>Reverse:1999 同人素材（版权方 Bluepoch）</td><td>自有萤火虫品牌</td><td class="warn">只能借设计语言，素材必须自制</td></tr>
+      <tr><td>内容重心</td><td>档案检索 / 图鉴 / 剧情浏览</td><td>长文阅读 + 评论 + 友圈</td><td class="warn">文章页排版优先级 &gt; 菜单炫技</td></tr>
+    </table>
+  </div>
+
+  <h2>分层实施路线</h2>
+  <p class="sub">每层独立可交付、可回退。建议至少做完 L2 再评估是否继续。</p>
+
+  <div class="tiers">
+    <div class="tier">
+      <div class="lvl">L1<small>TOKENS</small></div>
+      <div>
+        <h4>设计令牌移植 —— 换色换字</h4>
+        <p>在 <code>@theme</code> / <code>variables.styl</code> 引入 reverse 橙色阶与 foundation 奶油色阶，把 <code>--primary</code>、<code>--page-bg</code>、<code>--card-bg</code>、<code>--line-divider</code> 等核心变量映射到 UTTU 取值；字体侧在 fontConfig 增加 Playfair Display（标题）+ Work Sans（正文），CJK 沿用现有汉仪文黑或换 Noto Serif 增加「刻本感」。噪点纹理用一张 SVG data-URI 铺底。</p>
+        <span class="eff">工作量：小（半天～1天） · 风险：低 · 全站即时变脸</span>
+      </div>
+    </div>
+    <div class="tier">
+      <div class="lvl">L2<small>COMPONENTS</small></div>
+      <div>
+        <h4>组件皮肤 —— 卡片 / 按钮 / 导航</h4>
+        <p>卡片改成 5px 奶油描边 + 0.375rem 小圆角 + 暖黑面板；主按钮改 <code>bg-reverse-500 → hover:reverse-700</code>；导航栏、标签、文章元信息、代码块顶栏全部跟随色板；给标题补 clip-path 分段揭示动效。这一层做完，「像不像 UTTU」已有七八成。</p>
+        <span class="eff">工作量：中（2–4天） · 风险：中（需逐页目检亮/暗两套）</span>
+      </div>
+    </div>
+    <div class="tier">
+      <div class="lvl">L3<small>EFFECTS</small></div>
+      <div>
+        <h4>氛围特效 —— 雨丝 / 自定义光标 / 噪点动效</h4>
+        <p>雨丝容器（移动端自动禁用）、自定义光标（设置里可关）、黑胶旋转装饰等。全部是独立图层，不碰内容架构。注意：自定义光标会影响可访问性，务必保留开关——UTTU 自己也提供了关闭选项。</p>
+        <span class="eff">工作量：小-中（1–2天） · 风险：低（独立图层，可单独回退）</span>
+      </div>
+    </div>
+    <div class="tier">
+      <div class="lvl">L4<small>RESTRUCTURE</small></div>
+      <div>
+        <h4>形态改造 —— 首页游戏菜单化</h4>
+        <p>把首页改成图片按钮式主菜单 + 进场弹窗 + 分屏面板。这层会与现有首页架构（侧栏播放器、友链、置顶文章等 Svelte 岛屿）正面冲突，还需要成套美术资源（按钮图、背景图、Logo 变体）。除非你想把博客彻底改成「个人门户 / 档案馆」形态，否则不建议。</p>
+        <span class="eff hard">工作量：大（1–2周 + 美术） · 风险：高（信息架构重做）</span>
+      </div>
+    </div>
+  </div>
+
+  <h2>风险清单</h2>
+  <div class="panel accent">
+    <ul class="clean">
+      <li><b>版权素材红线</b>——UTTU 的按钮图、角色图、背景均属 Bluepoch 资产或同人创作，只能借「设计语言」，所有图像资源必须自制 / 授权。</li>
+      <li><b>双主题决策</b>——UTTU 是单暗色站；Firefly 有亮暗双主题和色相滑块。橙×奶油在亮色主题下需要另一套取值（奶油底 + 深橙字），否则会翻车。</li>
+      <li><b>文章页可读性</b>——长文是博客的命。暗底奶油字对比度足够（#ece5d9 on #1a1919 ≈ 13:1），但 prose 内的引用块、代码块、表格都要随主题重调，不能只改外框。</li>
+      <li><b>性能预算</b>——噪点、雨丝、自定义光标都是廉价特效，但背景大图要走本仓库已有的 LQIP / resize 管线，别硬塞 2MB webp。参考 18文章 的性能优化基线（forced-reflow、LCP 目标）。</li>
+      <li><b>既有资产冲突</b>——GreatVibes 装饰字体是死文件（见性能优化交接记录），换字体体系时顺手清理，别叠床架屋。</li>
+    </ul>
+  </div>
+
+  <h2>建议</h2>
+  <div class="panel">
+    <h3><span class="tag">PLAN</span>先 L1 + L2，一周内看到成果</h3>
+    <p class="muted">第一步只动令牌和组件皮肤，就能让全站获得「UTTU 味」的八成观感，且随时可回退；雨丝和光标（L3）作为甜头按需添加；L4 首页形态改造单独立项、做好信息架构评审再动。改造期间用 <code>pnpm check</code> 的 17-error 基线与 18文章 的性能基线做回归参照，视觉验收走本机 dev server + Playwright MCP 截图对比。</p>
+  </div>
+
+  <footer>
+    Firefly × UTTU 可行性评估 · 样式数据静态抓取自 uttu.merui.net 生产资源 · 本页自身即采用 reverse/foundation 色板与衬线标题排版
+  </footer>
+</div>
+
+<script>
+  // 生成雨丝（数量随视口，移动端 CSS 已隐藏）
+  const rain = document.getElementById('rain');
+  const n = Math.min(26, Math.floor(innerWidth / 60));
+  for (let i = 0; i < n; i++) {
+    const d = document.createElement('i');
+    d.style.left = (Math.random() * 100).toFixed(2) + '%';
+    d.style.animationDuration = (5 + Math.random() * 6).toFixed(1) + 's';
+    d.style.animationDelay = (-Math.random() * 10).toFixed(1) + 's';
+    d.style.height = (30 + Math.random() * 40) | 0;
+    rain.appendChild(d);
+  }
+</script>
+</body>
+</html>

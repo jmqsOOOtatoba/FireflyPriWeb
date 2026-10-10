@@ -414,6 +414,7 @@ export const en: Translation = {
 	[Key.cardSettings]: "Card Style",
 	[Key.cardBorder]: "Card Border & Shadow",
 	[Key.cardBorderWidth]: "Border Width",
+	[Key.uttuCursor]: "Custom Cursor",
 	[Key.cardFollowTheme]: "Card Follow Theme Color",
 	[Key.displaySettings]: "Display Settings",
 	[Key.lightDarkMode]: "Light / Dark Mode",

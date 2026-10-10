@@ -404,6 +404,7 @@ enum I18nKey {
 	cardSettings = "cardSettings",
 	cardBorder = "cardBorder",
 	cardBorderWidth = "cardBorderWidth",
+	uttuCursor = "uttuCursor",
 	cardFollowTheme = "cardFollowTheme",
 
 	// 导航栏快捷面板（PC 收拢态汉堡菜单）

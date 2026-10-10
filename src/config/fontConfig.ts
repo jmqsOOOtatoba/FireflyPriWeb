@@ -45,6 +45,84 @@ export const fontsList: FontDefinition[] = [
 		subsets: ["latin", "cyrillic"],
 		fallbacks: ["sans-serif"],
 	},
+	// ─── UTTU 风格：正文拉丁字体（本地文件，代理不可用时也能构建）───
+	{
+		name: "Work Sans",
+		cssVariable: "--font-work-sans",
+		provider: "local",
+		options: {
+			variants: [
+				{
+					src: ["./public/assets/fonts/work-sans-latin-400-normal.woff2"],
+					weight: "400",
+					style: "normal",
+				},
+				{
+					src: ["./public/assets/fonts/work-sans-latin-500-normal.woff2"],
+					weight: "500",
+					style: "normal",
+				},
+				{
+					src: ["./public/assets/fonts/work-sans-latin-600-normal.woff2"],
+					weight: "600",
+					style: "normal",
+				},
+				{
+					src: ["./public/assets/fonts/work-sans-latin-700-normal.woff2"],
+					weight: "700",
+					style: "normal",
+				},
+			],
+		},
+		fallbacks: ["sans-serif"],
+	},
+	// ─── UTTU 风格：标题衬线（拉丁，含斜体强调用）───
+	{
+		name: "Playfair Display",
+		cssVariable: "--font-playfair",
+		provider: "local",
+		options: {
+			variants: [
+				{
+					src: ["./public/assets/fonts/playfair-latin-700-normal.woff2"],
+					weight: "700",
+					style: "normal",
+				},
+				{
+					src: ["./public/assets/fonts/playfair-latin-700-italic.woff2"],
+					weight: "700",
+					style: "italic",
+				},
+				{
+					src: ["./public/assets/fonts/playfair-latin-900-normal.woff2"],
+					weight: "900",
+					style: "normal",
+				},
+				{
+					src: ["./public/assets/fonts/playfair-latin-900-italic.woff2"],
+					weight: "900",
+					style: "italic",
+				},
+			],
+		},
+		fallbacks: ["serif"],
+	},
+	// ─── UTTU 风格：标题衬线（CJK，构建时由 subset-fonts 裁剪成 woff2）───
+	{
+		name: "Noto Serif SC",
+		cssVariable: "--font-noto-serif-sc",
+		provider: "local",
+		options: {
+			variants: [
+				{
+					src: ["./public/assets/fonts/NotoSerifSC-Bold.otf"],
+					weight: "700",
+					style: "normal",
+				},
+			],
+		},
+		fallbacks: ["serif", "Songti SC", "SimSun"],
+	},
 	{
 		name: "JetBrains Mono",
 		cssVariable: "--font-jetbrains-mono",
@@ -107,7 +185,8 @@ export const fontConfig: FontSelectionConfig = {
 	enable: true,
 	// 当前选择的字体 CSS 变量名（对应上方 fonts 中的 cssVariable）
 	// 使用 "system" 表示系统字体（不加载任何自定义字体）
-	selected: ["--font-hanyi-wenhei"],
+	// Work Sans 先渲染拉丁字符，CJK 字符自动回退到汉仪文黑
+	selected: ["--font-work-sans", "--font-hanyi-wenhei"],
 
 	// 各区域独立字体设置（填写上方 fonts 中的 cssVariable，留空则使用全局 selected 字体）
 	// 例如：bannerTitleFont: "--font-inter", 表示主页横幅主标题使用 Inter 字体
@@ -117,6 +196,8 @@ export const fontConfig: FontSelectionConfig = {
 	bannerSubtitleFont: "--font-inter",
 	// 导航栏标题字体
 	navbarTitleFont: "",
+	// 标题字体链：Playfair（拉丁衬线）→ 思源宋体（CJK 衬线）
+	headingFont: ["--font-playfair", "--font-noto-serif-sc"],
 	// 代码块字体（用于代码高亮和等宽字体场景）
 	codeFont: "--font-jetbrains-mono",
 
@@ -129,6 +210,10 @@ export const fontConfig: FontSelectionConfig = {
 		},
 		// 全站正文主字体（selected 引用），不配子集化会原样输出 3.1MB TTF
 		"--font-hanyi-wenhei": {
+			extraChars: "",
+		},
+		// 标题 CJK 衬线（12MB OTF，构建时裁剪为页面实际用字的 woff2）
+		"--font-noto-serif-sc": {
 			extraChars: "",
 		},
 	},

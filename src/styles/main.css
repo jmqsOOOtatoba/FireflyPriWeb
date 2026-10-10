@@ -18,8 +18,23 @@
 /* Tailwind v4 配置 - 从 tailwind.config.cjs 迁移 */
 @theme {
   --font-sans:
-    'Roboto', 'sans-serif', ui-sans-serif, system-ui, sans-serif,
+    'Work Sans', 'Roboto', 'sans-serif', ui-sans-serif, system-ui, sans-serif,
     'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+  /* ===== UTTU reverse 橙色阶（固定品牌色，提取自 uttu.merui.net） ===== */
+  --color-reverse-300: #edb184;
+  --color-reverse-400: #e58752;
+  --color-reverse-500: #df6931;
+  --color-reverse-600: #d05126;
+  --color-reverse-700: #ad3e21;
+  --color-reverse-800: #8a3322;
+  --color-reverse-900: #702c1e;
+
+  /* ===== UTTU foundation 奶油色阶 ===== */
+  --color-foundation-50: #f9f6f3;
+  --color-foundation-100: #ece5d9;
+  --color-foundation-200: #e2d7c6;
+  --color-foundation-300: #cfbca2;
 }
 
 /* 自定义工具类 - Tailwind v4 使用 @utility 定义 */
@@ -51,6 +66,95 @@
 /* 确保平滑滚动 */
 html {
     scroll-behavior: smooth;
+}
+
+/* ===== UTTU 签名：全页噪点纹理（覆盖在 --page-bg 之上，pointer 不可交互） ===== */
+html {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.47 0 0 0 0 0.44 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+}
+
+/* ===== UTTU 风格标题：衬线字（--font-heading 由 FontSetup 注入） ===== */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.prose :where(h1, h2, h3, h4, h5, h6) {
+    font-family: var(--font-heading, Georgia, serif);
+}
+
+/* ===== 标题 clip-path 分段揭示（UTTU segment 动画的简化版） ===== */
+@media (prefers-reduced-motion: no-preference) {
+    @keyframes uttu-wipe {
+        from {
+            clip-path: inset(0 100% 0 0);
+        }
+        to {
+            clip-path: inset(0 0 0 0);
+        }
+    }
+
+    h1,
+    h2,
+    .prose :where(h1, h2) {
+        animation: uttu-wipe 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+    }
+}
+
+/* ===== UTTU 自定义光标（uttu-cursor.ts 驱动） ===== */
+html.uttu-cursor-on,
+html.uttu-cursor-on * {
+    cursor: none !important;
+}
+
+/* 表单控件保留文本光标，保证输入场景可用性 */
+html.uttu-cursor-on :is(input, textarea, select, [contenteditable="true"]) {
+    cursor: text !important;
+}
+
+.uttu-cursor-dot,
+.uttu-cursor-ring {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 1200;
+    opacity: 0;
+    border-radius: 50%;
+    transition: opacity 0.15s ease;
+    will-change: transform;
+}
+
+.uttu-cursor-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--primary);
+}
+
+.uttu-cursor-ring {
+    width: 28px;
+    height: 28px;
+    border: 1.5px solid var(--primary);
+    transition:
+        opacity 0.15s ease,
+        transform 0.18s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        border-color 0.15s ease;
+}
+
+/* transition 作用在 transform 上会与 JS 每帧写入的 translate3d 冲突：
+   JS 只负责定位，滞后感由 ring 独立的短 transition 提供；按下时缩放反馈 */
+.uttu-cursor-ring.is-active {
+    border-color: var(--reverse-500, var(--primary));
+}
+
+/* 触屏/无精确指针时不生成元素，此处仅兜底隐藏 */
+@media (pointer: coarse) {
+    .uttu-cursor-dot,
+    .uttu-cursor-ring {
+        display: none !important;
+    }
 }
 
 /* 全站键盘焦点基线；组件可以在更高的层中覆盖间距或形态。 */
@@ -248,18 +352,18 @@ html {
     }
 
 
-    /* 开启边框和阴影效果时的样式（宽度由 --card-border-width 控制，默认 2px，可在显示设置面板调节） */
+    /* 开启边框和阴影效果时的样式（宽度由 --card-border-width 控制，默认 5px，可在显示设置面板调节） */
     .enable-card-border .card-base {
         @apply transition-all duration-300 border border-(--card-border-color) shadow-xs;
-        border-width: var(--card-border-width, 2px);
+        border-width: var(--card-border-width, 5px);
     }
     .enable-card-border .card-base-transparent {
         @apply transition-all duration-300 border border-(--card-border-color) shadow-xs;
-        border-width: var(--card-border-width, 2px);
+        border-width: var(--card-border-width, 5px);
     }
     .enable-card-border .btn-card {
         @apply transition-all duration-300 border border-(--card-border-color) shadow-xs;
-        border-width: var(--card-border-width, 2px);
+        border-width: var(--card-border-width, 5px);
     }
 
     /* 导航栏样式适配 */
@@ -268,7 +372,7 @@ html {
         /* 与卡片边框同款：颜色跟随 --card-border-color（亮黑/暗白），宽度跟随 --card-border-width 滑块
            （!important 压过 navbar.css 的未分层 1px 透明边框） */
         border-color: var(--card-border-color) !important;
-        border-width: var(--card-border-width, 2px) !important;
+        border-width: var(--card-border-width, 5px) !important;
     }
 
     /* 壁纸模式切换期间禁止导航栏边框和阴影闪现（含 ::after 滚动投影） */

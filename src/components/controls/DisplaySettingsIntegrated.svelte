@@ -33,6 +33,7 @@ import {
 	getStoredOverlayCardOpacity,
 	getStoredOverlayOpacity,
 	getStoredSakuraEnabled,
+	getStoredUttuCursorEnabled,
 	getStoredWallpaperMode,
 	getStoredWavesEnabled,
 	setBannerCarouselEnabled,
@@ -47,6 +48,7 @@ import {
 	setOverlayCardOpacity,
 	setOverlayOpacity,
 	setSakuraEnabled,
+	setUttuCursorEnabled,
 	setWallpaperMode,
 	setWavesEnabled,
 } from "@utils/setting-utils";
@@ -106,6 +108,7 @@ const defaultBannerTitleEnabled = getDefaultBannerTitleEnabled();
 let bannerCarouselEnabled = $state(true);
 const defaultBannerCarouselEnabled = getDefaultBannerCarouselEnabled();
 let sakuraEnabled = $state(true);
+let uttuCursorEnabled = $state(true);
 const defaultSakuraEnabled = getDefaultSakuraEnabled();
 let overlayOpacity = $state(getDefaultOverlayOpacity());
 const defaultOverlayOpacity = getDefaultOverlayOpacity();
@@ -140,6 +143,8 @@ const isBannerTitleSwitchable =
 const isBannerCarouselSwitchable =
 	displaySettingsConfig.bannerCarouselSwitchable;
 const isSakuraSwitchable = displaySettingsConfig.sakuraSwitchable;
+// UTTU 自定义光标开关始终可用（无需配置项）
+const isUttuCursorSwitchable = true;
 const isCardBorderSwitchable = displaySettingsConfig.cardBorderSwitchable;
 const isCardFollowThemeSwitchable =
 	displaySettingsConfig.cardFollowThemeSwitchable;
@@ -225,7 +230,7 @@ const hasWallpaperTab = $derived(
 			wallpaperMode === WALLPAPER_FULLSCREEN) &&
 			hasBannerSettings),
 );
-const hasEffectsTab = $derived(isSakuraSwitchable);
+const hasEffectsTab = $derived(isSakuraSwitchable || isUttuCursorSwitchable);
 
 let visibleTabs = $derived.by(() => {
 	const tabs: { key: TabKey; icon: string; label: string }[] = [];
@@ -437,6 +442,11 @@ function toggleSakuraEnabled() {
 	setSakuraEnabled(sakuraEnabled);
 }
 
+function toggleUttuCursorEnabled() {
+	uttuCursorEnabled = !uttuCursorEnabled;
+	setUttuCursorEnabled(uttuCursorEnabled);
+}
+
 function toggleCardBorderEnabled() {
 	cardBorderEnabled = !cardBorderEnabled;
 	setCardBorderEnabled(cardBorderEnabled);
@@ -561,6 +571,9 @@ onMount(() => {
 
 	// 从localStorage读取樱花特效状态
 	sakuraEnabled = getStoredSakuraEnabled();
+
+	// 从localStorage读取UTTU自定义光标状态
+	uttuCursorEnabled = getStoredUttuCursorEnabled();
 
 	// 从localStorage读取卡片样式状态
 	cardBorderEnabled = getStoredCardBorderEnabled();
@@ -1091,6 +1104,26 @@ $effect(() => {
 					<div class="absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-all duration-200"
 						 class:left-0.5={!sakuraEnabled}
 						 class:left-5={sakuraEnabled}></div>
+				</div>
+			</button>
+		</div>
+		{/if}
+		<!-- UTTU 自定义光标开关（仅精确指针设备实际生效） -->
+		{#if isUttuCursorSwitchable}
+		<div class="mt-1">
+			<button
+				class="w-full btn-regular rounded-md py-2 px-3 flex items-center gap-3 text-left active:scale-95 transition-all relative overflow-hidden"
+				class:bg-(--btn-regular-bg-hover)={uttuCursorEnabled}
+				onclick={toggleUttuCursorEnabled}
+			>
+				<Icon icon="mdi:cursor-pointer" class="text-[1.25rem] shrink-0"></Icon>
+				<span class="text-sm flex-1">{i18n(I18nKey.uttuCursor)}</span>
+				<div class="w-10 h-5 rounded-full transition-all duration-200 relative"
+					 class:bg-(--primary)={uttuCursorEnabled}
+					 class:bg-(--btn-regular-bg-active)={!uttuCursorEnabled}>
+					<div class="absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-all duration-200"
+						 class:left-0.5={!uttuCursorEnabled}
+						 class:left-5={uttuCursorEnabled}></div>
 				</div>
 			</button>
 		</div>

@@ -23,6 +23,7 @@ import { initScroll } from "@/utils/scroll-utils";
 import { initThemeListener, initWallpaperMode } from "@/utils/setting-utils";
 import { setupSwupTransitions } from "@/utils/swup-transitions";
 import { initTouchCodeCopyReveal } from "@/utils/touch-copy-utils";
+import { initUttuCursor } from "@/utils/uttu-cursor";
 
 /** 布局初始化编排（从 Layout.astro 迁出） */
 export function initLayout(): void {
@@ -30,6 +31,9 @@ export function initLayout(): void {
 	// 切页后的页面状态刷新由下方 swup 钩子与一次性注册的 document 监听器负责）
 	if (window.__fireflyLayoutInit) return;
 	window.__fireflyLayoutInit = true;
+
+	// UTTU 自定义光标（自带开关与媒体查询守卫）
+	initUttuCursor();
 
 	initializeFloatingPanels();
 

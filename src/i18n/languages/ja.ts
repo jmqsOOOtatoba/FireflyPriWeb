@@ -411,6 +411,7 @@ export const ja: Translation = {
 	[Key.cardSettings]: "カードスタイル",
 	[Key.cardBorder]: "カードのボーダーと影",
 	[Key.cardBorderWidth]: "ボーダーの太さ",
+	[Key.uttuCursor]: "カスタムカーソル",
 	[Key.cardFollowTheme]: "カードのテーマカラー追随",
 	[Key.displaySettings]: "表示設定",
 	[Key.lightDarkMode]: "ライト/ダークモード",

@@ -67,6 +67,8 @@ export type FontSelectionConfig = {
 	bannerTitleFont?: string;
 	bannerSubtitleFont?: string;
 	navbarTitleFont?: string;
+	/** 标题（h1–h6）字体，支持多个 CSS 变量组成回退链（如拉丁衬线 + CJK 衬线） */
+	headingFont?: string | string[];
 	/** 代码块字体 CSS 变量名（用于代码高亮和等宽字体场景） */
 	codeFont?: string;
 	/**

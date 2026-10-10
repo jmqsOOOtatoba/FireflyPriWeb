@@ -1,0 +1,103 @@
+---
+/**
+ * RainEffect.astro — UTTU 风格首页雨丝
+ *
+ * 纯 CSS 动画（无 rAF/Canvas 开销），SSR 输出固定参数的雨丝条。
+ * 仅首页显示：脚本在 astro:page-load 时按路径切换 data-home（覆盖 Swup 切页）。
+ * 移动端与 prefers-reduced-motion 下整层隐藏。
+ * 雨丝颜色由 --rain-color 控制（variables.styl 亮/暗主题各一份）。
+ */
+const DROPS = [
+	{ left: 4, duration: 7.2, delay: -2.1, height: 42, opacity: 0.5 },
+	{ left: 11, duration: 9.4, delay: -5.6, height: 56, opacity: 0.32 },
+	{ left: 18, duration: 6.4, delay: -0.8, height: 34, opacity: 0.55 },
+	{ left: 25, duration: 8.6, delay: -4.2, height: 48, opacity: 0.28 },
+	{ left: 33, duration: 7.8, delay: -6.9, height: 40, opacity: 0.46 },
+	{ left: 39, duration: 10.2, delay: -3.3, height: 60, opacity: 0.24 },
+	{ left: 47, duration: 6.8, delay: -1.5, height: 36, opacity: 0.52 },
+	{ left: 54, duration: 9.0, delay: -7.7, height: 52, opacity: 0.3 },
+	{ left: 61, duration: 7.4, delay: -4.9, height: 44, opacity: 0.48 },
+	{ left: 68, duration: 8.2, delay: -2.6, height: 38, opacity: 0.36 },
+	{ left: 74, duration: 10.8, delay: -6.1, height: 58, opacity: 0.26 },
+	{ left: 81, duration: 6.6, delay: -0.4, height: 32, opacity: 0.56 },
+	{ left: 87, duration: 9.6, delay: -5.2, height: 50, opacity: 0.34 },
+	{ left: 93, duration: 7.6, delay: -3.7, height: 42, opacity: 0.44 },
+	{ left: 8, duration: 11.4, delay: -8.3, height: 64, opacity: 0.22 },
+	{ left: 29, duration: 6.2, delay: -1.1, height: 30, opacity: 0.58 },
+	{ left: 44, duration: 8.8, delay: -6.5, height: 46, opacity: 0.3 },
+	{ left: 58, duration: 7.0, delay: -2.9, height: 40, opacity: 0.5 },
+	{ left: 71, duration: 10.0, delay: -4.4, height: 54, opacity: 0.28 },
+	{ left: 84, duration: 6.6, delay: -7.2, height: 36, opacity: 0.54 },
+	{ left: 96, duration: 9.2, delay: -3.0, height: 48, opacity: 0.32 },
+	{ left: 21, duration: 8.0, delay: -9.1, height: 56, opacity: 0.24 },
+];
+---
+
+<div id="uttu-rain" class="uttu-rain" aria-hidden="true" data-home="off">
+	{DROPS.map((d) => (
+		<span
+			style={`left:${d.left}%;animation-duration:${d.duration}s;animation-delay:${d.delay}s;height:${d.height}px;opacity:${d.opacity}`}
+		/>
+	))}
+</div>
+
+<style>
+	.uttu-rain {
+		position: fixed;
+		inset: 0;
+		overflow: hidden;
+		pointer-events: none;
+		z-index: 40;
+		opacity: 0;
+		transition: opacity 0.6s ease;
+	}
+
+	.uttu-rain[data-home="on"] {
+		opacity: 1;
+	}
+
+	.uttu-rain span {
+		position: absolute;
+		top: -80px;
+		width: 1px;
+		background: linear-gradient(
+			to bottom,
+			transparent,
+			var(--rain-color, rgba(236, 229, 217, 0.65))
+		);
+		animation-name: uttu-rain-fall;
+		animation-timing-function: linear;
+		animation-iteration-count: infinite;
+		will-change: transform;
+	}
+
+	@keyframes uttu-rain-fall {
+		to {
+			transform: translateY(calc(100vh + 120px));
+		}
+	}
+
+	/* 移动端与弱动效用户直接关闭（与 UTTU 行为一致） */
+	@media (max-width: 768px) {
+		.uttu-rain {
+			display: none;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.uttu-rain {
+			display: none;
+		}
+	}
+</style>
+
+<script>
+	// 首页可见性同步：全量加载 + Swup 切页（astro:page-load 是本站唯一可靠切页事件）
+	function syncRainHome(): void {
+		const el = document.getElementById("uttu-rain");
+		if (!el) return;
+		el.dataset.home = window.location.pathname === "/" ? "on" : "off";
+	}
+	syncRainHome();
+	document.addEventListener("astro:page-load", syncRainHome);
+</script>

@@ -10,6 +10,7 @@ import GithubCardManager from "@components/features/GithubCardManager.astro";
 import MusicManager from "@components/features/MusicManager.astro";
 import MusicPlayerManager from "@components/features/MusicPlayerManager.astro";
 import MusicPlayerView from "@components/features/MusicPlayerView.astro";
+import RainEffect from "@components/features/RainEffect.astro";
 import SakuraEffect from "@components/features/SakuraEffect.astro";
 import WavesEffect from "@components/features/WavesEffect.astro";
 import ConfigCarrier from "@components/layout/ConfigCarrier.astro";
@@ -618,6 +619,9 @@ const ogImageAlt = propsOgImageAlt ?? pageTitle;
 
     <!-- Water Waves Effect -->
     <WavesEffect />
+
+    <!-- UTTU 首页雨丝 -->
+    <RainEffect />
 
     <!-- Fancybox Manager -->
     <FancyboxManager />

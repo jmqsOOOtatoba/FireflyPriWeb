@@ -926,12 +926,36 @@ export function setCardBorderEnabled(enabled: boolean): void {
 	}
 }
 
+// UTTU 自定义光标开关（uttu-cursor.ts 监听 "uttu-cursor-change" 实时生效）
+export function getStoredUttuCursorEnabled(): boolean {
+	if (typeof localStorage === "undefined") {
+		return true;
+	}
+	const stored = localStorage.getItem("uttu-cursor");
+	if (stored === null) {
+		return true;
+	}
+	return stored !== "off";
+}
+
+export function setUttuCursorEnabled(enabled: boolean): void {
+	if (
+		typeof localStorage === "undefined" ||
+		typeof localStorage.setItem !== "function"
+	) {
+		return;
+	}
+	localStorage.setItem("uttu-cursor", enabled ? "on" : "off");
+	window.dispatchEvent(new CustomEvent("uttu-cursor-change"));
+}
+
 // Card border width functions
 const CARD_BORDER_WIDTH_MIN = 0;
 const CARD_BORDER_WIDTH_MAX = 5;
 
 export function getDefaultCardBorderWidth(): number {
-	return 2;
+	// UTTU 风格默认 5px 奶油描边（上限同样是 5）
+	return 5;
 }
 
 export function getStoredCardBorderWidth(): number {
