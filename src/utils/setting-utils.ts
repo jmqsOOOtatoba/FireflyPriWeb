@@ -926,7 +926,7 @@ export function setCardBorderEnabled(enabled: boolean): void {
 	}
 }
 
-// UTTU 自定义光标开关（uttu-cursor.ts 监听 "uttu-cursor-change" 实时生效）
+// 自定义光标开关（uttu-cursor.ts 监听 "uttu-cursor-change" 实时生效）
 export function getStoredUttuCursorEnabled(): boolean {
 	if (typeof localStorage === "undefined") {
 		return true;
@@ -954,8 +954,7 @@ const CARD_BORDER_WIDTH_MIN = 0;
 const CARD_BORDER_WIDTH_MAX = 5;
 
 export function getDefaultCardBorderWidth(): number {
-	// UTTU 风格默认 5px 奶油描边（上限同样是 5）
-	return 5;
+	return 2;
 }
 
 export function getStoredCardBorderWidth(): number {
