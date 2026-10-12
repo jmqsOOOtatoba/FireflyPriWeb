@@ -1,0 +1,256 @@
+---
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+
+const bodyStack = "var(--font-work-sans), var(--font-hanyi-wenhei), sans-serif";
+const headingStack = "var(--font-heading)";
+---
+
+<MainGridLayout title="字体展示" description="全站字体配置的临时预览页">
+	<style>
+		.font-demo-page {
+			display: flex;
+			flex-direction: column;
+			gap: 1.5rem;
+		}
+		.demo-card {
+			background: var(--card-bg);
+			border: 1px solid var(--line-divider);
+			border-radius: var(--radius-large);
+			padding: 1.75rem 2rem;
+			overflow: hidden;
+		}
+		.demo-meta {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			gap: 0.5rem 0.75rem;
+			margin-bottom: 1.1rem;
+		}
+		.demo-role {
+			font-size: 0.75rem;
+			font-weight: 700;
+			letter-spacing: 0.06em;
+			text-transform: uppercase;
+			color: var(--primary);
+			background: color-mix(in srgb, var(--primary) 12%, transparent);
+			border-radius: 999px;
+			padding: 0.2rem 0.7rem;
+		}
+		.demo-name {
+			font-size: 0.95rem;
+			font-weight: 600;
+			color: var(--btn-content);
+		}
+		.demo-src {
+			font-size: 0.75rem;
+			color: var(--secondary);
+		}
+		.demo-sample {
+			line-height: 1.55;
+			color: var(--btn-content);
+			word-break: break-word;
+		}
+		.demo-latin {
+			font-size: 1.7rem;
+			margin: 0.35rem 0;
+		}
+		.demo-cn {
+			font-size: 1.35rem;
+			margin: 0.35rem 0;
+		}
+		.demo-para {
+			font-size: 0.95rem;
+			color: var(--secondary);
+			margin-top: 0.75rem;
+		}
+		.weight-row {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.4rem 1.4rem;
+			margin-top: 0.9rem;
+			padding-top: 0.9rem;
+			border-top: 1px dashed var(--line-divider);
+		}
+		.weight-row span {
+			font-size: 1.05rem;
+			color: var(--btn-content);
+		}
+		.code-block {
+			font-family: var(--font-code);
+			font-size: 0.95rem;
+			background: color-mix(in srgb, var(--btn-content) 6%, transparent);
+			border: 1px solid var(--line-divider);
+			border-radius: 0.75rem;
+			padding: 0.9rem 1.1rem;
+			margin-top: 0.75rem;
+			white-space: pre-wrap;
+			line-height: 1.7;
+			color: var(--btn-content);
+		}
+		.section-label {
+			font-size: 0.8rem;
+			font-weight: 700;
+			color: var(--secondary);
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+			margin: 0.5rem 0 0;
+		}
+		.pair-note {
+			font-size: 0.82rem;
+			color: var(--secondary);
+			margin-top: 0.65rem;
+		}
+	</style>
+
+	<div class="font-demo-page onload-animation">
+		<div class="demo-card">
+			<div class="demo-meta">
+				<span class="demo-role">正文 body</span>
+				<span class="demo-name">Work Sans（拉丁）→ 汉仪文黑 65W（中文）</span>
+				<span class="demo-src">本地 woff2 / 本地 TTF · --font-work-sans + --font-hanyi-wenhei</span>
+			</div>
+			<div class="demo-sample" style={`font-family: ${bodyStack}`}>
+				<p class="demo-latin" style="font-family: var(--font-work-sans), sans-serif">
+					The quick brown fox jumps over the lazy dog.
+				</p>
+				<p class="demo-cn" style="font-family: var(--font-hanyi-wenhei), sans-serif">
+					萤火虽微，愿为其芒——这是正文里中文的实际样子。
+				</p>
+				<p class="demo-para">
+					这一整段就是网站正文的默认字体链：拉丁字母先吃 Work Sans，碰到汉字自动回退到汉仪文黑，
+					最后由系统字体兜底。正文里的列表、按钮、说明文字全部长这样。
+				</p>
+				<div class="weight-row">
+					<span style="font-family: var(--font-work-sans), sans-serif; font-weight: 400">Regular 400</span>
+					<span style="font-family: var(--font-work-sans), sans-serif; font-weight: 500">Medium 500</span>
+					<span style="font-family: var(--font-work-sans), sans-serif; font-weight: 600">SemiBold 600</span>
+					<span style="font-family: var(--font-work-sans), sans-serif; font-weight: 700">Bold 700</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="demo-card">
+			<div class="demo-meta">
+				<span class="demo-role">标题 h1–h6</span>
+				<span class="demo-name">Playfair Display（拉丁衬线）→ 思源宋体（中文衬线）</span>
+				<span class="demo-src">本地 woff2 / 本地 OTF · --font-heading</span>
+			</div>
+			<div class="demo-sample" style={`font-family: ${headingStack}`}>
+				<p class="demo-latin" style="font-family: var(--font-playfair), serif">
+					Editorial Headlines in Playfair Display
+				</p>
+				<p class="demo-cn" style="font-family: var(--font-noto-serif-sc), serif">
+					这是文章大标题的中文衬线效果
+				</p>
+				<p class="demo-para">
+					全站所有 h1–h6 都走这条链：西文用 Playfair 的高对比衬线，中文交给思源宋体，
+					文章页标题、卡片标题、横幅大字全是它。
+				</p>
+				<div class="weight-row">
+					<span style="font-family: var(--font-playfair), serif; font-weight: 700">Bold 700</span>
+					<span style="font-family: var(--font-playfair), serif; font-weight: 900">Black 900</span>
+					<span style="font-family: var(--font-playfair), serif; font-weight: 700; font-style: italic">Italic 700</span>
+					<span style="font-family: var(--font-playfair), serif; font-weight: 900; font-style: italic">Italic 900</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="demo-card">
+			<div class="demo-meta">
+				<span class="demo-role">主页横幅主标题</span>
+				<span class="demo-name">Zen Maru Gothic（Zen 円ゴシック · 圆体）</span>
+				<span class="demo-src">Fontsource · --font-zen-maru-gothic</span>
+			</div>
+			<div class="demo-sample" style="font-family: var(--font-zen-maru-gothic), sans-serif">
+				<p class="demo-latin">Welcome Home! Rounded &amp; Friendly</p>
+				<p class="demo-cn">圆滚滚的字体，ホームへようこそ</p>
+				<p class="demo-para">
+					只用在首页横幅的大标题上——圆角笔画跟本站的圆润风格是一路的，日文假名也好看。
+				</p>
+				<div class="weight-row">
+					<span style="font-weight: 300">Light 300</span>
+					<span style="font-weight: 400">Regular 400</span>
+					<span style="font-weight: 500">Medium 500</span>
+					<span style="font-weight: 700">Bold 700</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="demo-card">
+			<div class="demo-meta">
+				<span class="demo-role">主页横幅副标题</span>
+				<span class="demo-name">Inter（界面无衬线）</span>
+				<span class="demo-src">Fontsource · --font-inter</span>
+			</div>
+			<div class="demo-sample" style="font-family: var(--font-inter), sans-serif">
+				<p class="demo-latin">Typography makes the interface feel alive — 0123456789</p>
+				<p class="demo-para">
+					横幅副标题专用。中性、现代、数字辨识度高，跟主标题的圆体形成对比。
+				</p>
+				<div class="weight-row">
+					<span style="font-weight: 300">Light 300</span>
+					<span style="font-weight: 400">Regular 400</span>
+					<span style="font-weight: 500">Medium 500</span>
+					<span style="font-weight: 700">Bold 700</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="demo-card">
+			<div class="demo-meta">
+				<span class="demo-role">代码 行内 & 代码块</span>
+				<span class="demo-name">JetBrains Mono</span>
+				<span class="demo-src">Fontsource · --font-code</span>
+			</div>
+			<div class="demo-sample" style="font-family: var(--font-code)">
+				<p class="demo-latin">const firefly = 'glow'; // I = l | 0 vs O</p>
+				<p class="demo-para">
+					行内 <code
+						style="font-family: var(--font-code); background: color-mix(in srgb, var(--btn-content) 8%, transparent); padding: 0.1em 0.4em; border-radius: 0.4em"
+						>font-family: JetBrains Mono</code
+					> 和文章代码块都用它，等宽、易区分 0/O。
+				</p>
+				<div class="code-block">{`export function subsetFonts(chars: string) {
+  const woff2 = await compress(chars);
+  return woff2.byteLength < 480 * 1024;
+}`}</div>
+			</div>
+		</div>
+
+		<div class="demo-card">
+			<div class="demo-meta">
+				<span class="demo-role">导航栏标题</span>
+				<span class="demo-name">跟随正文（未单独配置）</span>
+				<span class="demo-src">navbarTitleFont: "" → Work Sans + 汉仪文黑</span>
+			</div>
+			<div class="demo-sample" style={`font-family: ${bodyStack}`}>
+				<p class="demo-latin" style="font-family: var(--font-work-sans), sans-serif">Firefly Blog</p>
+				<p class="demo-cn" style="font-family: var(--font-hanyi-wenhei), sans-serif">导航栏上的站名长这样</p>
+			</div>
+		</div>
+
+		<div class="demo-card">
+			<div class="demo-meta">
+				<span class="demo-role">闲置 · 未启用</span>
+				<span class="demo-name">GreatVibes（英文花体）</span>
+				<span class="demo-src">本地 OTF · 配置了但没有任何区域引用</span>
+			</div>
+			<div class="demo-sample">
+				<style>
+					@font-face {
+						font-family: "GreatVibes Demo";
+						src: url("/assets/fonts/GreatVibes-Regular-2.otf") format("opentype");
+						font-display: swap;
+					}
+				</style>
+				<p class="demo-latin" style="font-family: 'GreatVibes Demo', cursive; font-size: 2.6rem">
+					Firefly Signature
+				</p>
+				<p class="demo-para">
+					这个花体在 fontConfig 里登记过，但 selected 和所有区域字段都没引用它——
+					所以站点上任何地方都看不到，纯属占坑。要装饰性英文签名可以考虑启用。
+				</p>
+			</div>
+		</div>
+	</div>
+</MainGridLayout>
