@@ -5,50 +5,51 @@
 
 /* ===== 主题相关变量 ===== */
 :root
-  --primary: oklch(0.70 0.14 var(--hue))
-  --page-bg: oklch(0.95 0.01 var(--hue))
-  --card-bg: white
-  --card-bg-transparent: unquote("rgb(255 255 255 / var(--card-transparent-opacity, 0.6))")
-  
-  --btn-content: oklch(0.55 0.12 var(--hue))
-  --btn-regular-bg: oklch(0.95 0.025 var(--hue))
-  --btn-regular-bg-hover: oklch(0.9 0.05 var(--hue))
-  --btn-regular-bg-active: oklch(0.85 0.08 var(--hue))
-  
-  --btn-plain-bg-hover: oklch(0.95 0.025 var(--hue))
-  --btn-plain-bg-active: oklch(0.98 0.01 var(--hue))
-  
-  --btn-card-bg-hover: oklch(0.98 0.005 var(--hue))
-  --btn-card-bg-active: oklch(0.9 0.03 var(--hue))
-  
+  /* animal-island 一期·亮色中性色板（规范见 docs/animal-island-ui-style/，验收通过前勿随意回改） */
+  --primary: oklch(0.75 0.13 var(--hue))
+  --page-bg: #f8f8f0
+  --card-bg: #f7f3df
+  --card-bg-transparent: unquote("rgb(247 243 223 / var(--card-transparent-opacity, 0.6))")
+
+  --btn-content: #794f27
+  --btn-regular-bg: #fffbe7
+  --btn-regular-bg-hover: #f4eeda
+  --btn-regular-bg-active: #e9e1c6
+
+  --btn-plain-bg-hover: #efe9d6
+  --btn-plain-bg-active: #fdfbf4
+
+  --btn-card-bg-hover: #fdfbf4
+  --btn-card-bg-active: #efe9d6
+
   --enter-btn-bg: var(--btn-regular-bg)
   --enter-btn-bg-hover: var(--btn-regular-bg-hover)
   --enter-btn-bg-active: var(--btn-regular-bg-active)
-  
-  --deep-text: oklch(0.25 0.02 var(--hue))
-  --title-active: oklch(0.6 0.1 var(--hue))
-  
-  --line-divider: rgba(0, 0, 0, 0.08)
-  --line-color: rgba(0, 0, 0, 0.1)
-  /* 卡片/导航栏边框色：亮色纯黑，暗色切白（随 enable-card-border 开关） */
-  --card-border-color: black
-  --meta-divider: rgba(0, 0, 0, 0.2)
-  --content-meta: rgba(0, 0, 0, 0.7)
-  
+
+  --deep-text: #794f27
+  --title-active: #11a89b
+
+  --line-divider: rgba(121, 79, 39, 0.12)
+  --line-color: rgba(121, 79, 39, 0.16)
+  /* 卡片/导航栏边框色：亮色暖棕，暗色切白（随 enable-card-border 开关） */
+  --card-border-color: #c4b89e
+  --meta-divider: rgba(121, 79, 39, 0.22)
+  --content-meta: rgba(121, 79, 39, 0.72)
+
   --inline-code-bg: var(--btn-regular-bg)
   --inline-code-color: var(--btn-content)
-  --muted: oklch(0.93 0.015 var(--hue))
-  --selection-bg: oklch(0.90 0.05 var(--hue))
+  --muted: #f0ece2
+  --selection-bg: #e6f9f6
   --codeblock-bg: oklch(0.17 0.015 var(--hue))
   --codeblock-topbar-bg: oklch(0.3 0.02 var(--hue))
-  
-  --license-block-bg: rgba(0, 0, 0, 0.03)
-  
+
+  --license-block-bg: rgba(121, 79, 39, 0.06)
+
   --link-underline: oklch(0.93 0.04 var(--hue))
   --link-hover: oklch(0.95 0.025 var(--hue))
   --link-active: oklch(0.90 0.05 var(--hue))
-  
-  --float-panel-bg: white
+
+  --float-panel-bg: #f8f8f0
   
   --scrollbar-bg-light: rgba(0, 0, 0, 0.4)
   --scrollbar-bg-hover-light: rgba(0, 0, 0, 0.5)
@@ -221,17 +222,17 @@
 
 /* ===== 阴影变量 ===== */
 :root
-  /* 基础阴影 */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05)
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1)
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1)
-  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1)
-  --shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.25)
-  
+  /* 基础阴影（animal-island：冷黑 → 暖棕 rgba(61,52,40,·)） */
+  --shadow-sm: 0 2px 4px rgba(61, 52, 40, 0.06)
+  --shadow-md: 0 3px 10px rgba(61, 52, 40, 0.1)
+  --shadow-lg: 0 8px 24px rgba(61, 52, 40, 0.14)
+  --shadow-xl: 0 12px 32px rgba(61, 52, 40, 0.18)
+  --shadow-2xl: 0 16px 48px rgba(61, 52, 40, 0.24)
+
   /* 特殊阴影 */
-  --shadow-navbar: 0 4px 16px rgba(0, 0, 0, 0.1)
+  --shadow-navbar: 0 4px 16px rgba(61, 52, 40, 0.12)
   --shadow-navbar-dark: 0 4px 16px rgba(0, 0, 0, 0.2)
-  --shadow-button: 0 4px 12px rgba(0, 0, 0, 0.15)
+  --shadow-button: 0 3px 10px rgba(61, 52, 40, 0.16)
   --shadow-button-dark: 0 4px 12px rgba(255, 255, 255, 0.1)
 
   /* 导航栏玻璃高光与发丝线（明色） */

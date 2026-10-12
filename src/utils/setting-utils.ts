@@ -31,7 +31,7 @@ declare global {
 }
 
 export function getDefaultHue(): number {
-	const fallback = "250";
+	const fallback = "185";
 	// 检查是否在浏览器环境中
 	if (typeof document === "undefined") {
 		return Number.parseInt(fallback, 10);

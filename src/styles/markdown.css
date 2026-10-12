@@ -222,3 +222,21 @@ body.wallpaper-transparent .custom-md {
   }
 }
 
+/* ===== animal-island 五期·正文排版色 =====
+   覆盖 @tailwindcss/typography 插件默认的冷灰（body=gray-700、标题=gray-900）。
+   未分层规则压过插件输出；仅亮色生效，暗色继续走 prose-invert 默认。 */
+:root:not(.dark) .prose,
+:root:not(.dark) .custom-md {
+  --tw-prose-body: #725d42;
+  --tw-prose-headings: #794f27;
+  --tw-prose-lead: #794f27;
+  --tw-prose-bold: #5c3a1a;
+  --tw-prose-counters: #9f927d;
+  --tw-prose-bullets: #8a7b66;
+  --tw-prose-hr: #d4c9b4;
+  --tw-prose-quotes: #725d42;
+  --tw-prose-quote-borders: #d4c9b4;
+  --tw-prose-captions: #9f927d;
+  --tw-prose-code: #794f27;
+}
+

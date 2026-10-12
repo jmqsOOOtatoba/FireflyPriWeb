@@ -95,7 +95,7 @@
     border-radius: inherit;
     pointer-events: none;
     z-index: -2;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 16px rgba(61, 52, 40, 0.12);
 }
 
 :root.dark #navbar.navbar-sticky-shadow > .navbar-seg::after {
@@ -266,10 +266,10 @@ html:not([data-wallpaper-mode="none"])[data-has-wallpaper]
 html:not([data-wallpaper-mode="none"])
     body.wallpaper-transparent
     :is(.dropdown-content, .float-panel) {
-    background: rgba(255, 255, 255, 0.55) !important;
+    background: rgba(248, 248, 240, 0.55) !important;
     backdrop-filter: blur(var(--navbar-panel-blur, 20px)) saturate(1.5) !important;
     box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
-    border: 1px solid rgba(0, 0, 0, 0.06) !important;
+    border: 1px solid rgba(121, 79, 39, 0.1) !important;
 }
 
 /* 暗色主题 */

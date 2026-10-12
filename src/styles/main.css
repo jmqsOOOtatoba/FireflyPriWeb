@@ -18,8 +18,42 @@
 /* Tailwind v4 配置 - 从 tailwind.config.cjs 迁移 */
 @theme {
   --font-sans:
-    'Work Sans', 'Roboto', 'sans-serif', ui-sans-serif, system-ui, sans-serif,
-    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    'Nunito', 'Noto Sans SC', -apple-system, 'PingFang SC', 'Microsoft YaHei',
+    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
+  /* animal-island 一期：black 语义改为暖深棕，text-black/* / bg-black/* 全线自动转暖 */
+  --color-black: #5c3a1a;
+  /* animal-island 四期：gray/neutral 冷灰阶整体换暖羊皮纸阶（全站 200+ 处一次性转暖） */
+  --color-neutral-50: #fbfaf3;
+  --color-neutral-100: #f0ece2;
+  --color-neutral-200: #e5ddc8;
+  --color-neutral-300: #c4b89e;
+  --color-neutral-400: #b3a68d;
+  --color-neutral-500: #9f927d;
+  --color-neutral-600: #8a7b66;
+  --color-neutral-700: #725d42;
+  --color-neutral-800: #5a4426;
+  --color-neutral-900: #44331c;
+  --color-neutral-950: #2e2110;
+  --color-gray-50: #fbfaf3;
+  --color-gray-100: #f0ece2;
+  --color-gray-200: #e5ddc8;
+  --color-gray-300: #c4b89e;
+  --color-gray-400: #b3a68d;
+  --color-gray-500: #9f927d;
+  --color-gray-600: #8a7b66;
+  --color-gray-700: #725d42;
+  --color-gray-800: #5a4426;
+  --color-gray-900: #44331c;
+  --color-gray-950: #2e2110;
+}
+
+/* animal-island 排版期：正文默认字重 500（规范 body 500）。
+   放在 base 层——utilities 层的 font-bold/font-medium 仍能正常覆盖。 */
+@layer base {
+  body {
+    font-weight: 500;
+  }
 }
 
 /* 自定义工具类 - Tailwind v4 使用 @utility 定义 */
@@ -749,4 +783,97 @@ html.uttu-cursor-on :is(input, textarea, select, [contenteditable="true"]) {
 /* 分页信息样式 */
 .pagination-info {
   @apply text-sm text-(--text-secondary) text-center mb-2;
+}
+
+/* ===== animal-island 二期·按钮系统 =====
+   整块刻意不进 @layer：模板里散落的 rounded-*/shadow-* 工具类在 utilities 层，
+   只有未分层规则才能统一压过它们（pill 化与投影的全局开关）。 */
+.btn-plain,
+.btn-regular,
+.btn-card {
+  border-radius: 50px;
+  transition:
+    background-color 0.15s var(--ease-standard),
+    color 0.15s var(--ease-standard),
+    box-shadow 0.2s var(--ease-standard),
+    transform 0.15s var(--ease-standard),
+    opacity 0.15s var(--ease-standard);
+}
+
+/* default 填充按钮：柔和抬升阴影（rest 0 2px → hover 0 3px，硬规则 5） */
+.btn-regular,
+.btn-card {
+  box-shadow: 0 2px 4px 0 rgba(61, 52, 40, 0.06);
+}
+.btn-regular:hover,
+.btn-card:hover {
+  box-shadow: 0 3px 10px 0 rgba(61, 52, 40, 0.1);
+}
+
+/* ghost 按钮透明底不投影，hover 填底后再给，避免浮出脏晕 */
+.btn-plain:hover {
+  box-shadow: 0 2px 4px 0 rgba(61, 52, 40, 0.06);
+}
+
+/* primary 主按钮：3D 堆叠阴影（0 5px 0 #bdaea0），全站仅此一家（硬规则 5/12/13） */
+.btn-primary {
+  background-color: var(--primary);
+  color: #fff;
+  border-radius: 50px;
+  font-weight: 600;
+  box-shadow: 0 5px 0 0 #bdaea0;
+  transition:
+    background-color 0.15s var(--ease-standard),
+    color 0.15s var(--ease-standard),
+    box-shadow 0.15s var(--ease-standard),
+    transform 0.15s var(--ease-standard);
+}
+.btn-primary:hover {
+  background-color: #3dd4c6;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 0 0 #bdaea0;
+}
+.btn-primary:active {
+  background-color: #11a89b;
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 0 #bdaea0;
+}
+
+/* ===== animal-island 四期·卡片系统统一（PostCard 试点收编，覆盖 ProjectCard/AlbumCard） =====
+   偏离硬规则 8（Card 无 box-shadow）：本站页面底与卡片底同为羊皮纸系、色差极小，
+   需要暖色抬升投影做分离；hover 上浮 -2px 与规范一致。 */
+.post-card-wrapper.card-base,
+.album-card.card-base {
+  background-color: var(--card-bg);
+  box-shadow: 0 3px 10px rgba(61, 52, 40, 0.1);
+  transition:
+    transform 0.3s var(--ease-standard),
+    box-shadow 0.3s var(--ease-standard),
+    background-color 0.15s ease;
+}
+.post-card-wrapper.card-base:hover,
+.album-card.card-base:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(61, 52, 40, 0.14);
+}
+
+.post-card-wrapper .post-card-title {
+  color: var(--deep-text);
+}
+.post-card-wrapper a.post-card-title:hover,
+.post-card-wrapper .post-card-title:hover {
+  color: var(--title-active);
+}
+.post-card-wrapper .post-card-title::before {
+  background-color: var(--primary);
+}
+.post-card-wrapper .description {
+  color: var(--content-meta);
+}
+
+.album-card .album-card-title {
+  color: var(--deep-text);
+}
+.album-card .album-card-title:hover {
+  color: var(--title-active);
 }

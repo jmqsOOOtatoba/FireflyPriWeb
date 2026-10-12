@@ -73,6 +73,17 @@ html[data-theme='one-dark-pro'] {
   --ec-lang-logo: #fff;
 }
 
+/* ===== animal-island 五期·亮色代码块（非壁纸透明模式）=====
+   one-light 默认 #fafafa 冷白 → 羊皮纸奶油；圆角对齐规范 CodeBlock 20px；
+   壁纸透明模式由下方 body.wallpaper-transparent 规则接管（半透明奶油），两者条件互斥。 */
+html[data-theme='one-light'] body:not(.wallpaper-transparent)
+  .expressive-code
+  .frame {
+  background-color: #f7f3df !important;
+  border: 1px solid rgba(121, 79, 39, 0.14);
+  border-radius: 20px;
+}
+
 /* 透明模式下的代码块样式 */
 /*
  * 仅处理外层容器背景，避免清空 ANSI token 的背景色。
@@ -95,6 +106,7 @@ body.wallpaper-transparent .expressive-code .frame .ec-code__inner {
 body.wallpaper-transparent .expressive-code .frame {
   background-color: var(--card-bg-transparent) !important;
   background: var(--card-bg-transparent) !important;
+  border-radius: 20px;
 }
 
 /* 透明模式下折叠遮罩改淡入半透明卡片背景，避免底部糊出一条不透明色块 */

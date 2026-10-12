@@ -76,6 +76,47 @@ export const fontsList: FontDefinition[] = [
 		},
 		fallbacks: ["sans-serif"],
 	},
+	// ─── animal-island：正文/标题拉丁圆体 Nunito（本地 woff2，构建零网络依赖）───
+	{
+		name: "Nunito",
+		cssVariable: "--font-nunito",
+		provider: "local",
+		options: {
+			variants: [
+				{
+					src: ["./public/assets/fonts/nunito-latin-400-normal.woff2"],
+					weight: "400",
+					style: "normal",
+				},
+				{
+					src: ["./public/assets/fonts/nunito-latin-500-normal.woff2"],
+					weight: "500",
+					style: "normal",
+				},
+				{
+					src: ["./public/assets/fonts/nunito-latin-600-normal.woff2"],
+					weight: "600",
+					style: "normal",
+				},
+				{
+					src: ["./public/assets/fonts/nunito-latin-700-normal.woff2"],
+					weight: "700",
+					style: "normal",
+				},
+				{
+					src: ["./public/assets/fonts/nunito-latin-800-normal.woff2"],
+					weight: "800",
+					style: "normal",
+				},
+				{
+					src: ["./public/assets/fonts/nunito-latin-900-normal.woff2"],
+					weight: "900",
+					style: "normal",
+				},
+			],
+		},
+		fallbacks: ["sans-serif"],
+	},
 	// ─── UTTU 风格：标题衬线（拉丁，含斜体强调用）───
 	{
 		name: "Playfair Display",
@@ -185,19 +226,20 @@ export const fontConfig: FontSelectionConfig = {
 	enable: true,
 	// 当前选择的字体 CSS 变量名（对应上方 fonts 中的 cssVariable）
 	// 使用 "system" 表示系统字体（不加载任何自定义字体）
-	// Work Sans 先渲染拉丁字符，CJK 字符自动回退到汉仪文黑
-	selected: ["--font-work-sans", "--font-hanyi-wenhei"],
+	// Nunito 先渲染拉丁字符，CJK 字符自动回退到汉仪文黑（animal-island 圆体方案）
+	selected: ["--font-nunito", "--font-hanyi-wenhei"],
 
 	// 各区域独立字体设置（填写上方 fonts 中的 cssVariable，留空则使用全局 selected 字体）
 	// 例如：bannerTitleFont: "--font-inter", 表示主页横幅主标题使用 Inter 字体
-	// 主页横幅主标题字体
+	// 主页横幅主标题字体（Zen Maru 圆体，与 animal-island 圆润气质同源，保留）
 	bannerTitleFont: "--font-zen-maru-gothic",
-	// 主页横幅副标题字体
-	bannerSubtitleFont: "--font-inter",
+	// 主页横幅副标题字体（animal-island：Nunito 圆体）
+	bannerSubtitleFont: "--font-nunito",
 	// 导航栏标题字体
 	navbarTitleFont: "",
-	// 标题字体链：Playfair（拉丁衬线）→ 思源宋体（CJK 衬线）
-	headingFont: ["--font-playfair", "--font-noto-serif-sc"],
+	// 标题字体链：Nunito（拉丁圆体）→ 汉仪文黑（CJK 黑体）——animal-island 规则 4/8：
+	// 圆体无衬线，字重 600–900，替代原 Playfair + 思源宋体衬线链
+	headingFont: ["--font-nunito", "--font-hanyi-wenhei"],
 	// 代码块字体（用于代码高亮和等宽字体场景）
 	codeFont: "--font-jetbrains-mono",
 
