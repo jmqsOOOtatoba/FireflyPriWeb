@@ -15,6 +15,12 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+dev-server.log
+
+# root-level one-off artifacts (never track)
+/font-showcase.png
+/index.html
+/本次修改整理.md
 
 # environment variables
 .env
