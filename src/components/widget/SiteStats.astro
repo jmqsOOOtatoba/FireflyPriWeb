@@ -127,6 +127,7 @@ const stats = [
           <span
             class="text-base font-bold text-neutral-900 dark:text-neutral-100"
             data-stat-id={stat.id}
+            data-stat-value
           >
             {stat.formatted ? formatNumber(stat.value) : stat.value}
           </span>
@@ -347,4 +348,96 @@ const stats = [
       initBusuanziRetry();
     }
   }
+</script>
+
+<script>
+import { animate } from "animejs";
+
+// 数字滚动（anime.js）：每会话首次出现统计面板时，可见后把各数值从 0 滚到终值。
+// 上方 define:vars 脚本是 classic script（解析期执行），本模块脚本 defer 执行——
+// 运行时动态值（运行天数/最后更新）已被写好，textContent 即终值。
+const COUNTED_KEY = "ff-site-stats-counted";
+
+function isCountable(text: string): boolean {
+	return /^\d+$/.test(text) || /^\d{1,3}(,\d{3})+$/.test(text);
+}
+
+function collectTargets(root: HTMLElement): Array<{ el: HTMLElement; end: number }> {
+	const targets: Array<{ el: HTMLElement; end: number }> = [];
+	root.querySelectorAll<HTMLElement>("[data-stat-value]").forEach((el) => {
+		const text = el.textContent?.trim() ?? "";
+		if (!isCountable(text)) return; // 「今天」等非数字跳过
+		const end = Number(text.replaceAll(",", ""));
+		if (Number.isFinite(end) && end > 0) targets.push({ el, end });
+	});
+	return targets;
+}
+
+function animateCounters(targets: Array<{ el: HTMLElement; end: number }>): void {
+	targets.forEach(({ el, end }, index) => {
+		el.textContent = "0";
+		const counter = { v: 0 };
+		animate(counter, {
+			v: end,
+			duration: 1000,
+			delay: index * 80,
+			ease: "outExpo",
+			onUpdate: () => {
+				el.textContent = Math.round(counter.v).toLocaleString();
+			},
+			onComplete: () => {
+				el.textContent = end.toLocaleString();
+			},
+		});
+	});
+}
+
+function setupCountUp() {
+	// 切页（swup 容器含 sidebar-dynamic）会重渲染本组件，会话内只播一次
+	if (sessionStorage.getItem(COUNTED_KEY)) return;
+
+	// #site-stats 会同时存在桌面/移动两份（其中一份可能被隐藏或 0×0），
+	// 不能用 getElementById——逐个观察、由第一个真正可见的实例触发。
+	// 0×0 的隐藏副本必须滤掉：零面积元素会被 IntersectionObserver 特判为
+	// isIntersecting（哪怕在视口里只有个原点），否则它会抢跑守卫、害死可见副本
+	const roots = Array.from(document.querySelectorAll<HTMLElement>("#site-stats")).filter(
+		(root) =>
+			root.dataset.countUpReady !== "1" && root.getBoundingClientRect().width > 0,
+	);
+	if (roots.length === 0) return;
+
+	if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+		sessionStorage.setItem(COUNTED_KEY, "1");
+		return;
+	}
+
+	roots.forEach((root) => {
+		root.dataset.countUpReady = "1";
+		const targets = collectTargets(root);
+		if (targets.length === 0) return;
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				// 另一份实例先触发过就不再重复播
+				if (sessionStorage.getItem(COUNTED_KEY)) {
+					observer.disconnect();
+					return;
+				}
+				const hit = entries.find(
+					(entry) => entry.isIntersecting && entry.boundingClientRect.width > 0,
+				);
+				if (!hit) return;
+				observer.disconnect();
+				sessionStorage.setItem(COUNTED_KEY, "1"); // 真正播过才记，播前切页可换页重试
+				animateCounters(targets);
+			},
+			{ threshold: 0.3 },
+		);
+		observer.observe(root);
+	});
+}
+
+setupCountUp();
+// swup 切页后新 DOM 就绪的可靠事件（勿用 swup:contentReplaced 死事件）
+document.addEventListener("astro:page-load", setupCountUp);
 </script>

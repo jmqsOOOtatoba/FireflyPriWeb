@@ -1,4 +1,6 @@
 <script lang="ts">
+import { cubicOut } from "svelte/easing";
+import { fade, fly } from "svelte/transition";
 import I18nKey from "@/i18n/i18nKey";
 import { i18n } from "@/i18n/translation";
 import type { StandardizedAnime } from "@/types/anime";
@@ -9,6 +11,10 @@ interface Props {
 }
 
 let { anime, onclose }: Props = $props();
+
+const prefersReducedMotion = () =>
+	typeof window !== "undefined" &&
+	window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /** 将元素挂载到 body，脱离 overflow:hidden 容器 */
 function portal(node: HTMLElement) {
@@ -70,8 +76,14 @@ function getTypeColor(seasonType: number): string {
 		role="dialog"
 		aria-modal="true"
 		tabindex="-1"
+		in:fade={{ duration: 200, easing: cubicOut }}
+		out:fade={{ duration: 150, easing: cubicOut }}
 	>
-		<div class="relative w-full max-w-lg max-h-[90vh] overflow-hidden rounded-xl sm:rounded-2xl bg-(--card-bg) border border-(--line-divider) shadow-2xl animate-in scale-90 sm:scale-100">
+		<div
+			class="relative w-full max-w-lg max-h-[90vh] overflow-hidden rounded-xl sm:rounded-2xl bg-(--card-bg) border border-(--line-divider) shadow-2xl scale-90 sm:scale-100"
+			in:fly={{ y: prefersReducedMotion() ? 0 : 10, duration: 200, easing: cubicOut }}
+			out:fly={{ y: prefersReducedMotion() ? 0 : 10, duration: 150, easing: cubicOut }}
+		>
 			<!-- 关闭按钮 -->
 			<button
 				class="absolute top-4 right-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm transition-colors hover:bg-black/70"
@@ -182,18 +194,3 @@ function getTypeColor(seasonType: number): string {
 	</div>
 {/if}
 
-<style>
-	@keyframes animate-in {
-		from {
-			opacity: 0;
-			transform: translateY(10px);
-		}
-		to {
-			opacity: 1;
-			transform: translateY(0);
-		}
-	}
-	.animate-in {
-		animation: animate-in 0.2s ease-out;
-	}
-</style>

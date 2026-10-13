@@ -25,7 +25,17 @@ interface Props {
 
 let { labels, children }: Props = $props();
 let active = $state(0);
+let tabFading = $state(false);
 let container: HTMLDivElement | undefined;
+
+async function selectTab(i: number) {
+	if (i === active || tabFading) return;
+	tabFading = true;
+	await new Promise((r) => setTimeout(r, 150));
+	active = i; // $effect 随即换 display（此刻容器不可见，硬切被藏住）
+	await new Promise((r) => requestAnimationFrame(() => r(null)));
+	tabFading = false;
+}
 
 const tabs = $derived(Array.isArray(labels) ? labels : []);
 
@@ -55,14 +65,14 @@ $effect(() => {
 				class:active={i === active}
 				role="tab"
 				aria-selected={i === active}
-				onclick={() => (active = i)}
+				onclick={() => selectTab(i)}
 				type="button"
 			>
 				{label}
 			</button>
 		{/each}
 	</div>
-	<div class="code-group-blocks">
+	<div class="code-group-blocks" style="opacity: {tabFading ? 0 : 1}">
 		{@render children?.()}
 	</div>
 </div>
@@ -95,5 +105,8 @@ $effect(() => {
 	.code-group-tab.active {
 		color: var(--primary);
 		border-bottom-color: var(--primary);
+	}
+	.code-group-blocks {
+		transition: opacity var(--duration-normal) var(--ease-decelerate);
 	}
 </style>

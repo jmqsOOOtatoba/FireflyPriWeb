@@ -153,10 +153,15 @@ function handleFilterChange(filter: string) {
 	currentPage = 1;
 }
 
-function goToPage(page: number) {
-	if (page >= 1 && page <= totalPages) {
-		currentPage = page;
-	}
+let gridFading = $state(false);
+
+async function goToPage(page: number) {
+	if (page < 1 || page > totalPages || page === currentPage) return;
+	gridFading = true;
+	await new Promise((r) => setTimeout(r, 150));
+	currentPage = page;
+	await new Promise((r) => requestAnimationFrame(() => r(null)));
+	gridFading = false;
 }
 </script>
 
@@ -168,7 +173,7 @@ function goToPage(page: number) {
       onFilterChange={handleFilterChange}
     />
 
-    <div class="media-grid grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+    <div class="media-grid grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3" style="opacity: {gridFading ? 0 : 1}; transition: opacity var(--duration-normal) var(--ease-decelerate)">
       {#each pagedItems as item (item.subject_id)}
         <div
           class="media-item"

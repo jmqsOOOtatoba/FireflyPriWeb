@@ -254,12 +254,19 @@ async function renderItems(items: DynamicData[]) {
 	}
 }
 
-function goToPage(page: number) {
+let gridFading = $state(false);
+
+async function goToPage(page: number) {
+	if (page === currentPage) return;
+	gridFading = true;
+	await new Promise((r) => setTimeout(r, 150));
 	currentPage = page;
 	updateUrl(true);
 	document
 		.querySelector(".page-shell")
 		?.scrollIntoView({ behavior: "smooth", block: "start" });
+	await new Promise((r) => setTimeout(r, 0)); // 让 effect/renderItems 至少跑一帧
+	gridFading = false;
 }
 
 $effect(() => {
@@ -341,7 +348,7 @@ onMount(() => {
 	</div>
 {/if}
 
-<div class="page-feed" bind:this={list}></div>
+<div class="page-feed" bind:this={list} style="opacity: {gridFading ? 0 : 1}; transition: opacity var(--duration-normal) var(--ease-decelerate)"></div>
 
 {#if !loading && !failed}
 	<ClientPagination

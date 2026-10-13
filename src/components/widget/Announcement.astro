@@ -53,7 +53,7 @@ const showTitle = widgetConfig?.showTitle !== false;
         config.closable && (
           <button
             class="btn-regular rounded-lg h-8 w-8 text-sm hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors"
-            onclick="this.closest('widget-layout').style.display='none'"
+            onclick="var w=this.closest('widget-layout');if(!w||w.dataset.closing)return;if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){w.style.display='none';return}w.dataset.closing='1';w.style.maxHeight=w.offsetHeight+'px';w.style.marginBottom='0';void w.offsetHeight;requestAnimationFrame(function(){w.style.transition='max-height 200ms var(--ease-standard),margin-bottom 200ms var(--ease-standard)';w.style.maxHeight='0';w.style.marginBottom='-1rem';for(var i=0;i<w.children.length;i++){var c=w.children[i];c.style.transition='opacity 200ms var(--ease-standard)';c.style.opacity='0'}});setTimeout(function(){w.style.display='none'},240)"
             aria-label={i18n(I18nKey.announcementClose)}
           >
             <Icon name="fa7-solid:xmark" class="text-sm" />

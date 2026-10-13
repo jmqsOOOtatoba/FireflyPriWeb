@@ -485,7 +485,22 @@ html.uttu-cursor-on :is(input, textarea, select, [contenteditable="true"]) {
         @apply transition-colors duration-150 rounded-md p-1.5 -m-1.5 expand-animation;
     }
     .float-panel {
-        @apply top-21 rounded-(--radius-large) overflow-hidden bg-(--card-bg) transition-colors duration-150 shadow-xl border border-black/5 dark:border-white/10
+        @apply top-21 rounded-(--radius-large) overflow-hidden bg-(--card-bg) shadow-xl border border-black/5 dark:border-white/10;
+        transition:
+            opacity var(--duration-normal) var(--ease-decelerate),
+            translate var(--duration-normal) var(--ease-decelerate),
+            color var(--duration-normal) var(--ease-standard),
+            background-color var(--duration-normal) var(--ease-standard),
+            border-color var(--duration-normal) var(--ease-standard);
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .float-panel {
+            transition:
+                opacity var(--duration-normal) var(--ease-standard),
+                color var(--duration-normal) var(--ease-standard),
+                background-color var(--duration-normal) var(--ease-standard),
+                border-color var(--duration-normal) var(--ease-standard);
+        }
     }
     .float-panel-closed {
         @apply -translate-y-1 opacity-0 pointer-events-none

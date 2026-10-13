@@ -125,8 +125,15 @@ function setSort(sort: typeof sortBy) {
 	resetPage();
 }
 
-function goToPage(page: number) {
+let gridFading = $state(false);
+
+async function goToPage(page: number) {
+	if (page === currentPage) return;
+	gridFading = true;
+	await new Promise((r) => setTimeout(r, 150));
 	currentPage = page;
+	await new Promise((r) => requestAnimationFrame(() => r(null)));
+	gridFading = false;
 }
 
 function openDetail(anime: StandardizedAnime) {
@@ -177,7 +184,7 @@ function closeDetail() {
 
 	<!-- 卡片网格 -->
 	{#if pagedItems().length > 0}
-		<div class="anime-card-grid grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+		<div class="anime-card-grid grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4" style="opacity: {gridFading ? 0 : 1}; transition: opacity var(--duration-normal) var(--ease-decelerate)">
 			{#each pagedItems() as anime (anime.id)}
 				<AnimeCard {anime} onclick={openDetail} />
 			{/each}
