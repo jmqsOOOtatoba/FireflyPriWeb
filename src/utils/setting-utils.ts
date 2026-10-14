@@ -926,7 +926,7 @@ export function setCardBorderEnabled(enabled: boolean): void {
 	}
 }
 
-// 自定义光标开关（uttu-cursor.ts 监听 "uttu-cursor-change" 实时生效）
+// 自定义光标开关（custom-cursor.ts 监听 "uttu-cursor-change" 实时生效；存储键沿用旧名保住已存偏好）
 export function getStoredUttuCursorEnabled(): boolean {
 	if (typeof localStorage === "undefined") {
 		return true;

@@ -3,6 +3,7 @@ import {
 	registerContentOverflowListeners,
 	scheduleContentOverflowEnhancements,
 } from "@/utils/content-overflow-utils";
+import { initCustomCursor } from "@/utils/custom-cursor";
 import {
 	initializeFloatingPanels,
 	setClickOutsideToClose,
@@ -23,7 +24,6 @@ import { initScroll } from "@/utils/scroll-utils";
 import { initThemeListener, initWallpaperMode } from "@/utils/setting-utils";
 import { setupSwupTransitions } from "@/utils/swup-transitions";
 import { initTouchCodeCopyReveal } from "@/utils/touch-copy-utils";
-import { initUttuCursor } from "@/utils/uttu-cursor";
 
 /** 布局初始化编排（从 Layout.astro 迁出） */
 export function initLayout(): void {
@@ -32,8 +32,8 @@ export function initLayout(): void {
 	if (window.__fireflyLayoutInit) return;
 	window.__fireflyLayoutInit = true;
 
-	// UTTU 自定义光标（自带开关与媒体查询守卫）
-	initUttuCursor();
+	// 液态团自定义光标（自带开关与媒体查询守卫）
+	initCustomCursor();
 
 	initializeFloatingPanels();
 

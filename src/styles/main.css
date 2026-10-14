@@ -98,54 +98,112 @@ h6,
     font-family: var(--font-heading, Georgia, serif);
 }
 
-/* ===== 自定义光标（uttu-cursor.ts 驱动，显示设置面板可控开关） ===== */
-html.uttu-cursor-on,
-html.uttu-cursor-on * {
+/* ===== 自定义光标（custom-cursor.ts 驱动，显示设置面板可控开关） ===== */
+html.ff-cursor-on,
+html.ff-cursor-on * {
     cursor: none !important;
 }
 
 /* 表单控件保留文本光标，保证输入场景可用性 */
-html.uttu-cursor-on :is(input, textarea, select, [contenteditable="true"]) {
+html.ff-cursor-on :is(input, textarea, select, [contenteditable]:not([contenteditable="false"])) {
     cursor: text !important;
 }
 
-.uttu-cursor-dot,
-.uttu-cursor-ring {
+/* 液态团容器：全屏 fixed 叠层（原点即视口，指针坐标直接可用、零布局读取），
+   SVG gooey 滤镜把三层液滴融成软团；指针移动只写 transform */
+.ff-cursor {
     position: fixed;
     top: 0;
     left: 0;
-    pointer-events: none;
+    width: 100%;
+    height: 100%;
     z-index: 1200;
+    pointer-events: none;
     opacity: 0;
-    border-radius: 50%;
-    transition: opacity 0.15s ease;
+    transition: opacity var(--duration-normal) ease;
+    filter: url(#ff-cursor-goo);
+}
+
+/* 0.9 让内容透出一点，避免液团完全遮住将要点中的目标 */
+.ff-cursor.is-shown {
+    opacity: 0.9;
+}
+
+/* 输入态整体隐身，把画面完全让给系统文本光标（优先级高于 hover/press） */
+.ff-cursor.is-shown.is-editing {
+    opacity: 0;
+}
+
+.ff-cursor-defs {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+/* 三层液滴：wrapper 只负责跟随滞后（JS 只写 translate3d），body 只负责状态缩放/变色。
+   提速版：lead/mid 贴指针（≈1-2 帧），tail 保留轻微有机延迟，避免发飘拖泥 */
+.ff-cursor-blob {
+    position: absolute;
+    top: 0;
+    left: 0;
     will-change: transform;
 }
 
-.uttu-cursor-dot {
-    width: 6px;
-    height: 6px;
+.ff-cursor-blob--lead {
+    transition: transform 0.03s linear;
+}
+
+.ff-cursor-blob--mid {
+    transition: transform 0.1s var(--ease-decelerate);
+}
+
+.ff-cursor-blob--tail {
+    transition: transform 0.22s var(--ease-decelerate);
+}
+
+.ff-cursor-blob-body {
+    display: block;
+    border-radius: 50%;
     background: var(--primary);
-}
-
-.uttu-cursor-ring {
-    width: 28px;
-    height: 28px;
-    border: 1.5px solid var(--primary);
+    transform: scale(1);
     transition:
-        opacity 0.15s ease,
-        transform 0.18s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-        border-color 0.15s ease;
+        transform var(--duration-fast) var(--ease-decelerate),
+        background-color var(--duration-fast) ease;
 }
 
-.uttu-cursor-ring.is-active {
-    border-color: var(--primary);
+.ff-cursor-blob--lead .ff-cursor-blob-body {
+    width: 10px;
+    height: 10px;
+    opacity: 1;
+}
+
+.ff-cursor-blob--mid .ff-cursor-blob-body {
+    width: 22px;
+    height: 22px;
+    opacity: 0.8;
+}
+
+.ff-cursor-blob--tail .ff-cursor-blob-body {
+    width: 32px;
+    height: 32px;
+    opacity: 0.65;
+}
+
+/* 悬停可交互元素：放大 + 变色，补偿被隐藏的系统手型 */
+.ff-cursor.is-hover .ff-cursor-blob-body {
+    transform: scale(1.35);
+    background: var(--title-active);
+}
+
+/* 按下：整团压扁（与 hover 同特异性、靠后覆盖） */
+.ff-cursor.is-press .ff-cursor-blob-body {
+    transform: scale(0.75);
 }
 
 /* 触屏/无精确指针时不生成元素，此处仅兜底隐藏 */
 @media (pointer: coarse) {
-    .uttu-cursor-dot,
-    .uttu-cursor-ring {
+    .ff-cursor {
         display: none !important;
     }
 }
