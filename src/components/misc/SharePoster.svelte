@@ -600,12 +600,17 @@ function closeModal() {
 }
 
 let copied = false;
-function copyLink() {
-	navigator.clipboard.writeText(url);
-	copied = true;
-	setTimeout(() => {
-		copied = false;
-	}, 2000);
+async function copyLink() {
+	try {
+		await navigator.clipboard.writeText(url);
+		copied = true;
+		setTimeout(() => {
+			copied = false;
+		}, 2000);
+	} catch (err) {
+		// 失败不弹 toast：按钮图标不切对勾，用户可重试或手动复制
+		console.error("Copy link failed:", err);
+	}
 }
 
 function portal(node: HTMLElement) {

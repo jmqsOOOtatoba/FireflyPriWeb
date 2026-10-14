@@ -107,6 +107,8 @@ const recentPosts = posts.slice(0, 6);
     </div>
 
     <script>
+        import { showToast } from "@/utils/toast";
+
         function initRssCopy() {
             const copyBtn = document.getElementById('copy-rss-btn');
             if (!copyBtn) return;
@@ -134,6 +136,8 @@ const recentPosts = posts.slice(0, 6);
                     console.error("Copy failed:", err);
                     const originalText = btn.textContent;
                     btn.textContent = btn.getAttribute('data-failed-text') || '';
+                    showToast(btn.getAttribute('data-failed-text') || '');
+
                     setTimeout(() => {
                         btn.textContent = originalText;
                     }, 2000);
