@@ -111,6 +111,7 @@ const minutes = remarkPluginFrontmatter.minutes;
     pinned ? "pinned" : "",
     gridCoverFullWidth ? "" : "grid-cover-inset",
     isCoverTop ? "cover-top" : "",
+    "gh-card",
     "card-base flex flex-col-reverse w-full rounded-(--radius-large) overflow-hidden relative",
     className,
   ]}
@@ -282,6 +283,9 @@ const minutes = remarkPluginFrontmatter.minutes;
       </a>
     )
   }
+
+  <!-- Glare Hover 光斑层：高光随光标扫过，pointer-events:none 不挡点击 -->
+  <div class="gh-layer" aria-hidden="true"></div>
 </div>
 
 <style define:vars={{ coverWidth, descriptionClampLines }}>
@@ -504,4 +508,135 @@ const minutes = remarkPluginFrontmatter.minutes;
   }
 
   /* animal-island 卡片系统规则已升格到 main.css 末尾（全局，含 ProjectCard） */
+
+  /* === Glare Hover：光斑层，hover 时随光标亮起（pointer-events:none 不挡点击） === */
+  .gh-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 30;
+    pointer-events: none;
+    opacity: 0;
+    background: radial-gradient(
+      340px circle at var(--gh-x, 50%) var(--gh-y, 50%),
+      color-mix(in srgb, var(--primary) 22%, transparent) 0%,
+      color-mix(in srgb, var(--primary) 7%, transparent) 45%,
+      transparent 72%
+    );
+    transition: opacity var(--duration-slower) var(--ease-standard);
+  }
+
+  /* 亮起/淡出只在精细指针且允许动效时开放；gh-idle 是滚动中脚本挂的暂隐标记（滚动停稳重算 rect 后摘掉） */
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .gh-card:hover .gh-layer {
+      opacity: 1;
+    }
+
+    .gh-card.gh-idle .gh-layer {
+      opacity: 0;
+    }
+  }
 </style>
+
+<script>
+	/* Glare Hover：卡片光斑随光标扫过（参考 svelte-bits GlareHover，改造为主题色径向光斑）。
+	   rect 只在 pointerenter / 滚动停稳时读取；pointermove 仅写 CSS 变量与缓存，无布局读取。
+	   幂等：window 守卫防 document 监听重复注册；卡片 data-gh-bound 防重复绑定。
+	   Swup 切页整体换 DOM：astro:page-load 重绑新卡片，astro:before-swap 清悬停态。 */
+
+	type GlareWindow = Window & { __ffGlareInit?: boolean };
+
+	const glareWin = window as GlareWindow;
+
+	if (!glareWin.__ffGlareInit) {
+		glareWin.__ffGlareInit = true;
+
+		let hovered: HTMLElement | null = null;
+		let rect: DOMRect | null = null;
+		let lastX = 0;
+		let lastY = 0;
+		let idleTimer = 0;
+
+		const capable = (): boolean =>
+			window.matchMedia("(pointer: fine)").matches &&
+			!window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+		const writeGlare = (card: HTMLElement): void => {
+			if (!rect) return;
+			card.style.setProperty("--gh-x", `${lastX - rect.left}px`);
+			card.style.setProperty("--gh-y", `${lastY - rect.top}px`);
+		};
+
+		const onEnter = (e: PointerEvent): void => {
+			if (e.pointerType === "touch") return;
+			const card = e.currentTarget as HTMLElement;
+			hovered = card;
+			rect = card.getBoundingClientRect();
+			lastX = e.clientX;
+			lastY = e.clientY;
+			card.classList.remove("gh-idle");
+			writeGlare(card);
+		};
+
+		const onMove = (e: PointerEvent): void => {
+			const card = e.currentTarget as HTMLElement;
+			if (card !== hovered || !rect) return;
+			lastX = e.clientX;
+			lastY = e.clientY;
+			writeGlare(card);
+		};
+
+		const onLeave = (e: PointerEvent): void => {
+			const card = e.currentTarget as HTMLElement;
+			if (card !== hovered) return;
+			hovered = null;
+			rect = null;
+			card.classList.remove("gh-idle");
+		};
+
+		/* 滚动使缓存 rect 失效：滚动中挂 gh-idle 淡出光斑，停稳 140ms 后重读一次
+		   rect、按最后指针坐标落位再淡入——滚动路径不做逐帧布局读取 */
+		const onScroll = (): void => {
+			if (!hovered) return;
+			rect = null;
+			hovered.classList.add("gh-idle");
+			window.clearTimeout(idleTimer);
+			idleTimer = window.setTimeout(() => {
+				idleTimer = 0;
+				const card = hovered;
+				if (!card) return;
+				rect = card.getBoundingClientRect();
+				writeGlare(card);
+				card.classList.remove("gh-idle");
+			}, 140);
+		};
+
+		const bindCard = (card: HTMLElement): void => {
+			if (card.dataset.ghBound) return;
+			card.dataset.ghBound = "1";
+			card.addEventListener("pointerenter", onEnter);
+			card.addEventListener("pointermove", onMove);
+			card.addEventListener("pointerleave", onLeave);
+		};
+
+		const initGlare = (): void => {
+			if (!capable()) return;
+			document.querySelectorAll<HTMLElement>(".gh-card").forEach(bindCard);
+		};
+
+		const onBeforeSwap = (): void => {
+			// 换出前清理：悬停态与 rect 都指向即将被替换的 DOM
+			hovered = null;
+			rect = null;
+			window.clearTimeout(idleTimer);
+			idleTimer = 0;
+		};
+
+		window.addEventListener("scroll", onScroll, {
+			capture: true,
+			passive: true,
+		});
+		document.addEventListener("astro:page-load", initGlare);
+		document.addEventListener("astro:before-swap", onBeforeSwap);
+		initGlare();
+	}
+</script>

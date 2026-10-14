@@ -25,6 +25,7 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import CoverImage from "@/components/common/CoverImage.astro";
 import PostMetadata from "@/components/layout/PostMeta.astro";
+import PulseHeart from "@/components/misc/PulseHeart.svelte";
 import RecommendedPost from "@/components/misc/RecommendedPost.astro";
 import SeriesNav from "@/components/misc/SeriesNav.astro";
 import SharePoster from "@/components/misc/SharePoster.svelte";
@@ -467,6 +468,7 @@ const seriesData = await getSeriesPosts(entry);
                       </div>
                     </div>
                     <div class="flex items-center gap-3">
+                      <PulseHeart client:visible postId={entry.id} />
                       {
                         siteConfig.post.share && (
                           <SharePoster
@@ -557,6 +559,7 @@ const seriesData = await getSeriesPosts(entry);
                       </div>
                     </div>
                     <div class="flex items-center gap-3">
+                      <PulseHeart client:visible postId={entry.id} />
                       {
                         siteConfig.post.share && (
                           <SharePoster

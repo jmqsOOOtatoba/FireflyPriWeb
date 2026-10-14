@@ -23,7 +23,7 @@ const showTitle = widgetConfig?.showTitle !== false;
   name={config.title || i18n(I18nKey.announcement)}
   showTitle={showTitle}
   id="announcement"
-  class={className}
+  class={`sp-peel ${className ?? ""}`}
   style={style}
 >
   <div>
@@ -63,3 +63,33 @@ const showTitle = widgetConfig?.showTitle !== false;
     </div>
   </div>
 </WidgetLayout>
+
+<style>
+  /* Sticker Peel：公告卡右上角贴纸（纯 CSS 伪元素），hover 时以左端为轴翘起右角。
+     动效只走 transform；粗指针/减少动效下保持静止常态。 */
+  :global(widget-layout.sp-peel) {
+    position: relative;
+  }
+
+  :global(widget-layout.sp-peel::after) {
+    content: "";
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 46px;
+    height: 15px;
+    border-radius: 5px;
+    background: color-mix(in srgb, var(--primary) 30%, transparent);
+    box-shadow: var(--shadow-md);
+    pointer-events: none;
+    transform-origin: 18% 50%;
+    transform: rotate(-5deg);
+    transition: transform var(--duration-slower) var(--ease-standard);
+  }
+
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    :global(widget-layout.sp-peel:hover::after) {
+      transform: rotate(-14deg);
+    }
+  }
+</style>

@@ -506,6 +506,7 @@ export const ru: Translation = {
 	[Key.copyLink]: "Копировать ссылку",
 	[Key.savePoster]: "Сохранить постер",
 	[Key.scanToRead]: "Сканируйте, чтобы прочитать",
+	[Key.postLike]: "Нравится этот пост",
 
 	// Конфигурация блоков коллапсируемого кода
 	[Key.codeCollapsibleShowMore]: "Развернуть",

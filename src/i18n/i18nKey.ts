@@ -492,6 +492,7 @@ enum I18nKey {
 	copyLink = "copyLink",
 	savePoster = "savePoster",
 	scanToRead = "scanToRead",
+	postLike = "postLike",
 
 	// 代码块折叠配置
 	codeCollapsibleShowMore = "codeCollapsibleShowMore",

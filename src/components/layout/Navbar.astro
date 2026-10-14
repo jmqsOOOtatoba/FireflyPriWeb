@@ -7,6 +7,7 @@ import DisplaySettings from "@/components/controls/DisplaySettingsIntegrated.sve
 import LightDarkSwitch from "@/components/controls/LightDarkSwitch.svelte";
 import Search from "@/components/controls/Search.svelte";
 import MusicPlayer from "@/components/features/MusicPlayer.astro";
+import GooeyNavIndicator from "@/components/layout/GooeyNavIndicator.svelte";
 import {
 	backgroundWallpaper,
 	displaySettingsConfig,
@@ -201,6 +202,9 @@ const logoVariants = await Promise.all(
             ? "justify-self-center"
             : "justify-self-start"
     ]}>
+        <!-- 液态融合指示器：纯装饰层（pointer-events:none），跟踪下方 DropdownMenu 触发器；
+             Navbar 在 Swup 容器外常驻，client:load 水合一次即可 -->
+        <GooeyNavIndicator client:load />
         {links.map((l) => {
             return <DropdownMenu link={l} />;
         })}

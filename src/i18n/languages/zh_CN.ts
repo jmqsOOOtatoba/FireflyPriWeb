@@ -495,6 +495,7 @@ export const zh_CN: Translation = {
 	[Key.copyLink]: "复制链接",
 	[Key.savePoster]: "保存海报",
 	[Key.scanToRead]: "扫码阅读文章",
+	[Key.postLike]: "喜欢这篇文章",
 
 	// 代码块折叠配置
 	[Key.codeCollapsibleShowMore]: "展开",

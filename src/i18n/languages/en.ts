@@ -505,6 +505,7 @@ export const en: Translation = {
 	[Key.copyLink]: "Copy Link",
 	[Key.savePoster]: "Save Poster",
 	[Key.scanToRead]: "Scan to Read",
+	[Key.postLike]: "Like this post",
 
 	// Code Block Collapsible Configuration
 	[Key.codeCollapsibleShowMore]: "Show more",

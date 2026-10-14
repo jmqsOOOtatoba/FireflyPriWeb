@@ -21,16 +21,53 @@ html.is-page-transitioning .banner-home-text-overlay {
 /* Banner text styles */
 .banner-title {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-    animation: banner-fadeInUp 0.3s ease-out;
+    /* 整块 fadeInUp 已由下方逐字入场（.banner-split-char）接管 */
     font-weight: bold;
     /* 防止大字体标题溢出容器 */
     overflow-wrap: break-word;
     word-break: break-word;
 }
 
+/* ===== 主标题逐字入场（SplitText 风格）=====
+   拆字在构建期完成（BannerHomeTextOverlay.astro），动画纯 CSS、只动 transform/opacity：
+   运行时不读 innerWidth / document.fonts / getBoundingClientRect，不触发强制回流 */
+.banner-split-word {
+    display: inline-block;
+}
+
+.banner-split-char {
+    display: inline-block;
+    /* 0.85s 单字时长 + 110ms stagger：逐字过程放慢到清晰可感知，
+       整体入场 = min(字数,15)×110ms + 850ms，约 1.5~2.5s */
+    animation: banner-split-in 0.85s cubic-bezier(0.33, 1, 0.68, 1) both;
+    /* min() 封顶第 15 字起的延迟，长标题也不会把级联拖过 2.5s 上限 */
+    animation-delay: calc(min(var(--split-i, 0), 15) * 110ms);
+}
+
+@keyframes banner-split-in {
+    from {
+        opacity: 0;
+        /* 起始位移加深到 0.9em（对比 0.55em），配合更长时长让入场更明显 */
+        transform: translateY(0.9em);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 减弱动效偏好：降级为直接显示（触摸设备仍保留——纯合成层动画，无布局读取） */
+@media (prefers-reduced-motion: reduce) {
+    .banner-split-char {
+        animation: none;
+    }
+}
+
 .banner-subtitle {
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
-    animation: banner-fadeInUp 0.3s ease-out 0.3s both;
+    /* 级联延迟锚定标题实际收尾时刻（--split-total 由 BannerHomeTextOverlay 注入总字数）：
+       min(总字数,15)×110ms + 850ms 是标题结束点，再留 50ms 呼吸 */
+    animation: banner-fadeInUp 0.45s ease-out calc(min(var(--split-total, 7), 15) * 110ms + 900ms) both;
 }
 
 @keyframes banner-fadeInUp {
@@ -344,9 +381,18 @@ html.is-page-transitioning .banner-home-text-overlay {
     font-family: var(--font-banner-subtitle, inherit);
 }
 
-/* 首页横幅标题下方的链接图标行（半透明圆按钮） */
+/* 首页横幅标题下方的链接图标行（排在副标题之后完成级联：副标题起始 + 0.45s 时长） */
 .banner-links {
-    animation: banner-fadeInUp 0.3s ease-out 0.5s both;
+    animation: banner-fadeInUp 0.45s ease-out calc(min(var(--split-total, 7), 15) * 110ms + 1350ms) both;
+}
+
+/* 减弱动效偏好下副标题/链接也直接显示——级联延迟随标题变长后，
+   不能让减弱动效用户白等；必须放在两条基础规则之后才盖得住同特异性动画 */
+@media (prefers-reduced-motion: reduce) {
+    .banner-subtitle,
+    .banner-links {
+        animation: none;
+    }
 }
 
 .banner-link {

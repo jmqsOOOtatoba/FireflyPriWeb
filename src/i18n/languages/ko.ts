@@ -502,6 +502,7 @@ export const ko: Translation = {
 	[Key.copyLink]: "링크 복사",
 	[Key.savePoster]: "포스터 저장",
 	[Key.scanToRead]: "스캔하여 읽기",
+	[Key.postLike]: "이 글 좋아요",
 
 	// Code Block Collapsible Configuration
 	[Key.codeCollapsibleShowMore]: "더 보기",

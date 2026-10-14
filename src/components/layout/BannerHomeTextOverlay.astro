@@ -1,5 +1,6 @@
 ---
 import { Icon } from "astro-icon/components";
+import Magnet from "@/components/common/Magnet.svelte";
 import TypewriterText from "@/components/features/TypewriterText.astro";
 import { backgroundWallpaper } from "@/config";
 import { encodeMailto, MAILTO_ONCLICK_SCRIPT } from "@/utils/email-utils";
@@ -13,14 +14,52 @@ const { showHomeText, initialRandomSubtitle } = Astro.props;
 const homeText = backgroundWallpaper.common?.homeText;
 const homeTextLinks = homeText?.links;
 const homeTextLinksEnable = homeText?.linksEnable !== false;
+
+// 主标题逐字拆分（SplitText 风格）：构建期同步完成，运行时零 JS、零布局读取，
+// 入场动画由 CSS 按每字 --split-i 延迟播放（见 banner-home.css），不碰字体/尺寸 API
+const splitTitleWords = (title: string): string[][] => {
+	const words: string[][] = [];
+	let current: string[] = [];
+	for (const ch of Array.from(title)) {
+		// 空白字符仅作词边界（渲染为普通空格，保留按词换行）
+		if (/\s/.test(ch)) {
+			if (current.length > 0) {
+				words.push(current);
+				current = [];
+			}
+		} else {
+			current.push(ch);
+		}
+	}
+	if (current.length > 0) words.push(current);
+	return words;
+};
+
+const titleWords = homeText?.title ? splitTitleWords(homeText.title) : [];
+let titleCharOffset = 0;
+const titleWordOffsets = titleWords.map((word) => {
+	const offset = titleCharOffset;
+	titleCharOffset += word.length;
+	return offset;
+});
 ---
 {homeText?.enable && (
-    <div class={`banner-home-text-overlay absolute inset-0 z-20 flex items-center justify-center ${!showHomeText ? 'hidden' : ''}`}>
+    <div class={`banner-home-text-overlay absolute inset-0 z-20 flex items-center justify-center ${!showHomeText ? 'hidden' : ''}`} style={`--split-total:${titleCharOffset}`}>
         <div class="w-4/5 lg:w-3/4 text-center mb-0">
             <div class="flex flex-col">
                 {homeText.title && (
                     <div class="banner-title font-bold text-white mb-2 lg:mb-4 leading-tight" style={{ '--banner-title-size': homeText.titleSize || "3rem" }}>
-                        {homeText.title}
+                        {/* 逐字 span：字间不插空白（保证连排与朗读正确），词间补普通空格保留断行 */}
+                        {titleWords.map((word, wi) => (
+                            <>
+                                {wi > 0 ? " " : ""}
+                                <span class="banner-split-word">
+                                    {word.map((ch, ci) => (
+                                        <span class="banner-split-char" style={`--split-i:${titleWordOffsets[wi] + ci}`}>{ch}</span>
+                                    ))}
+                                </span>
+                            </>
+                        ))}
                     </div>
                 )}
                 {homeText.subtitle && (
@@ -48,21 +87,23 @@ const homeTextLinksEnable = homeText?.linksEnable !== false;
                                 : undefined;
                             const isExternal = link.url.startsWith("http");
                             return (
-                                <a
-                                    href={isMailto ? "#" : link.url}
-                                    aria-label={link.name}
-                                    title={link.name}
-                                    data-encoded-email={encodedEmail}
-                                    target={!isMailto && isExternal ? "_blank" : undefined}
-                                    rel={!isMailto && isExternal ? "noopener" : undefined}
-                                    class={link.showName ? "banner-link banner-link-text" : "banner-link"}
-                                    style="color: #fff"
-                                    onclick={isMailto ? MAILTO_ONCLICK_SCRIPT : undefined}
-                                >
-                                    {/* 内联 fill: currentColor，避免 CSS 加载前 SVG 默认黑色图标闪现 */}
-                                    <Icon name={link.icon} class="text-[1.25rem]" style="fill: currentColor" />
-                                    {link.showName && <span>{link.name}</span>}
-                                </a>
+                                <Magnet client:idle padding={40} strength={2.6}>
+                                    <a
+                                        href={isMailto ? "#" : link.url}
+                                        aria-label={link.name}
+                                        title={link.name}
+                                        data-encoded-email={encodedEmail}
+                                        target={!isMailto && isExternal ? "_blank" : undefined}
+                                        rel={!isMailto && isExternal ? "noopener" : undefined}
+                                        class={link.showName ? "banner-link banner-link-text" : "banner-link"}
+                                        style="color: #fff"
+                                        onclick={isMailto ? MAILTO_ONCLICK_SCRIPT : undefined}
+                                    >
+                                        {/* 内联 fill: currentColor，避免 CSS 加载前 SVG 默认黑色图标闪现 */}
+                                        <Icon name={link.icon} class="text-[1.25rem]" style="fill: currentColor" />
+                                        {link.showName && <span>{link.name}</span>}
+                                    </a>
+                                </Magnet>
                             );
                         })}
                     </div>

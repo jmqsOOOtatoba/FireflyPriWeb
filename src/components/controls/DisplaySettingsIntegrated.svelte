@@ -54,6 +54,7 @@ import {
 } from "@utils/setting-utils";
 import { onMount } from "svelte";
 import Icon from "@/components/common/Icon.svelte";
+import SquishSwitch from "@/components/controls/SquishSwitch.svelte";
 import {
 	backgroundWallpaper,
 	displaySettingsConfig,
@@ -143,7 +144,7 @@ const isBannerTitleSwitchable =
 const isBannerCarouselSwitchable =
 	displaySettingsConfig.bannerCarouselSwitchable;
 const isSakuraSwitchable = displaySettingsConfig.sakuraSwitchable;
-// UTTU 自定义光标开关始终可用（无需配置项）
+// 自定义光标开关始终可用（无需配置项；标识符沿用 uttu 旧名以保住存储键与事件协议）
 const isUttuCursorSwitchable = true;
 const isCardBorderSwitchable = displaySettingsConfig.cardBorderSwitchable;
 const isCardFollowThemeSwitchable =
@@ -572,7 +573,7 @@ onMount(() => {
 	// 从localStorage读取樱花特效状态
 	sakuraEnabled = getStoredSakuraEnabled();
 
-	// 从localStorage读取UTTU自定义光标状态
+	// 从localStorage读取自定义光标状态
 	uttuCursorEnabled = getStoredUttuCursorEnabled();
 
 	// 从localStorage读取卡片样式状态
@@ -806,13 +807,7 @@ $effect(() => {
 				>
 					<Icon icon="material-symbols:border-outer-rounded" class="text-[1.25rem] shrink-0"></Icon>
 					<span class="text-sm flex-1">{i18n(I18nKey.cardBorder)}</span>
-					<div class="w-10 h-5 rounded-full transition-all duration-200 relative"
-						 class:bg-(--primary)={cardBorderEnabled}
-						 class:bg-(--btn-regular-bg-active)={!cardBorderEnabled}>
-						<div class="absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-all duration-200"
-							 class:left-0.5={!cardBorderEnabled}
-							 class:left-5={cardBorderEnabled}></div>
-					</div>
+					<SquishSwitch checked={cardBorderEnabled} />
 				</button>
 				<div class="rounded-md bg-(--btn-regular-bg) p-2">
 					<div class="flex items-center justify-between mb-1">
@@ -841,13 +836,7 @@ $effect(() => {
 				>
 					<Icon icon="material-symbols:palette" class="text-[1.25rem] shrink-0"></Icon>
 					<span class="text-sm flex-1">{i18n(I18nKey.cardFollowTheme)}</span>
-					<div class="w-10 h-5 rounded-full transition-all duration-200 relative"
-						 class:bg-(--primary)={cardFollowThemeEnabled}
-						 class:bg-(--btn-regular-bg-active)={!cardFollowThemeEnabled}>
-						<div class="absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-all duration-200"
-							 class:left-0.5={!cardFollowThemeEnabled}
-							 class:left-5={cardFollowThemeEnabled}></div>
-					</div>
+					<SquishSwitch checked={cardFollowThemeEnabled} />
 				</button>
 				{/if}
 			</div>
@@ -1008,13 +997,7 @@ $effect(() => {
 				>
 					<Icon icon="material-symbols:titlecase-rounded" class="text-[1.25rem] shrink-0"></Icon>
 					<span class="text-sm flex-1">{i18n(I18nKey.wallpaperTitle)}</span>
-					<div class="w-10 h-5 rounded-full transition-all duration-200 relative"
-						 class:bg-(--primary)={bannerTitleEnabled}
-						 class:bg-(--btn-regular-bg-active)={!bannerTitleEnabled}>
-						<div class="absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-all duration-200"
-							 class:left-0.5={!bannerTitleEnabled}
-							 class:left-5={bannerTitleEnabled}></div>
-					</div>
+					<SquishSwitch checked={bannerTitleEnabled} />
 				</button>
 				{/if}
 				<!-- Banner Carousel Switch -->
@@ -1026,13 +1009,7 @@ $effect(() => {
 				>
 					<Icon icon="material-symbols:view-carousel-outline" class="text-[1.25rem] shrink-0"></Icon>
 					<span class="text-sm flex-1">{i18n(I18nKey.wallpaperCarousel)}</span>
-					<div class="w-10 h-5 rounded-full transition-all duration-200 relative"
-						 class:bg-(--primary)={bannerCarouselEnabled}
-						 class:bg-(--btn-regular-bg-active)={!bannerCarouselEnabled}>
-						<div class="absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-all duration-200"
-							 class:left-0.5={!bannerCarouselEnabled}
-							 class:left-5={bannerCarouselEnabled}></div>
-					</div>
+					<SquishSwitch checked={bannerCarouselEnabled} />
 				</button>
 				{/if}
 				<!-- Waves Animation Switch（横幅模式和 classic 全屏模式） -->
@@ -1044,13 +1021,7 @@ $effect(() => {
 				>
 					<Icon icon="material-symbols:airwave-rounded" class="text-[1.25rem] shrink-0"></Icon>
 					<span class="text-sm flex-1">{i18n(I18nKey.wavesAnimation)}</span>
-					<div class="w-10 h-5 rounded-full transition-all duration-200 relative"
-						 class:bg-(--primary)={wavesEnabled}
-						 class:bg-(--btn-regular-bg-active)={!wavesEnabled}>
-						<div class="absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-all duration-200"
-							 class:left-0.5={!wavesEnabled}
-							 class:left-5={wavesEnabled}></div>
-					</div>
+					<SquishSwitch checked={wavesEnabled} />
 				</button>
 				{/if}
 				<!-- Gradient Transition Switch（横幅模式和 classic 全屏模式） -->
@@ -1062,13 +1033,7 @@ $effect(() => {
 				>
 					<Icon icon="material-symbols:gradient" class="text-[1.25rem] shrink-0"></Icon>
 					<span class="text-sm flex-1">{i18n(I18nKey.gradientTransition)}</span>
-					<div class="w-10 h-5 rounded-full transition-all duration-200 relative"
-						 class:bg-(--primary)={gradientEnabled}
-						 class:bg-(--btn-regular-bg-active)={!gradientEnabled}>
-						<div class="absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-all duration-200"
-							 class:left-0.5={!gradientEnabled}
-							 class:left-5={gradientEnabled}></div>
-					</div>
+					<SquishSwitch checked={gradientEnabled} />
 				</button>
 				{/if}
 			</div>
@@ -1098,17 +1063,11 @@ $effect(() => {
 			>
 				<Icon icon="mdi:flower-poppy" class="text-[1.25rem] shrink-0"></Icon>
 				<span class="text-sm flex-1">{i18n(I18nKey.sakuraEffect)}</span>
-				<div class="w-10 h-5 rounded-full transition-all duration-200 relative"
-					 class:bg-(--primary)={sakuraEnabled}
-					 class:bg-(--btn-regular-bg-active)={!sakuraEnabled}>
-					<div class="absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-all duration-200"
-						 class:left-0.5={!sakuraEnabled}
-						 class:left-5={sakuraEnabled}></div>
-				</div>
+				<SquishSwitch checked={sakuraEnabled} />
 			</button>
 		</div>
 		{/if}
-		<!-- UTTU 自定义光标开关（仅精确指针设备实际生效） -->
+		<!-- 自定义光标开关（仅精确指针设备实际生效） -->
 		{#if isUttuCursorSwitchable}
 		<div class="mt-1">
 			<button
@@ -1118,13 +1077,7 @@ $effect(() => {
 			>
 				<Icon icon="mdi:cursor-pointer" class="text-[1.25rem] shrink-0"></Icon>
 				<span class="text-sm flex-1">{i18n(I18nKey.uttuCursor)}</span>
-				<div class="w-10 h-5 rounded-full transition-all duration-200 relative"
-					 class:bg-(--primary)={uttuCursorEnabled}
-					 class:bg-(--btn-regular-bg-active)={!uttuCursorEnabled}>
-					<div class="absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-all duration-200"
-						 class:left-0.5={!uttuCursorEnabled}
-						 class:left-5={uttuCursorEnabled}></div>
-				</div>
+				<SquishSwitch checked={uttuCursorEnabled} />
 			</button>
 		</div>
 		{/if}

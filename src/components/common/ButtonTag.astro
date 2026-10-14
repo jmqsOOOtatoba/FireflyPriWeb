@@ -7,7 +7,52 @@ interface Props {
 }
 const { dot, href, label }: Props = Astro.props;
 ---
-<a href={href} aria-label={label} class="tag-item transition text-sm font-medium px-3 py-1.5">
+<a href={href} aria-label={label} class="tag-item sp-peel transition text-sm font-medium px-3 py-1.5">
     {dot && <div class="h-1 w-1 bg-(--btn-content) dark:bg-(--card-bg) transition rounded-md mr-2"></div>}
     <slot></slot>
 </a>
+
+<style>
+  /* Sticker Peel：标签胶囊 hover 时整体微翘 + 右下角掀起纸背小三角（纯 CSS，transform/opacity only） */
+  .sp-peel {
+    position: relative;
+    transform-origin: 30% 50%;
+    transition:
+      transform var(--duration-slower) var(--ease-standard),
+      background-color var(--duration-normal) var(--ease-standard),
+      color var(--duration-normal) var(--ease-standard);
+  }
+
+  /* 掀起的贴纸背：纸背色小三角，静态 drop-shadow 随 transform 一起移动 */
+  .sp-peel::after {
+    content: "";
+    position: absolute;
+    right: -1px;
+    bottom: -2px;
+    width: 14px;
+    height: 14px;
+    clip-path: polygon(100% 0, 100% 100%, 0 100%);
+    background: color-mix(in srgb, var(--btn-regular-bg) 85%, var(--btn-content));
+    /* clip-path 裁剪使 box-shadow 语义变量不可用；drop-shadow 只收单色，
+       语义色变量暗色下会翻转成浅色产生光晕 → 用主题无关的中性黑接触阴影 */
+    filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.3));
+    opacity: 0;
+    transform: rotate(14deg) scale(0.45);
+    transform-origin: 100% 100%;
+    transition:
+      opacity var(--duration-slower) var(--ease-standard),
+      transform var(--duration-slower) var(--ease-standard);
+    pointer-events: none;
+  }
+
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .sp-peel:hover {
+      transform: rotate(-4deg) translateY(-1px);
+    }
+
+    .sp-peel:hover::after {
+      opacity: 1;
+      transform: rotate(0deg) scale(1);
+    }
+  }
+</style>

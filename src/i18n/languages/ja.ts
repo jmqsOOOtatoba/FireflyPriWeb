@@ -502,6 +502,7 @@ export const ja: Translation = {
 	[Key.copyLink]: "リンクをコピー",
 	[Key.savePoster]: "ポスターを保存",
 	[Key.scanToRead]: "QRコードで読む",
+	[Key.postLike]: "この記事にいいね",
 
 	// コードブロック折りたたみ設定
 	[Key.codeCollapsibleShowMore]: "展開する",
