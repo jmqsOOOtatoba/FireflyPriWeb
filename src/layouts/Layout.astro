@@ -160,14 +160,11 @@ const ogImageAlt = propsOgImageAlt ?? pageTitle;
 <html lang={siteLang} class="bg-(--page-bg) text-[14px] md:text-[16px]" data-wallpaper-mode={backgroundWallpaper.mode} data-fullscreen-layout={fullscreenLayout} data-has-wallpaper={hasWallpaper ? "" : undefined} data-tag-style={siteConfig.tagStyle ?? "pill"} data-category-style={siteConfig.categoryStyle ?? "rectangle"}>
   <head>
     <meta charset="UTF-8" />
-    <!-- 非主入口域名统一跳转到 azuma（仅线上 mstzuomu.space 子域生效，不影响本地开发） -->
+    <!-- 仅 www/根域跳转到 azuma（白名单式，tu/fc/pub/twikoo 等子域及本地开发不受影响） -->
     <script is:inline>
       (function () {
         var host = location.hostname;
-        if (
-          host !== "azuma.mstzuomu.space" &&
-          /(^|\.)mstzuomu\.space$/.test(host)
-        ) {
+        if (host === "www.mstzuomu.space" || host === "mstzuomu.space") {
           location.replace(
             "https://azuma.mstzuomu.space" +
               location.pathname +
