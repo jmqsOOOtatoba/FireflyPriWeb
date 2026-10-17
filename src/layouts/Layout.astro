@@ -160,6 +160,17 @@ const ogImageAlt = propsOgImageAlt ?? pageTitle;
 <html lang={siteLang} class="bg-(--page-bg) text-[14px] md:text-[16px]" data-wallpaper-mode={backgroundWallpaper.mode} data-fullscreen-layout={fullscreenLayout} data-has-wallpaper={hasWallpaper ? "" : undefined} data-tag-style={siteConfig.tagStyle ?? "pill"} data-category-style={siteConfig.categoryStyle ?? "rectangle"}>
   <head>
     <meta charset="UTF-8" />
+    <!-- 非主入口域名统一跳转到 azuma（浏览器端即时跳转，保留路径与查询串） -->
+    <script is:inline>
+      (function () {
+        var target = "azuma.mstzuomu.space";
+        if (location.hostname !== target) {
+          location.replace(
+            "https://" + target + location.pathname + location.search + location.hash,
+          );
+        }
+      })();
+    </script>
     <!-- 提前建立第三方连接：图床图片、umami 统计、Cloudflare beacon 都在 HTML 解析中途才被发现 -->
     <link rel="preconnect" href="https://tu.mstzuomu.space" />
     <link rel="preconnect" href="https://static.cloudflareinsights.com" />

@@ -50,7 +50,7 @@ export const siteConfig: SiteConfig = {
 	subtitle: "热爱是拯救无趣人生的唯一途径",
 
 	// 站点 URL
-	site_url: "https://mstzuomu.space",
+	site_url: "https://azuma.mstzuomu.space",
 
 	// 站点描述
 	description:
