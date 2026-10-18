@@ -242,42 +242,30 @@ export function buildNotifyEmail(data, approveUrl, rejectUrl) {
 	return lines.join("\n");
 }
 
-export function buildApplicantMail(action, data, reason) {
-	if (action === "approve") {
-		return {
-			subject: `【友链申请】「${data.title}」已通过`,
-			text: [
-				"你好：",
-				"",
-				`你在 ${data.siteurl} 提交的友链申请已通过审核，已加入友链列表并推送上线。`,
-				"博客构建完成后（约 3~5 分钟）即可看到，欢迎互换友链。",
-				"",
-				"—— Azuma",
-			].join("\n"),
-		};
-	}
-	const why = typeof reason === "string" ? reason.trim().slice(0, 500) : "";
-	const lines = why
-		? [
-				"你好：",
-				"",
-				"感谢你申请友链。很遗憾这次未能通过审核，原因如下：",
-				"",
-				why,
-				"",
-				"如有疑问欢迎回复本邮件与我交流。",
-				"",
-				"—— Azuma",
-			]
-		: [
-				"你好：",
-				"",
-				"感谢你申请友链。很遗憾这次未能通过审核，具体原因就不逐一说明了，还请理解。",
-				"",
-				"—— Azuma",
-			];
-	return {
-		subject: `【友链申请】关于「${data.title}」的申请结果`,
-		text: lines.join("\n"),
-	};
+export function buildApplicantMail(action, data, customText) {
+	const subject =
+		action === "approve"
+			? `【友链申请】「${data.title}」已通过`
+			: `【友链申请】关于「${data.title}」的申请结果`;
+	const custom =
+		typeof customText === "string" ? customText.trim().slice(0, 4000) : "";
+	if (custom) return { subject, text: custom };
+	const lines =
+		action === "approve"
+			? [
+					"你好：",
+					"",
+					`你在 ${data.siteurl} 提交的友链申请已通过审核，已加入友链列表并推送上线。`,
+					"博客构建完成后（约 3~5 分钟）即可看到，欢迎互换友链。",
+					"",
+					"—— 左沐",
+				]
+			: [
+					"你好：",
+					"",
+					"感谢你申请友链。很遗憾这次未能通过审核，具体原因就不逐一说明了，还请理解。",
+					"",
+					"—— 左沐",
+				];
+	return { subject, text: lines.join("\n") };
 }

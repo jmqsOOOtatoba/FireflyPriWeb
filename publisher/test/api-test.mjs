@@ -262,7 +262,10 @@ let approveToken = "";
 		pageHtml.includes("确认通过") && pageHtml.includes("新朋友"),
 		"确认页显示摘要与按钮",
 	);
-	assert(!pageHtml.includes('id="reason"'), "通过确认页不含拒绝理由输入框");
+	assert(
+		pageHtml.includes('id="mailBody"') && pageHtml.includes("已通过审核"),
+		"通过确认页预填默认邮件正文",
+	);
 	assert(
 		pageHtml.includes('fetch("/api/friend-decide"') &&
 			!pageHtml.includes("src="),
@@ -315,6 +318,7 @@ let approveToken = "";
 		(m) => m.to === "applicant@example.com" && m.subject?.includes("已通过"),
 	);
 	assert(!!applicantMail, "申请人收到通过邮件");
+	assert(applicantMail.text.includes("—— 左沐"), "默认邮件签名用「左沐」");
 }
 
 /* 11. reject：婉拒邮件 */
@@ -343,11 +347,14 @@ let approveToken = "";
 		`${BASE}/api/friend-decide?token=${encodeURIComponent(tokens[1])}`,
 	);
 	const rejPageHtml = await rejPage.text();
-	assert(rejPageHtml.includes("拒绝理由"), "拒绝确认页含理由输入框");
+	assert(
+		rejPageHtml.includes('id="mailBody"') && rejPageHtml.includes("未能通过"),
+		"拒绝确认页预填默认邮件正文",
+	);
 
 	const rej = await call("/api/friend-decide", {
 		method: "POST",
-		body: { token: tokens[1], reason: "测试拒绝理由XYZ" }, // 第二条链接 = reject
+		body: { token: tokens[1], text: "自定义拒绝正文XYZ" }, // 第二条链接 = reject
 	});
 	assert(
 		rej.status === 200 && rej.data.ok,
@@ -358,10 +365,11 @@ let approveToken = "";
 	const polite = (await call("/api/__outbox")).data.mails.find(
 		(m) => m.to === "rejected@example.com" && m.subject?.includes("落选站"),
 	);
-	assert(!!polite && polite.text.includes("未能通过"), "申请人收到婉拒邮件");
+	assert(!!polite, "婉拒邮件发出");
+	assert(polite && !polite.text.includes("未能通过"), "自定义正文替换默认文案");
 	assert(
-		polite?.text.includes("测试拒绝理由XYZ"),
-		"婉拒邮件包含站长填写的拒绝理由",
+		polite?.text.includes("自定义拒绝正文XYZ"),
+		"婉拒邮件使用站长编辑后的正文",
 	);
 
 	const file = await call("/api/__file", {

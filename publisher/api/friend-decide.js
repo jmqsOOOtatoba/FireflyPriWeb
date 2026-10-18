@@ -77,11 +77,10 @@ function confirmPage(token, payload) {
 	const rowsHtml = rows
 		.map(([k, v]) => `<dt>${h(k)}</dt><dd>${h(v)}</dd>`)
 		.join("");
-	const reasonBlock = isApprove
-		? ""
-		: `<div class="reason">
-<label for="reason">拒绝理由（选填，将写入发给申请人的通知邮件，留空则用默认文案）</label>
-<textarea id="reason" rows="3" maxlength="500" placeholder="例如：暂不接受新申请 / 内容方向不同 / 已有同类友链……"></textarea>
+	const mailText = buildApplicantMail(action, data).text;
+	const bodyBlock = `<div class="reason">
+<label for="mailBody">邮件正文（发给申请人的${isApprove ? "通过" : "拒绝"}通知，可直接编辑，留空则用默认文案）</label>
+<textarea id="mailBody" rows="7" maxlength="4000">${h(mailText)}</textarea>
 </div>`;
 	return `<!doctype html>
 <html lang="zh-CN">
@@ -112,7 +111,7 @@ button:disabled{opacity:.55;cursor:wait}
 <h1>友链申请处理</h1>
 <p class="hint">以下是申请人提交的信息，请核对后点击按钮。此页面需手动确认，点击前不会执行任何操作。</p>
 <dl>${rowsHtml}</dl>
-${reasonBlock}
+${bodyBlock}
 <button id="btn" type="button">${title}</button>
 <pre id="out"></pre>
 </main>
@@ -120,7 +119,7 @@ ${reasonBlock}
 const token = ${JSON.stringify(token)};
 const btn = document.getElementById("btn");
 const out = document.getElementById("out");
-const reasonEl = document.getElementById("reason");
+const bodyEl = document.getElementById("mailBody");
 btn.addEventListener("click", async () => {
 	btn.disabled = true;
 	out.textContent = "处理中……";
@@ -128,10 +127,7 @@ btn.addEventListener("click", async () => {
 		const res = await fetch("/api/friend-decide", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({
-				token,
-				...(reasonEl ? { reason: reasonEl.value } : {}),
-			}),
+			body: JSON.stringify({ token, text: bodyEl.value }),
 		});
 		const data = await res.json().catch(() => ({}));
 		out.textContent = data.ok
@@ -158,7 +154,7 @@ function getToken(req) {
 	}
 }
 
-async function handleApprove(payload, res) {
+async function handleApprove(payload, res, text) {
 	const data = payload.data;
 	const { githubToken } = friendEnv();
 	if (!githubToken) {
@@ -227,7 +223,7 @@ async function handleApprove(payload, res) {
 	}
 
 	if (data.email) {
-		const mail = buildApplicantMail("approve", data);
+		const mail = buildApplicantMail("approve", data, text);
 		try {
 			await sendMail({
 				to: data.email,
@@ -248,10 +244,10 @@ async function handleApprove(payload, res) {
 	});
 }
 
-async function handleReject(payload, res, reason) {
+async function handleReject(payload, res, text) {
 	const data = payload.data;
 	if (data.email) {
-		const mail = buildApplicantMail("reject", data, reason);
+		const mail = buildApplicantMail("reject", data, text);
 		try {
 			await sendMail({
 				to: data.email,
@@ -299,12 +295,12 @@ export default async function handler(req, res) {
 			json(res, 400, { ok: false, error: r.error });
 			return;
 		}
-		const reason =
-			typeof body?.reason === "string" ? body.reason.trim().slice(0, 500) : "";
+		const text =
+			typeof body?.text === "string" ? body.text.trim().slice(0, 4000) : "";
 		if (r.payload.action === "approve") {
-			await handleApprove(r.payload, res);
+			await handleApprove(r.payload, res, text);
 		} else {
-			await handleReject(r.payload, res, reason);
+			await handleReject(r.payload, res, text);
 		}
 		return;
 	}
