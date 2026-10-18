@@ -164,33 +164,6 @@ export const friendsConfig: FriendLink[] = [
 		enabled: true
 	},
 	{
-		title: "Firefly Docs",
-		imgurl: "https://docs-firefly.cuteleaf.cn/logo.png",
-		desc: "Firefly主题模板文档",
-		siteurl: "https://docs-firefly.cuteleaf.cn",
-		tags: ["Docs"],
-		weight: 9,
-		enabled: true,
-	},
-	{
-		title: "Astro",
-		imgurl: "https://avatars.githubusercontent.com/u/44914786?v=4&s=640",
-		desc: "The web framework for content-driven websites. ⭐️ Star to support our work!",
-		siteurl: "https://github.com/withastro/astro",
-		tags: ["Framework"],
-		weight: 8,
-		enabled: true,
-	},
-	{
-		title: "友链功能E2E测试",
-		imgurl: "https://e2e-friend-test.example/avatar.png",
-		desc: "全链路验证用的临时申请，审核时请点拒绝",
-		siteurl: "https://e2e-friend-test.example",
-		tags: ["Test"],
-		weight: 1,
-		enabled: true,
-	},
-	{
 		title: "左沐の手册",
 		imgurl: "https://tu.mstzuomu.space/file/头像/1786942479049_azumahead.jpg",
 		desc: "热爱是拯救无趣人生的唯一途径",
