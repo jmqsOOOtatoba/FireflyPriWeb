@@ -262,6 +262,7 @@ let approveToken = "";
 		pageHtml.includes("确认通过") && pageHtml.includes("新朋友"),
 		"确认页显示摘要与按钮",
 	);
+	assert(!pageHtml.includes('id="reason"'), "通过确认页不含拒绝理由输入框");
 	assert(
 		pageHtml.includes('fetch("/api/friend-decide"') &&
 			!pageHtml.includes("src="),
@@ -337,9 +338,16 @@ let approveToken = "";
 	const tokens = [
 		...notice.text.matchAll(/friend-decide\?token=([\w-]+\.[\w-]+)/g),
 	].map((m) => m[1]);
+
+	const rejPage = await fetch(
+		`${BASE}/api/friend-decide?token=${encodeURIComponent(tokens[1])}`,
+	);
+	const rejPageHtml = await rejPage.text();
+	assert(rejPageHtml.includes("拒绝理由"), "拒绝确认页含理由输入框");
+
 	const rej = await call("/api/friend-decide", {
 		method: "POST",
-		body: { token: tokens[1] }, // 第二条链接 = reject
+		body: { token: tokens[1], reason: "测试拒绝理由XYZ" }, // 第二条链接 = reject
 	});
 	assert(
 		rej.status === 200 && rej.data.ok,
@@ -351,6 +359,10 @@ let approveToken = "";
 		(m) => m.to === "rejected@example.com" && m.subject?.includes("落选站"),
 	);
 	assert(!!polite && polite.text.includes("未能通过"), "申请人收到婉拒邮件");
+	assert(
+		polite?.text.includes("测试拒绝理由XYZ"),
+		"婉拒邮件包含站长填写的拒绝理由",
+	);
 
 	const file = await call("/api/__file", {
 		query: `?path=${encodeURIComponent("src/config/friendsConfig.ts")}`,
