@@ -181,6 +181,15 @@ export const friendsConfig: FriendLink[] = [
 		weight: 8,
 		enabled: true,
 	},
+	{
+		title: "友链功能E2E测试",
+		imgurl: "https://e2e-friend-test.example/avatar.png",
+		desc: "全链路验证用的临时申请，审核时请点拒绝",
+		siteurl: "https://e2e-friend-test.example",
+		tags: ["Test"],
+		weight: 1,
+		enabled: true,
+	},
 	/* friend-autogen-insert-above */
 ];
 
