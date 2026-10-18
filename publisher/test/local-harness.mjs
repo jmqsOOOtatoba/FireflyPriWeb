@@ -38,6 +38,27 @@ seed(
 	"src/content/dynamic/20261003-0953.md",
 	'---\npublished: 2026-10-03 09:53:13\nlocation: "辽宁"\n---\n\n测试动态',
 );
+// 友链配置（含前端负责的锚点注释）
+seed(
+	"src/config/friendsConfig.ts",
+	[
+		'import type { FriendLink } from "../types/friendsConfig";',
+		"",
+		"export const friendsConfig: FriendLink[] = [",
+		"\t{",
+		'\t\ttitle: "已有站",',
+		'\t\timgurl: "https://existing.example/avatar.png",',
+		'\t\tdesc: "已存在的友链",',
+		'\t\tsiteurl: "https://existing.example/",',
+		'\t\ttags: ["Blog"],',
+		"\t\tweight: 100,",
+		"\t\tenabled: true,",
+		"\t},",
+		"\t/* friend-autogen-insert-above */",
+		"];",
+		"",
+	].join("\n"),
+);
 
 /* ---- mock fetch ---- */
 const realFetch = globalThis.fetch;
@@ -131,15 +152,42 @@ globalThis.fetch = async (url, init = {}) => {
 /* ---- 真实端点（mock 生效后动态导入） ---- */
 process.env.PUBLISH_TOKEN = process.env.PUBLISH_TOKEN || "test-pass-123";
 process.env.GITHUB_TOKEN = process.env.GITHUB_TOKEN || "gh_mock";
+process.env.FRIEND_SECRET = process.env.FRIEND_SECRET || "test-friend-secret";
+process.env.NOTIFY_EMAIL = process.env.NOTIFY_EMAIL || "owner@test.local";
+// 故意不配 SMTP_*：邮件走 lib/mail.js 的 outbox 跳过路径
 const auth = (await import("../api/auth.js")).default;
 const articles = (await import("../api/articles.js")).default;
 const article = (await import("../api/article.js")).default;
 const publish = (await import("../api/publish.js")).default;
+const friendApply = (await import("../api/friend-apply.js")).default;
+const friendDecide = (await import("../api/friend-decide.js")).default;
+const { outbox } = await import("../lib/mail.js");
 const handlers = {
 	"/api/auth": auth,
 	"/api/articles": articles,
 	"/api/article": article,
 	"/api/publish": publish,
+	"/api/friend-apply": friendApply,
+	"/api/friend-decide": friendDecide,
+	// 测试专用：查看 outbox 邮件与 mock 仓库文件
+	"/api/__outbox": (_req, res) => {
+		res.statusCode = 200;
+		res.setHeader("Content-Type", "application/json; charset=utf-8");
+		res.end(JSON.stringify({ ok: true, mails: outbox }));
+	},
+	"/api/__file": (req, res) => {
+		const entry = store.get(req.query?.path || "");
+		if (!entry) {
+			res.statusCode = 404;
+			res.end(JSON.stringify({ ok: false, error: "not found" }));
+			return;
+		}
+		res.statusCode = 200;
+		res.setHeader("Content-Type", "application/json; charset=utf-8");
+		res.end(
+			JSON.stringify({ ok: true, content: entry.content, sha: entry.sha }),
+		);
+	},
 };
 
 const MIME = {

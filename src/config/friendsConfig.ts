@@ -2,6 +2,9 @@ import type { FriendLink, FriendsPageConfig } from "../types/friendsConfig";
 
 // 可以在src/content/spec/friends.md中编写友链页面下方的自定义内容
 
+// 友链自助申请接口（本地调试可临时改为 http://localhost:8788/api/friend-apply）
+export const FRIENDS_APPLY_API = "https://pub.mstzuomu.space/api/friend-apply";
+
 // 友链页面配置
 export const friendsPageConfig: FriendsPageConfig = {
 	// 页面标题，如果留空则使用 i18n 中的翻译
@@ -178,6 +181,7 @@ export const friendsConfig: FriendLink[] = [
 		weight: 8,
 		enabled: true,
 	},
+	/* friend-autogen-insert-above */
 ];
 
 // 获取启用的友链并进行排序

@@ -1,0 +1,336 @@
+---
+import { FRIENDS_APPLY_API } from "@/config";
+---
+
+<friend-apply-form class="block my-4">
+  <div class="fa-card rounded-2xl border border-(--line-divider) overflow-hidden">
+    <div class="p-5 sm:p-6">
+      <h3 class="text-lg font-bold mb-1 flex items-center gap-2">
+        <span class="w-7 h-7 rounded-lg bg-(--primary)/10 flex items-center justify-center text-(--primary) text-sm" aria-hidden="true">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+        </span>
+        在线申请友链
+      </h3>
+      <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-5">
+        请先互链本站，再填写下方表单提交申请，审核结果将通过邮件通知
+      </p>
+
+      <form class="fa-form grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3.5" novalidate>
+        <label class="fa-field flex flex-col gap-1 min-w-0">
+          <span class="text-xs font-medium text-neutral-600 dark:text-neutral-300">
+            站点名称 <span class="text-(--primary)">*</span>
+          </span>
+          <input
+            type="text"
+            name="title"
+            required
+            maxlength="50"
+            autocomplete="off"
+            placeholder="您的站点名称"
+            class="fa-input w-full px-3.5 py-2.5 rounded-xl border border-(--line-divider) bg-transparent text-sm text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500 focus:border-(--primary) focus:ring-1 focus:ring-(--primary) outline-none transition-all duration-200"
+          />
+        </label>
+
+        <label class="fa-field flex flex-col gap-1 min-w-0">
+          <span class="text-xs font-medium text-neutral-600 dark:text-neutral-300">
+            站点链接 <span class="text-(--primary)">*</span>
+          </span>
+          <input
+            type="url"
+            name="siteurl"
+            required
+            autocomplete="off"
+            placeholder="https://example.com"
+            class="fa-input w-full px-3.5 py-2.5 rounded-xl border border-(--line-divider) bg-transparent text-sm text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500 focus:border-(--primary) focus:ring-1 focus:ring-(--primary) outline-none transition-all duration-200"
+          />
+        </label>
+
+        <label class="fa-field flex flex-col gap-1 min-w-0 sm:col-span-2">
+          <span class="text-xs font-medium text-neutral-600 dark:text-neutral-300">
+            头像链接 <span class="text-(--primary)">*</span>
+          </span>
+          <input
+            type="url"
+            name="imgurl"
+            required
+            autocomplete="off"
+            placeholder="https://example.com/avatar.png"
+            class="fa-input w-full px-3.5 py-2.5 rounded-xl border border-(--line-divider) bg-transparent text-sm text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500 focus:border-(--primary) focus:ring-1 focus:ring-(--primary) outline-none transition-all duration-200"
+          />
+        </label>
+
+        <label class="fa-field flex flex-col gap-1 min-w-0 sm:col-span-2">
+          <span class="text-xs font-medium text-neutral-600 dark:text-neutral-300 flex items-center justify-between">
+            <span>站点描述 <span class="text-(--primary)">*</span></span>
+            <span class="fa-desc-count text-neutral-400 dark:text-neutral-500 font-normal" aria-hidden="true"></span>
+          </span>
+          <input
+            type="text"
+            name="desc"
+            required
+            maxlength="100"
+            autocomplete="off"
+            placeholder="一句话介绍您的站点"
+            class="fa-input w-full px-3.5 py-2.5 rounded-xl border border-(--line-divider) bg-transparent text-sm text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500 focus:border-(--primary) focus:ring-1 focus:ring-(--primary) outline-none transition-all duration-200"
+          />
+        </label>
+
+        <label class="fa-field flex flex-col gap-1 min-w-0">
+          <span class="text-xs font-medium text-neutral-600 dark:text-neutral-300">标签（选填）</span>
+          <input
+            type="text"
+            name="tags"
+            autocomplete="off"
+            placeholder="Blog, 技术（逗号分隔，最多 5 个）"
+            class="fa-input w-full px-3.5 py-2.5 rounded-xl border border-(--line-divider) bg-transparent text-sm text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500 focus:border-(--primary) focus:ring-1 focus:ring-(--primary) outline-none transition-all duration-200"
+          />
+        </label>
+
+        <label class="fa-field flex flex-col gap-1 min-w-0">
+          <span class="text-xs font-medium text-neutral-600 dark:text-neutral-300">联系邮箱（选填）</span>
+          <input
+            type="email"
+            name="email"
+            autocomplete="email"
+            placeholder="用于接收审核结果通知"
+            class="fa-input w-full px-3.5 py-2.5 rounded-xl border border-(--line-divider) bg-transparent text-sm text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500 focus:border-(--primary) focus:ring-1 focus:ring-(--primary) outline-none transition-all duration-200"
+          />
+        </label>
+
+        <label class="fa-field flex flex-col gap-1 min-w-0 sm:col-span-2">
+          <span class="text-xs font-medium text-neutral-600 dark:text-neutral-300">申请理由（选填）</span>
+          <textarea
+            name="reason"
+            rows="3"
+            maxlength="200"
+            placeholder="想对站长说的话，或补充说明（最多 200 字）"
+            class="fa-input w-full px-3.5 py-2.5 rounded-xl border border-(--line-divider) bg-transparent text-sm text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500 focus:border-(--primary) focus:ring-1 focus:ring-(--primary) outline-none transition-all duration-200 resize-y"></textarea>
+        </label>
+
+        {/* 蜜罐：正常用户不可见不可聚焦，机器人填入则静默拒绝 */}
+        <div class="fa-hp" aria-hidden="true">
+          <label>
+            昵称
+            <input type="text" name="nickname" tabindex="-1" autocomplete="off" />
+          </label>
+        </div>
+
+        <div class="sm:col-span-2 flex flex-col gap-2.5 mt-1">
+          <p class="fa-msg hidden text-sm rounded-xl px-3.5 py-2.5" role="alert"></p>
+          <div class="flex items-center gap-3 flex-wrap">
+            <button
+              type="submit"
+              class="fa-submit btn-regular inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 active:scale-95 disabled:opacity-60 disabled:pointer-events-none cursor-pointer"
+            >
+              <svg class="fa-spinner hidden w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+              </svg>
+              <span class="fa-submit-text">提交申请</span>
+            </button>
+            <span class="text-xs text-neutral-400 dark:text-neutral-500">
+              带 <span class="text-(--primary)">*</span> 为必填，邮箱可选
+            </span>
+          </div>
+        </div>
+      </form>
+
+      <div class="fa-success hidden mt-2 rounded-xl border border-(--primary)/30 bg-(--primary)/8 px-4 py-3.5 text-sm text-neutral-700 dark:text-neutral-200">
+        申请已提交，等待站长邮件审核～ 确认互链后会尽快添加您的友链。
+      </div>
+    </div>
+  </div>
+</friend-apply-form>
+
+<script is:inline define:vars={{ applyApi: FRIENDS_APPLY_API }}>
+	if (!customElements.get("friend-apply-form")) {
+		class FriendApplyForm extends HTMLElement {
+			constructor() {
+				super();
+			}
+
+			connectedCallback() {
+				const form = this.querySelector("form");
+				if (!form || form.dataset.faBound === "1") return;
+				form.dataset.faBound = "1";
+
+				const descInput = form.querySelector('input[name="desc"]');
+				const descCount = this.querySelector(".fa-desc-count");
+				if (descInput && descCount) {
+					const updateCount = () => {
+						descCount.textContent = `${descInput.value.length}/100`;
+					};
+					descInput.addEventListener("input", updateCount);
+					updateCount();
+				}
+
+				form.addEventListener("submit", (e) => {
+					e.preventDefault();
+					this.handleSubmit(form);
+				});
+			}
+
+			showMsg(type, text) {
+				const msg = this.querySelector(".fa-msg");
+				if (!msg) return;
+				msg.textContent = text;
+				msg.classList.remove("hidden");
+				msg.classList.toggle("bg-red-50", type === "error");
+				msg.classList.toggle("dark:bg-red-900/30", type === "error");
+				msg.classList.toggle("text-red-600", type === "error");
+				msg.classList.toggle("dark:text-red-300", type === "error");
+				msg.classList.toggle("border", type === "error");
+				msg.classList.toggle("border-red-200", type === "error");
+				msg.classList.toggle("dark:border-red-800", type === "error");
+			}
+
+			hideMsg() {
+				const msg = this.querySelector(".fa-msg");
+				if (!msg) return;
+				msg.classList.add("hidden");
+				msg.textContent = "";
+			}
+
+			isHttpUrl(value) {
+				try {
+					const u = new URL(value);
+					return u.protocol === "http:" || u.protocol === "https:";
+				} catch {
+					return false;
+				}
+			}
+
+			isEmail(value) {
+				return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+			}
+
+			parseTags(raw) {
+				if (!raw) return [];
+				return raw
+					.split(/[,，、]/)
+					.map((t) => t.trim())
+					.filter(Boolean)
+					.slice(0, 5);
+			}
+
+			validate(form) {
+				const data = new FormData(form);
+				const title = (data.get("title") || "").toString().trim();
+				const siteurl = (data.get("siteurl") || "").toString().trim();
+				const imgurl = (data.get("imgurl") || "").toString().trim();
+				const desc = (data.get("desc") || "").toString().trim();
+				const email = (data.get("email") || "").toString().trim();
+				const reason = (data.get("reason") || "").toString().trim();
+
+				if (!title) return { error: "请填写站点名称" };
+				if (title.length > 50) return { error: "站点名称不能超过 50 字" };
+				if (!siteurl) return { error: "请填写站点链接" };
+				if (!this.isHttpUrl(siteurl)) {
+					return { error: "站点链接需为有效的 http/https 地址" };
+				}
+				if (!imgurl) return { error: "请填写头像链接" };
+				if (!this.isHttpUrl(imgurl)) {
+					return { error: "头像链接需为有效的 http/https 地址" };
+				}
+				if (!desc) return { error: "请填写站点描述" };
+				if (desc.length > 100) return { error: "站点描述不能超过 100 字" };
+				if (email && !this.isEmail(email)) {
+					return { error: "邮箱格式不正确" };
+				}
+				if (reason.length > 200) return { error: "申请理由不能超过 200 字" };
+
+				return {
+					body: {
+						title,
+						siteurl,
+						imgurl,
+						desc,
+						tags: this.parseTags((data.get("tags") || "").toString()),
+						email: email || undefined,
+						reason: reason || undefined,
+						nickname: (data.get("nickname") || "").toString(),
+					},
+				};
+			}
+
+			setBusy(form, busy) {
+				const btn = form.querySelector(".fa-submit");
+				const spinner = form.querySelector(".fa-spinner");
+				const text = form.querySelector(".fa-submit-text");
+				if (btn) btn.disabled = busy;
+				if (spinner) spinner.classList.toggle("hidden", !busy);
+				if (text) text.textContent = busy ? "提交中..." : "提交申请";
+			}
+
+			async handleSubmit(form) {
+				if (form.dataset.faBusy === "1") return;
+				this.hideMsg();
+
+				const result = this.validate(form);
+				if (result.error) {
+					this.showMsg("error", result.error);
+					return;
+				}
+
+				// 蜜罐命中：假装成功，不发请求
+				if (result.body.nickname) {
+					this.showSuccess(form);
+					return;
+				}
+
+				form.dataset.faBusy = "1";
+				this.setBusy(form, true);
+
+				try {
+					const res = await fetch(applyApi, {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify(result.body),
+					});
+					let payload = null;
+					try {
+						payload = await res.json();
+					} catch {
+						payload = null;
+					}
+
+					if (res.ok && payload && payload.ok) {
+						this.showSuccess(form);
+						return;
+					}
+
+					const errMsg =
+						(payload && payload.error) ||
+						(res.status >= 400 && res.status < 500
+							? "提交被拒绝，请检查填写内容"
+							: "提交失败，请稍后重试");
+					this.showMsg("error", errMsg);
+				} catch {
+					this.showMsg("error", "网络异常，请稍后重试");
+				} finally {
+					form.dataset.faBusy = "0";
+					this.setBusy(form, false);
+				}
+			}
+
+			showSuccess(form) {
+				form.classList.add("hidden");
+				const success = this.querySelector(".fa-success");
+				if (success) success.classList.remove("hidden");
+			}
+		}
+		customElements.define("friend-apply-form", FriendApplyForm);
+	}
+</script>
+
+<style>
+	/* 蜜罐：非 display:none 的视觉隐藏，仍不可见且不可聚焦 */
+	.fa-hp {
+		position: absolute;
+		left: -9999px;
+		top: auto;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+	}
+</style>
