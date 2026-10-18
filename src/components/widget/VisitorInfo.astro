@@ -53,6 +53,108 @@ const showTitle = widgetConfig?.showTitle !== false;
     '</div>';
   }
 
+  var ALERT_TAB_BASE = 'weather-alert-tab text-xs px-2.5 py-1 rounded-full cursor-pointer transition-colors whitespace-nowrap';
+  var ALERT_TAB_ACTIVE = 'bg-(--primary) text-white';
+  var ALERT_TAB_IDLE = 'bg-neutral-100/70 dark:bg-neutral-800/70 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200/80 dark:hover:bg-neutral-700/70';
+
+  function alertTabLabel(alert) {
+    return alert.title || [alert.type, alert.level].filter(Boolean).join('') || '预警';
+  }
+
+  function buildGuidanceHtml(guidance) {
+    if (!Array.isArray(guidance)) return '';
+    var listItems = [];
+    var tagItems = [];
+    guidance.forEach(function(item) {
+      var s = item == null ? '' : String(item).trim();
+      if (!s) return;
+      // 带编号的长句作为列表条目，短词作为标签
+      if (/^\d+[、.．]/.test(s) || s.length > 10) listItems.push(s);
+      else tagItems.push(s);
+    });
+    if (!listItems.length && !tagItems.length) return '';
+    var html = '<div class="weather-alert-guide mt-1 pt-2 border-t border-neutral-200/70 dark:border-neutral-700/50">' +
+      '<div class="text-xs font-medium text-neutral-600 dark:text-neutral-300 mb-1.5">🛡️ 防御指南</div>';
+    if (listItems.length) {
+      html += '<div class="flex flex-col gap-1 text-xs text-neutral-500 dark:text-neutral-400">';
+      listItems.forEach(function(s) {
+        html += '<div>' + escapeHtml(s) + '</div>';
+      });
+      html += '</div>';
+    }
+    if (tagItems.length) {
+      html += '<div class="flex flex-wrap gap-1.5 mt-1.5">';
+      tagItems.forEach(function(s) {
+        html += '<span class="rounded-full bg-neutral-100/80 dark:bg-neutral-800/80 px-2 py-0.5 text-[11px] text-neutral-600 dark:text-neutral-300">' + escapeHtml(s) + '</span>';
+      });
+      html += '</div>';
+    }
+    html += '</div>';
+    return html;
+  }
+
+  function buildAlertBody(alert, index, single) {
+    var html = '<div class="weather-alert-body flex flex-col gap-1.5" data-index="' + index + '">';
+    var title = alert.title == null ? '' : String(alert.title).trim();
+    if (single && title) {
+      html += '<span class="text-xs font-medium text-(--primary)">📢 ' + escapeHtml(title) + '</span>';
+    }
+    var text = alert.text == null ? '' : String(alert.text).trim();
+    if (text) {
+      html += '<div class="weather-alert-text text-xs text-neutral-500 dark:text-neutral-400 whitespace-pre-wrap break-words line-clamp-2">' + escapeHtml(text) + '</div>';
+    }
+    html += buildGuidanceHtml(alert.guidance);
+    html += '<button type="button" class="weather-alert-toggle hidden self-start text-xs font-medium text-(--primary) hover:underline cursor-pointer">展开</button>';
+    html += '</div>';
+    return html;
+  }
+
+  function setupAlertBody(body) {
+    var textEl = body.querySelector('.weather-alert-text');
+    var guideEl = body.querySelector('.weather-alert-guide');
+    var btn = body.querySelector('.weather-alert-toggle');
+    if (!btn) return;
+
+    // 文字被截断（超出两行）或有防御指南时才需要展开按钮
+    var textClamped = false;
+    if (textEl) {
+      var clampedHeight = textEl.clientHeight;
+      textEl.classList.remove('line-clamp-2');
+      var fullHeight = Math.max(textEl.scrollHeight, textEl.clientHeight);
+      textEl.classList.add('line-clamp-2');
+      textClamped = fullHeight > clampedHeight + 1;
+    }
+    if (!textClamped && !guideEl) return;
+
+    if (guideEl) guideEl.classList.add('hidden');
+    btn.classList.remove('hidden');
+    btn.addEventListener('click', function() {
+      var expanded = body.classList.toggle('is-expanded');
+      if (textEl) textEl.classList.toggle('line-clamp-2', !expanded);
+      if (guideEl) guideEl.classList.toggle('hidden', !expanded);
+      btn.textContent = expanded ? '收起' : '展开';
+    });
+  }
+
+  function setupAlertTabs(container) {
+    var tabs = container.querySelectorAll('.weather-alert-tab');
+    if (!tabs.length) return;
+    var bodies = container.querySelectorAll('.weather-alert-body');
+    function activate(activeIndex) {
+      tabs.forEach(function(tab, i) {
+        tab.className = ALERT_TAB_BASE + (i === activeIndex ? ' ' + ALERT_TAB_ACTIVE : ' ' + ALERT_TAB_IDLE);
+        tab.setAttribute('aria-selected', i === activeIndex ? 'true' : 'false');
+      });
+      bodies.forEach(function(body, i) {
+        body.classList.toggle('hidden', i !== activeIndex);
+      });
+    }
+    tabs.forEach(function(tab, i) {
+      tab.addEventListener('click', function() { activate(i); });
+    });
+    activate(0);
+  }
+
   async function loadVisitorInfo() {
     var containers = document.querySelectorAll('.visitor-info-content');
 
@@ -73,11 +175,21 @@ const showTitle = widgetConfig?.showTitle !== false;
       var tempText = data.temperature != null ? data.temperature + '°' : '--';
       var windText = (data.wind_direction || '') + (data.wind_power || '');
       var alertsHtml = '';
-      if (Array.isArray(data.alerts) && data.alerts.length > 0) {
-        var alert = data.alerts[0];
-        alertsHtml = '<div class="rounded-xl bg-neutral-100/60 dark:bg-neutral-800/50 px-3 py-2.5 flex flex-col gap-1">' +
-          '<span class="text-xs font-medium text-(--primary)">📢 ' + escapeHtml(alert.title) + '</span>' +
-          '<span class="text-xs text-neutral-500 dark:text-neutral-400 line-clamp-2">' + escapeHtml(alert.text) + '</span>' +
+      var alerts = Array.isArray(data.alerts) ? data.alerts.filter(function(a) { return a && typeof a === 'object'; }) : [];
+      if (alerts.length > 0) {
+        var single = alerts.length === 1;
+        var tabsHtml = '';
+        if (!single) {
+          tabsHtml = '<div class="weather-alert-tabs flex flex-wrap gap-1.5" role="tablist">';
+          alerts.forEach(function(a, i) {
+            tabsHtml += '<button type="button" role="tab" aria-selected="false" data-index="' + i + '" ' +
+              'class="' + ALERT_TAB_BASE + ' ' + ALERT_TAB_IDLE + '">' + escapeHtml(alertTabLabel(a)) + '</button>';
+          });
+          tabsHtml += '</div>';
+        }
+        var bodiesHtml = alerts.map(function(a, i) { return buildAlertBody(a, i, single); }).join('');
+        alertsHtml = '<div class="rounded-xl bg-neutral-100/60 dark:bg-neutral-800/50 px-3 py-2.5 flex flex-col gap-2">' +
+          tabsHtml + bodiesHtml +
         '</div>';
       }
 
@@ -103,6 +215,11 @@ const showTitle = widgetConfig?.showTitle !== false;
       '</div>';
 
       container.setAttribute('data-loaded', 'true');
+      // 先在全部 body 可见时测量文字高度，再用 tabs 隐藏非活动项
+      container.querySelectorAll('.weather-alert-body').forEach(function(body) {
+        setupAlertBody(body);
+      });
+      setupAlertTabs(container);
 
     } catch (error) {
       console.error('获取访客信息失败:', error);
