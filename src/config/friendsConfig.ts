@@ -152,6 +152,15 @@ export const friendsConfig: FriendLink[] = [
 		enabled: true
 	},
 	{
+		title: "平昊阳's Blog",
+		desc: "在心里种花，人生才不会荒芜！",
+		siteurl: "https://pinghaoyang.com.cn",
+		imgurl: "https://pinghaoyang.com.cn/avatar.webp",
+		tags: ["Blog"],
+		weight: 100,
+		enabled: true
+	},
+	{
 		title: "Firefly Docs",
 		imgurl: "https://docs-firefly.cuteleaf.cn/logo.png",
 		desc: "Firefly主题模板文档",
