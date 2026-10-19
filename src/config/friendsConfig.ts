@@ -172,6 +172,14 @@ export const friendsConfig: FriendLink[] = [
 		weight: 1,
 		enabled: true,
 	},
+	{
+		title: "张萌萌",
+		imgurl: "https://blog.nw177.cn/assets/avatar.webp",
+		desc: "春风得意马蹄疾 一日看尽长安花",
+		siteurl: "https://blog.nw177.cn",
+		weight: 1,
+		enabled: true,
+	},
 	/* friend-autogen-insert-above */
 ];
 
