@@ -180,6 +180,14 @@ export const friendsConfig: FriendLink[] = [
 		weight: 1,
 		enabled: true,
 	},
+	{
+		title: "神楽闇の小屋",
+		imgurl: "https://blog.kagurayami.top/assets/site/avatar.webp",
+		desc: "雨记得天空忘记说的话。",
+		siteurl: "https://blog.kagurayami.top/zh-cn/",
+		weight: 1,
+		enabled: true,
+	},
 	/* friend-autogen-insert-above */
 ];
 
