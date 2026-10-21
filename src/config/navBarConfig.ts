@@ -79,6 +79,9 @@ const getDynamicNavBarConfig = (): NavBarConfig => {
 
 			// MyAnimeList
 			LinkPresets.MAL,
+
+			// 站点统计
+			LinkPresets.Analytics,
 		],
 	});
 
@@ -248,6 +251,12 @@ export const LinkPresets: Record<string, NavBarLink> = {
 		url: "/myanimelist/",
 		icon: "material-symbols:menu-book",
 		pageKey: "mal",
+	},
+	Analytics: {
+		name: "站点统计",
+		url: "/analytics/",
+		icon: "material-symbols:monitoring",
+		pageKey: "analytics",
 	},
 	Sponsor: {
 		name: "打赏",

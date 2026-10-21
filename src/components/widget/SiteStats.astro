@@ -70,8 +70,16 @@ const lastPostDate = lastActivityDate ? lastActivityDate.toISOString() : null;
 
 const todayText = i18n(I18nKey.today);
 
-// Umami 公开分享链接：SiteStats 经 /api/share/<slug> 只读拉取总浏览量/访客数
-const umamiShareUrl = analyticsConfig.umamiAnalytics?.shareUrl || "";
+// Umami 公开分享：shareId + shareApiBase 派生 API 地址（SiteStats 经 /api/share/<id> 只读拉数）
+const umamiShareId = analyticsConfig.umamiAnalytics?.shareId || "";
+const umamiShareApiBase = (
+	analyticsConfig.umamiAnalytics?.shareApiBase || ""
+).replace(/\/+$/, "");
+// 云端历史累计（迁移至自建前的精确值，展示层 = 实时计数 + 此偏移）
+const umamiHistoricalStats = {
+	pageviews: analyticsConfig.umamiAnalytics?.historicalStats?.pageviews ?? 0,
+	visitors: analyticsConfig.umamiAnalytics?.historicalStats?.visitors ?? 0,
+};
 
 const stats = [
 	{
@@ -187,7 +195,7 @@ const stats = [
   </div>
 </WidgetLayout>
 
-<script is:inline define:vars={{ siteStartDate, lastPostDate, todayText, umamiShareUrl }}>
+<script is:inline define:vars={{ siteStartDate, lastPostDate, todayText, umamiShareId, umamiShareApiBase, umamiHistoricalStats }}>
   function updateDynamicStats() {
     const today = new Date();
 
@@ -225,15 +233,12 @@ const stats = [
   }
 
   // 通过 Umami 公开分享接口拉取站点统计（只读，无需管理员 token）：
-  //   GET <origin>/api/share/<slug>            -> { websiteId, token }
+  //   GET <origin>/api/share/<id>              -> { websiteId, token }
   //   GET <origin>/api/websites/<id>/stats     -> 需 x-umami-share-token 头
   // 拉取失败就停留在占位符 "-"，不做隐藏（2026-10-21 用户指定）。
-  // 云端历史累计（Umami Cloud，2026-08-14 ~ 2026-10-21 迁移至自建前的精确值，
-  // 展示层 = 自建新计数 + 此偏移，实现数字无缝续接；换统计方案时改这里）
-  const UMAMI_HISTORY = { pageviews: 5605, visitors: 774 };
 
   function setUmamiValue(key, value) {
-    const total = (Number(value) || 0) + (UMAMI_HISTORY[key] || 0);
+    const total = (Number(value) || 0) + (Number(umamiHistoricalStats[key]) || 0);
     const text = total.toLocaleString();
     document.querySelectorAll(`[data-umami-key="${key}"]`).forEach((element) => {
       element.textContent = text;
@@ -246,12 +251,10 @@ const stats = [
   }
 
   async function fetchUmamiStats() {
-    if (!umamiShareUrl) return;
-    const slug = umamiShareUrl.split("/share/")[1];
-    if (!slug) return;
-    const apiBase = new URL(umamiShareUrl).origin + "/api";
+    if (!umamiShareId || !umamiShareApiBase) return;
+    const apiBase = umamiShareApiBase.replace(/\/+$/, "") + "/api";
     try {
-      const shareRes = await fetch(`${apiBase}/share/${encodeURIComponent(slug)}`);
+      const shareRes = await fetch(`${apiBase}/share/${encodeURIComponent(umamiShareId)}`);
       if (!shareRes.ok) throw new Error(`share ${shareRes.status}`);
       const share = await shareRes.json();
       const endAt = Date.now();

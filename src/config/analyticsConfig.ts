@@ -11,8 +11,19 @@ export const analyticsConfig: AnalyticsConfig = {
 		websiteId: "b7133f9c-dd00-4788-bd60-070691faac3d",
 		// Umami JS地址，支持使用自建
 		scriptUrl: "https://umami.mstzuomu.space/script.js",
-		// 公开分享链接（只读，SiteStats 组件用它经 /api/share/<slug> 拉取站点统计）
+		// 公开分享链接（兼容保留；新逻辑优先用 shareId + shareApiBase 拼接）
 		shareUrl: "https://umami.mstzuomu.space/share/JU1ln89R70HYBxnC",
+		// Umami 公开分享 ID（/share/<id> 路径段）
+		shareId: "JU1ln89R70HYBxnC",
+		// Umami 实例 origin（公开分享 API 基址）
+		shareApiBase: "https://umami.mstzuomu.space",
+		// 云端历史累计（Umami Cloud，2026-08-14 ~ 2026-10-21 迁移至自建前的精确值）
+		// 云端历史已于 2026-10-21 全量迁入自建库（session/website_event 合成记录），
+		// 展示层偏移归零；如需回滚迁移，把这里改回 { visitors: 774, pageviews: 5605 }
+		historicalStats: {
+			visitors: 0,
+			pageviews: 0,
+		},
 		// Umami 会话回放脚本地址，支持使用自建
 		replaysScriptUrl: "https://cloud.umami.is/recorder.js",
 		// 是否追踪出站链接
