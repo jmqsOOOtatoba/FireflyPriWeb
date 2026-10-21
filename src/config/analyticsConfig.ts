@@ -5,12 +5,14 @@ export const analyticsConfig: AnalyticsConfig = {
 	googleAnalyticsId: "",
 	// Microsoft Clarity ID
 	microsoftClarityId: "",
-	// Umami 统计配置
+	// Umami 统计配置（2026-10-21 起为自建实例 umami.mstzuomu.space，Docker 部署于备案服务器）
 	umamiAnalytics: {
-		// Umami Website ID
-		websiteId: "78431b3f-f005-4261-ac00-1aa7d0cd4c53",
+		// Umami Website ID（自建实例中的站点 ID）
+		websiteId: "b7133f9c-dd00-4788-bd60-070691faac3d",
 		// Umami JS地址，支持使用自建
-		scriptUrl: "https://cloud.umami.is/script.js",
+		scriptUrl: "https://umami.mstzuomu.space/script.js",
+		// 公开分享链接（只读，SiteStats 组件用它经 /api/share/<slug> 拉取站点统计）
+		shareUrl: "https://umami.mstzuomu.space/share/JU1ln89R70HYBxnC",
 		// Umami 会话回放脚本地址，支持使用自建
 		replaysScriptUrl: "https://cloud.umami.is/recorder.js",
 		// 是否追踪出站链接

@@ -1,7 +1,7 @@
 ---
 import { Icon } from "astro-icon/components";
 import WidgetLayout from "@/components/common/WidgetLayout.astro";
-import { siteConfig } from "@/config";
+import { analyticsConfig, siteConfig } from "@/config";
 import I18nKey from "@/i18n/i18nKey";
 import { i18n } from "@/i18n/translation";
 import type { WidgetComponentConfig } from "@/types/config";
@@ -69,6 +69,9 @@ const lastActivityDate = posts.reduce<Date | null>((latest, post) => {
 const lastPostDate = lastActivityDate ? lastActivityDate.toISOString() : null;
 
 const todayText = i18n(I18nKey.today);
+
+// Umami 公开分享链接：SiteStats 经 /api/share/<slug> 只读拉取总浏览量/访客数
+const umamiShareUrl = analyticsConfig.umamiAnalytics?.shareUrl || "";
 
 const stats = [
 	{
@@ -141,8 +144,8 @@ const stats = [
     ))}
 
 
-<!-- 不蒜子统计：总浏览量 -->
-<div class="flex items-center justify-between px-3 py-1.5" data-busuanzi-row>
+<!-- Umami 统计：总浏览量 -->
+<div class="flex items-center justify-between px-3 py-1.5">
     <div class="flex items-center gap-2.5">
         <div class="text-(--primary) text-xl">
             <Icon is:inline name="material-symbols:visibility-outline" />
@@ -153,13 +156,13 @@ const stats = [
     </div>
     <div class="flex items-center">
         <span class="text-base font-bold text-neutral-900 dark:text-neutral-100">
-                        <span id="busuanzi_site_pv" data-busuanzi-key="site_pv">-</span>
+                        <span data-umami-key="pageviews">-</span>
         </span>
     </div>
 </div>
 
-<!-- 不蒜子统计：访客数 -->
-<div class="flex items-center justify-between px-3 py-1.5" data-busuanzi-row>
+<!-- Umami 统计：访客数 -->
+<div class="flex items-center justify-between px-3 py-1.5">
     <div class="flex items-center gap-2.5">
         <div class="text-(--primary) text-xl">
             <Icon name="material-symbols:group" />
@@ -170,7 +173,7 @@ const stats = [
     </div>
     <div class="flex items-center">
         <span class="text-base font-bold text-neutral-900 dark:text-neutral-100">
-                       <span id="busuanzi_site_uv" data-busuanzi-key="site_uv">-</span>
+                       <span data-umami-key="visitors">-</span>
         </span>
     </div>
 </div>
@@ -184,7 +187,7 @@ const stats = [
   </div>
 </WidgetLayout>
 
-<script is:inline define:vars={{ siteStartDate, lastPostDate, todayText }}>
+<script is:inline define:vars={{ siteStartDate, lastPostDate, todayText, umamiShareUrl }}>
   function updateDynamicStats() {
     const today = new Date();
 
@@ -221,107 +224,62 @@ const stats = [
     }
   }
 
-  // 不蒜子 v3 换库导致历史计数清零（2026-10 迁移），站内续接迁移前的累计值展示。
-  // 数值为用户口述约数（PV≈2000+、UV≈1000+），想调整直接改这里。
-  const BUSUANZI_OFFSETS = { site_pv: 2000, site_uv: 1000 };
+  // 通过 Umami 公开分享接口拉取站点统计（只读，无需管理员 token）：
+  //   GET <origin>/api/share/<slug>            -> { websiteId, token }
+  //   GET <origin>/api/websites/<id>/stats     -> 需 x-umami-share-token 头
+  // 拉取失败就停留在占位符 "-"，不做隐藏（2026-10-21 用户指定）。
+  // 云端历史累计（Umami Cloud，2026-08-14 ~ 2026-10-21 迁移至自建前的精确值，
+  // 展示层 = 自建新计数 + 此偏移，实现数字无缝续接；换统计方案时改这里）
+  const UMAMI_HISTORY = { pageviews: 5605, visitors: 774 };
 
-  function withOffset(raw, offset) {
-    const n = Number(raw);
-    return Number.isFinite(n) ? String(n + offset) : raw;
-  }
-
-  // 不蒜子 v3 官方脚本会 querySelectorAll 按 id 批量写入所有同 id 元素（原始计数），
-  // 此处把原始值加历史偏移后镜像到全部 data-busuanzi-key 元素。
-  // data-busuanzi-raw 缓存最近一次识别到的原始值：只有当元素文本 ≠ 按该原始值
-  // 算出的展示值时，才认定不蒜子又写入了新原始值——否则偏移后的展示值会被
-  // 误判为新原始值而反复叠加。
-  function syncBusuanziValues() {
-    ["site_pv", "site_uv"].forEach((key) => {
-      const source = document.getElementById(`busuanzi_${key}`);
-      if (!source) return;
-      const current = source.textContent.trim();
-      if (!/^\d/.test(current)) return; // 占位符 "-"、拒绝文案等非数字不处理
-      const offset = BUSUANZI_OFFSETS[key] || 0;
-      const lastRaw = source.getAttribute("data-busuanzi-raw");
-      if (lastRaw === null || current !== withOffset(lastRaw, offset)) {
-        source.setAttribute("data-busuanzi-raw", current);
-      }
-      const value = withOffset(source.getAttribute("data-busuanzi-raw"), offset);
-      document.querySelectorAll(`[data-busuanzi-key="${key}"]`).forEach((element) => {
-        if (element.textContent !== value) {
-          element.textContent = value;
-        }
-      });
+  function setUmamiValue(key, value) {
+    const total = (Number(value) || 0) + (UMAMI_HISTORY[key] || 0);
+    const text = total.toLocaleString();
+    document.querySelectorAll(`[data-umami-key="${key}"]`).forEach((element) => {
+      element.textContent = text;
     });
   }
 
-  function busuanziValuesFilled() {
-    const element = document.getElementById("busuanzi_site_pv");
-    const value = element ? element.textContent.trim() : "";
-    // 服务端拒绝来源时会把"域名/IP已被禁用"等文案当值写入，非数字一律视为未填充
-    return /^\d/.test(value);
+  function umamiValuesFilled() {
+    const el = document.querySelector('[data-umami-key="pageviews"]');
+    return !!el && /^\d/.test(el.textContent.trim());
   }
 
-  function hideBusuanziRows() {
-    document.querySelectorAll("[data-busuanzi-row]").forEach((row) => {
-      row.style.display = "none";
-    });
-  }
-
-  // 不蒜子服务偶发超时/失败时页面会停留在占位符 "-"。
-  // 这里轮询数值，未写入则重置防重锁后重新注入脚本重发请求，全部重试失败后隐藏统计行。
-  function initBusuanziRetry() {
-    const delays = [4000, 8000, 15000];
-    let attempt = 0;
-    const schedule = () => {
-      if (attempt >= delays.length) {
-        // 给最后一次重试留出响应时间，仍无值才隐藏
-        setTimeout(() => {
-          if (!busuanziValuesFilled()) hideBusuanziRows();
-        }, 6000);
-        return;
-      }
-      const delay = delays[attempt++];
-      setTimeout(() => {
-        if (busuanziValuesFilled()) return;
-        document
-          .querySelectorAll('script[src*="busuanzi.min.js"]')
-          .forEach((old) => old.remove());
-        // v3 脚本有 window.busuanziRequestSent 一次性防重锁，不重置则重注入不会发请求
-        window.busuanziRequestSent = false;
-        const script = document.createElement("script");
-        script.src = `//cdn.busuanzi.cc/busuanzi/3.6.9/busuanzi.min.js?retry=${Date.now()}`;
-        script.async = true;
-        document.head.appendChild(script);
-        schedule();
-      }, delay);
-    };
-    // 等 DOM 解析完再起算，避免正式注入（同样挂在 DOMContentLoaded）还没执行就误判失败
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", schedule, { once: true });
-    } else {
-      schedule();
+  async function fetchUmamiStats() {
+    if (!umamiShareUrl) return;
+    const slug = umamiShareUrl.split("/share/")[1];
+    if (!slug) return;
+    const apiBase = new URL(umamiShareUrl).origin + "/api";
+    try {
+      const shareRes = await fetch(`${apiBase}/share/${encodeURIComponent(slug)}`);
+      if (!shareRes.ok) throw new Error(`share ${shareRes.status}`);
+      const share = await shareRes.json();
+      const endAt = Date.now();
+      const statsRes = await fetch(
+        `${apiBase}/websites/${share.websiteId}/stats?startAt=0&endAt=${endAt}`,
+        {
+          headers: {
+            "x-umami-share-token": share.token,
+            "x-umami-share-context": "1",
+          },
+        },
+      );
+      if (!statsRes.ok) throw new Error(`stats ${statsRes.status}`);
+      const stats = await statsRes.json();
+      setUmamiValue("pageviews", stats.pageviews?.value ?? 0);
+      setUmamiValue("visitors", stats.visitors?.value ?? 0);
+    } catch (error) {
+      console.error("[SiteStats] Umami 拉取失败:", error);
     }
-  }
-
-  // 不合规来源（localhost/裸 IP 等）：每份实例脚本执行时都幂等隐藏本实例的行
-  if (window.__busuanziAllowed === false) {
-    hideBusuanziRows();
   }
 
   // 页面加载时更新
   updateDynamicStats();
-  syncBusuanziValues();
-
 
   // 页面切换时重新更新
   document.addEventListener("swup:contentReplaced", () => {
     setTimeout(() => {
       updateDynamicStats();
-      // 重新触发不蒜子统计
-      if (typeof busuanzi !== 'undefined' && busuanzi.pv) {
-        busuanzi.pv();
-      }
     }, 100);
   });
 
@@ -333,20 +291,11 @@ const stats = [
       setTimeout(updateDynamicStats, 100);
     });
 
-    // 不蒜子数值异步写入，监听第一个元素的变化并同步到其余实例（仅注册一次）
-    ["site_pv", "site_uv"].forEach((key) => {
-      const source = document.getElementById(`busuanzi_${key}`);
-      if (!source) return;
-      new MutationObserver(syncBusuanziValues).observe(source, {
-        childList: true,
-        characterData: true,
-        subtree: true,
-      });
-    });
-
-    if (window.__busuanziAllowed !== false) {
-      initBusuanziRetry();
-    }
+    fetchUmamiStats();
+    // 网络抖动兜底：4 秒后仍无数据就再试一次
+    setTimeout(() => {
+      if (!umamiValuesFilled()) fetchUmamiStats();
+    }, 4000);
   }
 </script>
 
