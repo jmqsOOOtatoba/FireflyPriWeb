@@ -71,7 +71,7 @@ const sourceLabel = shareApiBase.includes("cloud.umami.is")
 		</header>
 
 		<section class="analytics-summary" aria-label="站点概览">
-			<article class="analytics-summary-card analytics-summary-card--blue">
+			<article class="analytics-summary-card analytics-summary-card--blue card-base">
 				<div class="analytics-summary-card__topline">
 					<span class="analytics-summary-card__label">ALL-TIME</span>
 					<Icon is:inline name="material-symbols:group-rounded" aria-hidden="true" />
@@ -80,7 +80,7 @@ const sourceLabel = shareApiBase.includes("cloud.umami.is")
 				<span>累计访客</span>
 				<small>含迁移前历史累计</small>
 			</article>
-			<article class="analytics-summary-card analytics-summary-card--mint">
+			<article class="analytics-summary-card analytics-summary-card--mint card-base">
 				<div class="analytics-summary-card__topline">
 					<span class="analytics-summary-card__label">ALL-TIME</span>
 					<Icon is:inline name="material-symbols:visibility-rounded" aria-hidden="true" />
@@ -89,7 +89,7 @@ const sourceLabel = shareApiBase.includes("cloud.umami.is")
 				<span>累计浏览</span>
 				<small>含迁移前历史累计</small>
 			</article>
-			<article class="analytics-summary-card analytics-summary-card--gold">
+			<article class="analytics-summary-card analytics-summary-card--gold card-base">
 				<div class="analytics-summary-card__topline">
 					<span class="analytics-summary-card__label">TODAY</span>
 					<Icon is:inline name="material-symbols:person-search-rounded" aria-hidden="true" />
@@ -98,7 +98,7 @@ const sourceLabel = shareApiBase.includes("cloud.umami.is")
 				<span>今日访客</span>
 				<small>北京时间 00:00 起</small>
 			</article>
-			<article class="analytics-summary-card analytics-summary-card--violet">
+			<article class="analytics-summary-card analytics-summary-card--violet card-base">
 				<div class="analytics-summary-card__topline">
 					<span class="analytics-summary-card__label">TODAY</span>
 					<Icon is:inline name="material-symbols:trending-up-rounded" aria-hidden="true" />
@@ -2919,9 +2919,12 @@ const sourceLabel = shareApiBase.includes("cloud.umami.is")
 		--analytics-mint: #1fae9a;
 		--analytics-gold: #e5a83c;
 		--analytics-violet: #866de8;
-		--analytics-text: color-mix(in oklab, var(--text-color) 92%, transparent);
-		--analytics-text-muted: color-mix(in oklab, var(--text-color) 58%, transparent);
-		--analytics-text-faint: color-mix(in oklab, var(--text-color) 38%, transparent);
+		/* 主题没有 --text-color 变量（幽灵变量会让 color-mix 失效、
+		   文字色退化为继承值且不随暗色翻转），这里按全站
+		   text-black/90 ↔ dark:text-white/90 的体系写实值 */
+		--analytics-text: rgb(0 0 0 / 0.9);
+		--analytics-text-muted: rgb(0 0 0 / 0.58);
+		--analytics-text-faint: rgb(0 0 0 / 0.38);
 		--analytics-border: color-mix(in oklab, var(--line-divider) 88%, transparent);
 		width: 100%;
 		position: relative;
@@ -2934,6 +2937,9 @@ const sourceLabel = shareApiBase.includes("cloud.umami.is")
 		--analytics-mint: #55d4bf;
 		--analytics-gold: #f3c46c;
 		--analytics-violet: #b0a0ff;
+		--analytics-text: rgb(255 255 255 / 0.9);
+		--analytics-text-muted: rgb(255 255 255 / 0.58);
+		--analytics-text-faint: rgb(255 255 255 / 0.38);
 	}
 
 	.analytics-hero {
@@ -2941,15 +2947,8 @@ const sourceLabel = shareApiBase.includes("cloud.umami.is")
 		isolation: isolate;
 		overflow: hidden;
 		padding: clamp(1rem, 2vw, 1.5rem);
-		border: 1px solid var(--analytics-border);
-		background:
-			linear-gradient(135deg, color-mix(in oklab, var(--analytics-blue) 10%, var(--card-bg)), var(--card-bg) 58%) !important;
-		box-shadow: 0 1.3rem 3.5rem rgb(35 77 130 / 0.08), inset 0 1px 0 rgb(255 255 255 / 0.58);
-	}
-
-	:root.dark .analytics-hero {
-		background:
-			linear-gradient(135deg, color-mix(in oklab, var(--analytics-blue) 14%, #111a25), #111a25 58%) !important;
+		/* 卡片本体外观交给 card-base；此处仅叠加装饰渐变，不覆盖 background-color */
+		background-image: linear-gradient(135deg, color-mix(in oklab, var(--analytics-blue) 8%, transparent), transparent 58%);
 	}
 
 	.analytics-hero::before {
@@ -3107,28 +3106,8 @@ const sourceLabel = shareApiBase.includes("cloud.umami.is")
 	.analytics-summary-card {
 		position: relative;
 		min-height: 7.3rem;
-		overflow: hidden;
 		padding: 0.82rem 0.95rem;
-		border: 1px solid color-mix(in oklab, var(--analytics-border) 82%, transparent);
-		border-radius: calc(var(--radius-large) - 0.2rem);
-		background: color-mix(in oklab, var(--card-bg) 46%, transparent);
-		box-shadow: 0 0.6rem 1.45rem color-mix(in oklab, var(--analytics-border) 52%, transparent), inset 0 1px 0 rgb(255 255 255 / 0.62);
 		isolation: isolate;
-	}
-
-	.analytics-summary-card::before {
-		content: "";
-		position: absolute;
-		inset: 0;
-		z-index: 1;
-		background: linear-gradient(
-			90deg,
-			color-mix(in oklab, var(--card-bg) 58%, transparent) 0%,
-			color-mix(in oklab, var(--card-bg) 28%, transparent) 34%,
-			transparent 78%,
-			transparent 100%
-		);
-		pointer-events: none;
 	}
 
 	.analytics-summary-card::after {
@@ -3140,22 +3119,6 @@ const sourceLabel = shareApiBase.includes("cloud.umami.is")
 			radial-gradient(circle at 82% 48%, color-mix(in oklab, var(--summary-accent) 16%, transparent), transparent 42%);
 		opacity: 0.9;
 		pointer-events: none;
-	}
-
-	:root.dark .analytics-summary-card {
-		border-color: color-mix(in srgb, var(--summary-accent) 20%, var(--line-divider));
-		background: #111a25;
-		box-shadow: 0 0.55rem 1.2rem rgb(0 0 0 / 0.2), inset 0 1px 0 rgb(255 255 255 / 0.06);
-	}
-
-	:root.dark .analytics-summary-card::before {
-		background: linear-gradient(
-			90deg,
-			rgb(9 15 24 / 0.96) 0%,
-			rgb(9 15 24 / 0.84) 30%,
-			rgb(9 15 24 / 0.48) 62%,
-			rgb(9 15 24 / 0.2) 100%
-		);
 	}
 
 	.analytics-summary-card > * {
@@ -3176,7 +3139,7 @@ const sourceLabel = shareApiBase.includes("cloud.umami.is")
 	.analytics-summary-card > small { display: block; margin-top: 0.22rem; color: var(--analytics-text-faint); font-size: 0.62rem; }
 	.analytics-layout { display: grid; grid-template-columns: minmax(0, 1.8fr) minmax(16rem, 0.85fr); gap: 1rem; align-items: start; }
 	.analytics-main, .analytics-sidebar { display: grid; gap: 1rem; min-width: 0; }
-	.analytics-panel { border: 1px solid var(--analytics-border); background: var(--card-bg); box-shadow: 0 0.7rem 2rem rgb(35 77 130 / 0.045), inset 0 1px 0 rgb(255 255 255 / 0.5); }
+	/* .analytics-panel 本体外观由 card-base 提供，此处不再覆盖 border/background/shadow */
 	.analytics-panel__header { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; padding: 1.35rem 1.45rem 0; }
 	.analytics-panel__header--compact { align-items: center; padding-bottom: 0.15rem; }
 	.analytics-section-kicker { margin: 0 0 0.4rem; color: var(--analytics-blue); font-size: 0.63rem; font-weight: 800; }
@@ -3309,7 +3272,7 @@ const sourceLabel = shareApiBase.includes("cloud.umami.is")
 	.analytics-ranking__copy small, .analytics-ranking__item > strong small { color: var(--analytics-text-faint); font-size: 0.62rem; font-weight: 500; }
 	.analytics-ranking__link > strong { color: var(--analytics-text); font-size: 1rem; font-weight: 820; font-variant-numeric: tabular-nums; letter-spacing: -0.025em; }
 	.analytics-panel__footnote { margin: 0 1.45rem; padding: 0.9rem 0 1.2rem; color: var(--analytics-text-faint); font-size: 0.66rem; line-height: 1.55; }
-	.analytics-deployment { position: relative; overflow: hidden; background: var(--card-bg); }
+	.analytics-deployment { position: relative; overflow: hidden; }
 	.analytics-deployment__header { position: relative; isolation: isolate; min-height: 9.8rem; align-items: flex-start !important; padding: 1.55rem 1.45rem 0.9rem; }
 	.analytics-deployment__heading { position: relative; z-index: 1; max-width: 66%; }
 	.analytics-deployment .analytics-section-kicker { margin-bottom: 0.48rem; }
@@ -3408,7 +3371,7 @@ const sourceLabel = shareApiBase.includes("cloud.umami.is")
 	.analytics-empty-row { display: grid; gap: 0.25rem; padding: 1.1rem 0; color: var(--analytics-text-muted); font-size: 0.78rem; }
 	.analytics-empty-row small { color: var(--analytics-text-faint); font-size: 0.66rem; }
 
-	.analytics-footer { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 1.25rem; padding: 1.1rem 1.35rem; overflow: hidden; border: 1px solid var(--analytics-border); background: color-mix(in oklab, var(--card-bg) 82%, transparent); isolation: isolate; }
+	.analytics-footer { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 1.25rem; padding: 1.1rem 1.35rem; overflow: hidden; isolation: isolate; }
 	.analytics-footer::before { position: absolute; z-index: 0; top: 0; bottom: 0; left: 0; width: 42%; border-radius: inherit; background: linear-gradient(105deg, transparent 0%, rgb(255 255 255 / 0.04) 30%, rgb(255 255 255 / 0.42) 50%, rgb(255 255 255 / 0.04) 70%, transparent 100%); content: ""; opacity: var(--footer-sheen-opacity, 0); transform: translateX(var(--footer-sheen-offset, -145%)); pointer-events: none; }
 	.analytics-footer > * { position: relative; z-index: 1; }
 	.analytics-footer__eyebrow { display: block; margin-bottom: 0.32rem; color: var(--analytics-blue); font-size: 0.62rem; font-weight: 800; }
@@ -3420,9 +3383,8 @@ const sourceLabel = shareApiBase.includes("cloud.umami.is")
 		position: relative;
 		overflow: hidden;
 		container-type: inline-size;
-		background:
-			radial-gradient(circle at 88% 55%, color-mix(in oklab, var(--analytics-blue) 7%, transparent), transparent 24rem),
-			var(--card-bg);
+		/* 仅叠加装饰渐变，保留 card-base 的 background-color（含壁纸透明/边框模式） */
+		background-image: radial-gradient(circle at 88% 55%, color-mix(in oklab, var(--analytics-blue) 7%, transparent), transparent 24rem);
 	}
 
 	.analytics-activity__header { position: relative; z-index: 1; }
