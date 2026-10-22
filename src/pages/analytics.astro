@@ -1,11 +1,12 @@
 ---
 import { Icon } from "astro-icon/components";
-import { analyticsConfig } from "@/config";
+import { analyticsConfig, commentConfig } from "@/config";
 import MainGridLayout from "@/layouts/MainGridLayout.astro";
 
 export const prerender = true;
 
 const umamiAnalytics = analyticsConfig.umamiAnalytics;
+const twikooServer = commentConfig.type === "twikoo" ? (commentConfig.twikoo?.envId ?? "") : "";
 const shareId = umamiAnalytics?.shareId ?? "";
 const shareApiBase = umamiAnalytics?.shareApiBase ?? "";
 const publicShareUrl =
@@ -480,6 +481,39 @@ const sourceLabel = shareApiBase.includes("cloud.umami.is")
 					</a>
 				</section>
 			</aside>
+
+			<section
+				class="analytics-comments analytics-panel card-base"
+				aria-labelledby="analytics-comments-title"
+				data-recent-comments
+				data-comment-server={twikooServer}
+			>
+				<header class="analytics-panel__header analytics-comments__header">
+					<div>
+						<p class="analytics-section-kicker">COMMUNITY / RECENT NOTES</p>
+						<h2 id="analytics-comments-title">最近评论</h2>
+						<p class="analytics-panel__description">有人来过，也留下了几句值得被看见的话。</p>
+					</div>
+					<div class="analytics-comments__header-meta">
+						<span class="analytics-panel__badge">Twikoo · 最新 8 条</span>
+						<a href="/guestbook/">去留言板</a>
+					</div>
+				</header>
+				<ul class="analytics-comments__list" data-comments-list aria-live="polite">
+					{Array.from({ length: 6 }, () => (
+						<li class="analytics-comment analytics-comment--skeleton" data-comment-skeleton>
+							<span class="analytics-comment__avatar"></span>
+							<span class="analytics-comment__body">
+								<span class="analytics-comment__skeleton-line analytics-comment__skeleton-line--name"></span>
+								<span class="analytics-comment__skeleton-line analytics-comment__skeleton-line--meta"></span>
+								<span class="analytics-comment__skeleton-line analytics-comment__skeleton-line--text"></span>
+								<span class="analytics-comment__skeleton-line analytics-comment__skeleton-line--text-short"></span>
+							</span>
+						</li>
+					))}
+				</ul>
+				<p class="analytics-comments__status" data-comments-status role="status" aria-live="polite">正在读取最近评论…</p>
+			</section>
 		</div>
 
 		<footer class="analytics-footer card-base" data-analytics-footer>
@@ -561,6 +595,54 @@ const sourceLabel = shareApiBase.includes("cloud.umami.is")
 			return hours ? `约 ${days} 天 ${hours} 小时` : `约 ${days} 天`;
 		};
 		const readRows = (value) => (Array.isArray(value) ? value : value?.data || []);
+		// —— 最近评论（Twikoo）——
+		const cleanCommentText = (value, fallback = "留下了一条评论") => {
+			const text = String(value || "")
+				.replace(/<[^>]*>/gu, " ")
+				.replace(/&nbsp;/gu, " ")
+				.replace(/\s+/gu, " ")
+				.trim();
+			return text || fallback;
+		};
+		const formatCommentTime = (value) => {
+			const date = new Date(value);
+			if (Number.isNaN(date.getTime())) return "时间未知";
+			const elapsed = Date.now() - date.getTime();
+			if (elapsed < 60 * 1000) return "刚刚";
+			if (elapsed < 60 * 60 * 1000) return `${Math.floor(elapsed / (60 * 1000))} 分钟前`;
+			if (elapsed < 24 * 60 * 60 * 1000) return `${Math.floor(elapsed / (60 * 60 * 1000))} 小时前`;
+			if (elapsed < 7 * 24 * 60 * 60 * 1000) return `${Math.floor(elapsed / (24 * 60 * 60 * 1000))} 天前`;
+			return dateTimeFormatter.format(date);
+		};
+		const getRecentCommentRows = (payload) => {
+			if (Array.isArray(payload)) return payload;
+			if (Array.isArray(payload?.data)) return payload.data;
+			if (Array.isArray(payload?.data?.data)) return payload.data.data;
+			return [];
+		};
+		const isSafeHttpUrl = (value) => {
+			if (typeof value !== "string" || !value.trim()) return false;
+			try {
+				return ["http:", "https:"].includes(new URL(value, window.location.origin).protocol);
+			} catch {
+				return false;
+			}
+		};
+		const getCommentPage = (value) => {
+			const rawPath = String(value || "").trim();
+			if (!rawPath) return { label: "留言板", href: "/guestbook/" };
+			try {
+				const url = new URL(rawPath, window.location.origin);
+				if (url.origin !== window.location.origin) return { label: "站点页面", href: "/" };
+				const path = url.pathname || "/";
+				return {
+					label: path === "/" ? "首页" : path.length > 34 ? `${path.slice(0, 33)}…` : path,
+					href: `${path}${url.search}${url.hash}`,
+				};
+			} catch {
+				return { label: "站点页面", href: "/" };
+			}
+		};
 		const dateKey = (value) => {
 			const parts = datePartsFormatter.formatToParts(new Date(value));
 			const map = Object.fromEntries(parts.map((part) => [part.type, part.value]));
@@ -2194,6 +2276,212 @@ const sourceLabel = shareApiBase.includes("cloud.umami.is")
 			};
 		};
 
+		// —— 最近评论：Twikoo GET_RECENT_COMMENTS（浏览器公开可调）——
+		const recentCommentsAnimationFrames = new WeakMap();
+		const animateRecentComments = (root) => {
+			const list = root.querySelector("[data-comments-list]");
+			if (!list) return;
+			const items = [...list.querySelectorAll(".analytics-comment:not(.analytics-comment--skeleton)")];
+			if (!items.length) return;
+			const previousFrame = recentCommentsAnimationFrames.get(list);
+			if (previousFrame) cancelAnimationFrame(previousFrame);
+
+			const animationClock = getAnimationClock();
+			const startedAt = animationClock.start();
+			const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+			const generationEnd = 0.42;
+			const rhythmEnd = 0.82;
+			const clamp01 = (value) => Math.max(0, Math.min(1, value));
+			const setItemProgress = (item, progress, index) => {
+				const rowStart = (index / Math.max(items.length, 1)) * 0.58;
+				const rowProgress = clamp01((progress - rowStart) / 0.28);
+				const eased = easeCountProgress(rowProgress);
+				item.style.setProperty("--comment-opacity", eased.toFixed(3));
+				item.style.setProperty("--comment-offset", `${((1 - eased) * 0.72).toFixed(3)}rem`);
+				item.style.setProperty("--comment-scale", (0.98 + eased * 0.02).toFixed(3));
+				item.dataset.commentsAnimationState = rowProgress >= 1 ? "visible" : "pending";
+			};
+			const finish = () => {
+				items.forEach((item) => {
+					item.style.setProperty("--comment-opacity", "1");
+					item.style.setProperty("--comment-offset", "0rem");
+					item.style.setProperty("--comment-scale", "1");
+					item.style.setProperty("--comment-ring", "0");
+					item.dataset.commentsAnimationState = "visible";
+				});
+				list.dataset.commentsAnimationPhase = "complete";
+				recentCommentsAnimationFrames.delete(list);
+			};
+			if (reducedMotion) {
+				finish();
+				return;
+			}
+			items.forEach((item) => {
+				item.style.setProperty("--comment-opacity", "0");
+				item.style.setProperty("--comment-offset", "0.72rem");
+				item.style.setProperty("--comment-scale", "0.98");
+				item.style.setProperty("--comment-ring", "0");
+				item.dataset.commentsAnimationState = "pending";
+			});
+			const tick = (timestamp) => {
+				const progress = clamp01((timestamp - startedAt) / animationClock.duration);
+				items.forEach((item, index) => setItemProgress(item, progress, index));
+				const rhythmProgress = easeCountProgress(clamp01((progress - generationEnd) / (rhythmEnd - generationEnd)));
+				const pulse = progress >= generationEnd && progress < rhythmEnd ? Math.sin(rhythmProgress * Math.PI) : 0;
+				items[0]?.style.setProperty("--comment-ring", (pulse * 0.9).toFixed(3));
+				if (progress < 1) {
+					const frame = requestAnimationFrame(tick);
+					recentCommentsAnimationFrames.set(list, frame);
+					return;
+				}
+				finish();
+			};
+			recentCommentsAnimationFrames.set(list, requestAnimationFrame(tick));
+		};
+
+		const showCommentsMessage = (root, title, description) => {
+			const list = root.querySelector("[data-comments-list]");
+			if (!list) return;
+			const item = document.createElement("li");
+			item.className = "analytics-comments__empty";
+			const titleElement = document.createElement("strong");
+			titleElement.textContent = title;
+			const descriptionElement = document.createElement("small");
+			descriptionElement.textContent = description;
+			item.append(titleElement, descriptionElement);
+			list.replaceChildren(item);
+			list.dataset.commentsState = "empty";
+			list.dataset.commentsAnimationPhase = "idle";
+		};
+
+		const renderRecentComments = (root, payload) => {
+			const list = root.querySelector("[data-comments-list]");
+			const status = root.querySelector("[data-comments-status]");
+			if (!list) return;
+
+			const comments = getRecentCommentRows(payload)
+				.filter((comment) => comment && typeof comment === "object")
+				.map((comment) => {
+					const nick = cleanCommentText(comment.nick, "访客");
+					const text = cleanCommentText(comment.comment);
+					const insertedAt = comment.date || comment.created;
+					const page = getCommentPage(comment.url);
+					return { nick, text, insertedAt, page };
+				})
+				.filter(({ text }) => Boolean(text))
+				.slice(0, 8);
+
+			if (!comments.length) {
+				showCommentsMessage(root, "暂时还没有公开评论", "有新的留言后，它会出现在这里。");
+				if (status) status.textContent = "Twikoo 暂无可展示的公开留言";
+				return;
+			}
+
+			const items = comments.map(({ nick, text, insertedAt, page }, index) => {
+				const item = document.createElement("li");
+				item.className = `analytics-comment${index === 0 ? " analytics-comment--latest" : ""}`;
+				item.style.setProperty("--comment-index", String(index));
+				const link = document.createElement("a");
+				link.className = "analytics-comment__link";
+				link.href = page.href;
+				link.title = `查看 ${nick} 在 ${page.label} 的评论`;
+
+				const avatar = document.createElement("span");
+				avatar.className = "analytics-comment__avatar";
+				const initial = document.createElement("span");
+				initial.textContent = nick.slice(0, 1).toUpperCase();
+				avatar.append(initial);
+				const record = getRecentCommentRows(payload)[index];
+				const avatarUrl = record?.avatar;
+				if (isSafeHttpUrl(avatarUrl)) {
+					const image = document.createElement("img");
+					image.src = avatarUrl;
+					image.alt = `${nick} 的头像`;
+					image.loading = "lazy";
+					image.decoding = "async";
+					image.referrerPolicy = "no-referrer";
+					image.addEventListener("error", () => avatar.replaceChildren(initial), { once: true });
+					avatar.replaceChildren(image);
+				}
+
+				const body = document.createElement("div");
+				body.className = "analytics-comment__body";
+				const topline = document.createElement("div");
+				topline.className = "analytics-comment__topline";
+				const identity = document.createElement("div");
+				identity.className = "analytics-comment__identity";
+				const name = document.createElement("strong");
+				name.textContent = nick;
+				const time = document.createElement("time");
+				time.textContent = formatCommentTime(insertedAt);
+				if (insertedAt) time.dateTime = String(insertedAt);
+				identity.append(name, time);
+
+				const pageLabel = document.createElement("span");
+				pageLabel.className = "analytics-comment__page";
+				pageLabel.textContent = `评论于 ${page.label}`;
+				topline.append(identity, pageLabel);
+
+				const content = document.createElement("p");
+				content.className = "analytics-comment__text";
+				content.textContent = text;
+				body.append(topline, content);
+				link.append(avatar, body);
+				item.append(link);
+				return item;
+			});
+
+			list.replaceChildren(...items);
+			list.dataset.commentsState = "ready";
+			animateRecentComments(root);
+			if (status) status.textContent = `已展示 ${comments.length} 条公开评论 · 内容来自 Twikoo`;
+		};
+
+		const setupRecentComments = (root) => {
+			const panel = root.querySelector("[data-recent-comments]");
+			const status = root.querySelector("[data-comments-status]");
+			if (!panel) return () => {};
+			const serverURL = String(panel.dataset.commentServer || "").replace(/\/+$/u, "");
+			if (!serverURL) {
+				showCommentsMessage(root, "评论系统尚未配置", "在 commentConfig.ts 启用 Twikoo 后，这里会自动显示最新评论。");
+				if (status) status.textContent = "Twikoo 未启用";
+				return () => {};
+			}
+
+			const controller = new AbortController();
+			const load = async () => {
+				try {
+					const response = await fetch(serverURL, {
+						method: "POST",
+						headers: { "Content-Type": "application/json", Accept: "application/json" },
+						body: JSON.stringify({ event: "GET_RECENT_COMMENTS", includeAudit: false, pageSize: 8, sort: "" }),
+						signal: controller.signal,
+					});
+					if (!response.ok) throw new Error(`twikoo ${response.status}`);
+					const payload = await response.json();
+					if (payload && payload.code && payload.code !== 0) throw new Error(payload.errmsg || "twikoo comments unavailable");
+					renderRecentComments(root, payload);
+				} catch (error) {
+					if (error?.name === "AbortError") return;
+					showCommentsMessage(root, "最近评论暂时不可用", "可以稍后重试，或直接打开留言板查看完整讨论。");
+					if (status) status.textContent = "Twikoo 公共接口暂时没有响应";
+				}
+			};
+			const handleAnimationReplay = () => {
+				if (root.querySelector("[data-comments-list]")?.dataset.commentsState === "ready") animateRecentComments(root);
+			};
+			window.addEventListener("rainzt-analytics-animation-replay", handleAnimationReplay);
+			load();
+			return () => {
+				controller.abort();
+				window.removeEventListener("rainzt-analytics-animation-replay", handleAnimationReplay);
+				const list = root.querySelector("[data-comments-list]");
+				const frame = list && recentCommentsAnimationFrames.get(list);
+				if (frame) cancelAnimationFrame(frame);
+				if (list) recentCommentsAnimationFrames.delete(list);
+			};
+		};
+
 		const setup = () => {
 			const root = document.querySelector("[data-umami-dashboard]");
 			if (!root) {
@@ -2225,6 +2513,7 @@ const sourceLabel = shareApiBase.includes("cloud.umami.is")
 			cleanups.push(setupAnalyticsFooter(root));
 			cleanups.push(setupPushRhythm(root));
 			cleanups.push(setupSummaryCards(root, apiBase, shareId));
+			cleanups.push(setupRecentComments(root));
 			root.classList.toggle("is-local-preview", isLocal);
 			if (!hasPublicStats || !apiBase || !shareId) {
 				setStatus(root, "offline", "未配置");
@@ -3536,6 +3825,41 @@ const sourceLabel = shareApiBase.includes("cloud.umami.is")
 	@keyframes analytics-snapshot-pulse { 0%, 100% { opacity: 0.45; } 50% { opacity: 0.9; } }
 	@keyframes analytics-pulse { 0%, 100% { opacity: 0.45; transform: scale(0.85); } 50% { opacity: 1; transform: scale(1.1); } }
 	@keyframes analytics-spin { to { transform: rotate(360deg); } }
+	.analytics-comments { margin-top: 0.8rem; overflow: hidden; }
+	.analytics-comments__header { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: 1rem; padding: 1.05rem 1.45rem 0.65rem; }
+	.analytics-comments__header > div:first-child { min-width: 0; }
+	.analytics-comments__header-meta { display: flex; min-width: max-content; flex-direction: column; align-items: flex-end; gap: 0.55rem; }
+	.analytics-comments__header-meta a { display: inline-flex; align-items: center; gap: 0.3rem; color: var(--analytics-blue); font-size: 0.72rem; font-weight: 800; text-decoration: none; }
+	.analytics-comments__header-meta a:hover { text-decoration: underline; text-underline-offset: 0.2rem; }
+	.analytics-comments__list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1.5rem; row-gap: 0; margin: 0 1.45rem; padding: 0; list-style: none; }
+	.analytics-comment { min-width: 0; padding: 0; opacity: var(--comment-opacity, 1); }
+	.analytics-comment__link { display: grid; grid-template-columns: 2.3rem minmax(0, 1fr); align-items: start; gap: 0.62rem; min-width: 0; padding: 0.6rem 0.55rem; border-radius: 0.75rem; color: inherit; text-decoration: none; transform: translate3d(0, var(--comment-offset, 0rem), 0) scale(var(--comment-scale, 1)); transition: transform var(--duration-normal) var(--ease-standard), background-color var(--duration-normal) var(--ease-standard), box-shadow var(--duration-normal) var(--ease-standard); }
+	.analytics-comment__link:hover, .analytics-comment__link:focus-visible { background: color-mix(in oklab, var(--analytics-blue) 6%, var(--card-bg)); box-shadow: 0 0.5rem 1.15rem color-mix(in oklab, var(--analytics-blue) 14%, transparent); transform: translate3d(0.32rem, -0.1rem, 0) scale(1.01); }
+	.analytics-comment__link:focus-visible { outline: 2px solid color-mix(in oklab, var(--analytics-blue) 72%, transparent); outline-offset: 2px; }
+	.analytics-comment__avatar { display: grid; width: 2.3rem; height: 2.3rem; flex: 0 0 auto; place-items: center; overflow: hidden; border: 2px solid color-mix(in oklab, var(--analytics-blue) 18%, var(--card-bg)); border-radius: 50%; color: var(--analytics-blue); background: color-mix(in oklab, var(--analytics-blue) 10%, var(--card-bg)); font-size: 0.78rem; font-weight: 850; transition: transform var(--duration-normal) var(--ease-standard), box-shadow var(--duration-normal) var(--ease-standard); }
+	.analytics-comment__avatar img { display: block; width: 100%; height: 100%; object-fit: cover; }
+	.analytics-comment__link:hover .analytics-comment__avatar, .analytics-comment__link:focus-visible .analytics-comment__avatar { box-shadow: 0 0.35rem 0.75rem color-mix(in oklab, var(--analytics-blue) 20%, transparent); transform: scale(1.04); }
+	.analytics-comment--latest .analytics-comment__avatar { box-shadow: 0 0 0 calc(var(--comment-ring, 0) * 0.32rem) rgb(245 139 170 / calc(var(--comment-ring, 0) * 0.34)); }
+	.analytics-comment__body { min-width: 0; }
+	.analytics-comment__topline { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: 0.45rem; min-width: 0; }
+	.analytics-comment__identity { display: flex; align-items: baseline; gap: 0.42rem; min-width: 0; }
+	.analytics-comment__identity strong { overflow: hidden; color: var(--analytics-text); font-size: 0.76rem; font-weight: 820; text-overflow: ellipsis; white-space: nowrap; }
+	.analytics-comment__identity time { flex: 0 0 auto; color: var(--analytics-text-faint); font-size: 0.6rem; white-space: nowrap; }
+	.analytics-comment__page { display: block; max-width: 7.5rem; overflow: hidden; color: var(--analytics-text-faint); font-size: 0.62rem; text-align: right; text-overflow: ellipsis; white-space: nowrap; }
+	.analytics-comment__text { display: -webkit-box; overflow: hidden; margin: 0.22rem 0 0; color: var(--analytics-text-muted); font-size: 0.7rem; line-height: 1.45; text-overflow: ellipsis; -webkit-box-orient: vertical; -webkit-line-clamp: 1; }
+	.analytics-comments__status { margin: 0 1.45rem; padding: 0.85rem 0 1.15rem; color: var(--analytics-text-faint); font-size: 0.66rem; }
+	.analytics-comments__empty { display: grid; grid-column: 1 / -1; gap: 0.3rem; padding: 1.05rem 0 1.15rem; color: var(--analytics-text-muted); }
+	.analytics-comments__empty strong { color: var(--analytics-text); font-size: 0.8rem; }
+	.analytics-comments__empty small { color: var(--analytics-text-faint); font-size: 0.68rem; }
+	.analytics-comment--skeleton { display: grid; grid-template-columns: 2.3rem minmax(0, 1fr); align-items: start; gap: 0.62rem; min-height: 4rem; padding: 0.6rem 0.05rem; }
+	.analytics-comment__skeleton-line { display: block; height: 0.46rem; border-radius: 999px; background: color-mix(in oklab, var(--muted) 75%, transparent); animation: analytics-skeleton 1.3s ease-in-out infinite; }
+	.analytics-comment--skeleton .analytics-comment__avatar { border: 0; background: color-mix(in oklab, var(--muted) 75%, transparent); animation: analytics-skeleton 1.3s ease-in-out infinite; }
+	.analytics-comment--skeleton .analytics-comment__body { display: grid; align-content: start; gap: 0.45rem; padding-top: 0.15rem; }
+	.analytics-comment__skeleton-line--name { width: 30%; height: 0.58rem; }
+	.analytics-comment__skeleton-line--meta { width: 48%; height: 0.34rem; }
+	.analytics-comment__skeleton-line--text { width: 92%; }
+	.analytics-comment__skeleton-line--text-short { width: 61%; }
+
 	@keyframes analytics-skeleton { 0%, 100% { opacity: 0.45; } 50% { opacity: 0.85; } }
 	@keyframes analytics-snake-food { 0%, 100% { opacity: 0.78; filter: saturate(0.92); } 50% { opacity: 1; filter: saturate(1.18); } }
 
@@ -3604,6 +3928,9 @@ const sourceLabel = shareApiBase.includes("cloud.umami.is")
 		.analytics-activity__footer { align-items: flex-start; flex-direction: column; gap: 0.48rem; }
 		.analytics-sidebar { grid-template-columns: 1fr; }
 		.analytics-footer { align-items: flex-start; flex-direction: column; }
+		.analytics-comments__list { grid-template-columns: 1fr; }
+		.analytics-comments__header { grid-template-columns: 1fr; }
+		.analytics-comments__header-meta { width: 100%; align-items: flex-start; flex-direction: row; justify-content: space-between; }
 	}
 
 	@container (max-width: 540px) {
