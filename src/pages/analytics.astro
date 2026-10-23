@@ -240,170 +240,170 @@ const sourceLabel = shareApiBase.includes("cloud.umami.is")
 					</div>
 				</section>
 
-				<section class="analytics-panel analytics-deployment card-base" aria-labelledby="analytics-push-title" data-push-rhythm>
-				<header class="analytics-panel__header analytics-panel__header--compact analytics-deployment__header">
-					<div class="analytics-deployment__heading">
-						<p class="analytics-section-kicker">OPERATIONS / RELEASES</p>
-						<h2 id="analytics-push-title">推送节奏</h2>
-						<p class="analytics-panel__description">按 GitHub main 分支推送时间观察活动密度</p>
+			</main>
+			<section class="analytics-panel analytics-deployment card-base" aria-labelledby="analytics-push-title" data-push-rhythm>
+			<header class="analytics-panel__header analytics-panel__header--compact analytics-deployment__header">
+				<div class="analytics-deployment__heading">
+					<p class="analytics-section-kicker">OPERATIONS / RELEASES</p>
+					<h2 id="analytics-push-title">推送节奏</h2>
+					<p class="analytics-panel__description">按 GitHub main 分支推送时间观察活动密度</p>
+				</div>
+				<div class="analytics-deployment__art" aria-hidden="true">
+					<p>持续热爱，<br />一直在更新！</p>
+					<span>♥</span>
+				</div>
+				<span class="analytics-panel__badge analytics-deployment__status" data-push-status>读取中</span>
+			</header>
+			<div class="analytics-deployment__metrics">
+				<div class="analytics-deployment__metric analytics-deployment__metric--latest analytics-deployment__metric--blue">
+					<span class="analytics-deployment__metric-icon" aria-hidden="true"><Icon is:inline name="material-symbols:schedule-rounded" /></span>
+					<span class="analytics-deployment__metric-copy">
+						<span>最近一次推送</span>
+						<strong data-push-latest>—</strong>
+					</span>
+					<em data-push-latest-badge>—</em>
+				</div>
+				<div class="analytics-deployment__metric analytics-deployment__metric--pink">
+					<span class="analytics-deployment__metric-icon" aria-hidden="true"><Icon is:inline name="material-symbols:calendar-month-rounded" /></span>
+					<span class="analytics-deployment__metric-copy">
+						<span>最近间隔</span>
+						<strong data-push-interval>—</strong>
+						<small>保持活跃 ✦</small>
+					</span>
+				</div>
+				<div class="analytics-deployment__metric analytics-deployment__metric--blue">
+					<span class="analytics-deployment__metric-icon" aria-hidden="true"><Icon is:inline name="material-symbols:bar-chart-rounded" /></span>
+					<span class="analytics-deployment__metric-copy">
+						<span>平均节奏</span>
+						<strong data-push-average>—</strong>
+						<small>基于全部推送</small>
+					</span>
+				</div>
+				<div class="analytics-deployment__metric analytics-deployment__metric--violet">
+					<span class="analytics-deployment__metric-icon" aria-hidden="true"><Icon is:inline name="material-symbols:local-fire-department-rounded" /></span>
+					<span class="analytics-deployment__metric-copy">
+						<span>连续推送</span>
+						<strong data-push-streak>—</strong>
+						<small data-push-streak-note>继续加油！</small>
+					</span>
+				</div>
+			</div>
+				<div class="analytics-deployment__heatmap" data-push-heatmap>
+					<div class="analytics-deployment__heatmap-head">
+						<div class="analytics-deployment__heatmap-title"><strong>推送活动</strong><span title="每格代表一天，颜色越深表示推送越多" aria-label="每格代表一天，颜色越深表示推送越多"><Icon is:inline name="material-symbols:info-outline-rounded" aria-hidden="true" /></span></div>
+						<div class="analytics-deployment__snake-controls" aria-label="贪吃蛇设置">
+							<div class="analytics-deployment__snake-control" role="group" aria-label="蛇速度">
+								<span>蛇速度</span>
+								<div class="analytics-deployment__snake-options">
+									<button type="button" data-push-snake-speed="1" aria-pressed="true">1x</button>
+									<button type="button" data-push-snake-speed="2" aria-pressed="false">2x</button>
+									<button type="button" data-push-snake-speed="5" aria-pressed="false">5x</button>
+								</div>
+							</div>
+							<div class="analytics-deployment__snake-control" role="group" aria-label="食物容量，每个食物增长格数">
+								<span>食物容量</span>
+								<div class="analytics-deployment__snake-options">
+									<button type="button" data-push-snake-food-capacity="1" aria-pressed="true" title="吃一个食物增长 1 格">1x</button>
+									<button type="button" data-push-snake-food-capacity="2" aria-pressed="false" title="吃一个食物增长 2 格">2x</button>
+									<button type="button" data-push-snake-food-capacity="5" aria-pressed="false" title="吃一个食物增长 5 格">5x</button>
+								</div>
+							</div>
+						</div>
+						<div class="analytics-deployment__heatmap-tabs" role="group" aria-label="热力图时间粒度">
+							<button type="button" data-push-heatmap-mode="daily" aria-pressed="true">每日</button>
+							<button type="button" data-push-heatmap-mode="weekly" aria-pressed="false">每周</button>
+							<button type="button" data-push-heatmap-mode="cumulative" aria-pressed="false">累计</button>
+						</div>
 					</div>
-					<div class="analytics-deployment__art" aria-hidden="true">
-						<p>持续热爱，<br />一直在更新！</p>
-						<span>♥</span>
+					<div class="analytics-deployment__heatmap-scroll" data-push-heatmap-scroll>
+						<div class="analytics-deployment__heatmap-layout">
+							<div class="analytics-deployment__heatmap-main">
+								<div class="analytics-deployment__heatmap-grid" data-push-heatmap-grid role="grid" aria-label="近一年 GitHub 推送活动，每格代表一天，颜色越深表示当天推送越多"></div>
+								<div class="analytics-deployment__months" data-push-heatmap-months aria-hidden="true"></div>
+							</div>
+						</div>
 					</div>
-					<span class="analytics-panel__badge analytics-deployment__status" data-push-status>读取中</span>
-				</header>
-				<div class="analytics-deployment__metrics">
-					<div class="analytics-deployment__metric analytics-deployment__metric--latest analytics-deployment__metric--blue">
-						<span class="analytics-deployment__metric-icon" aria-hidden="true"><Icon is:inline name="material-symbols:schedule-rounded" /></span>
-						<span class="analytics-deployment__metric-copy">
-							<span>最近一次推送</span>
-							<strong data-push-latest>—</strong>
+					<div class="analytics-deployment__heatmap-foot">
+						<span class="analytics-deployment__source"><Icon is:inline name="simple-icons:github" aria-hidden="true" /><span data-push-note>按 GitHub main 分支推送时间统计 · 已扣除每日 2 次固定 Actions</span></span>
+						<span class="analytics-deployment__heatmap-legend" aria-label="推送次数图例">
+							<span>少</span><i data-level="0"></i><i data-level="1"></i><i data-level="2"></i><i data-level="3"></i><i data-level="4"></i><span>多</span>
 						</span>
-						<em data-push-latest-badge>—</em>
+						<strong data-push-count>—</strong>
 					</div>
-					<div class="analytics-deployment__metric analytics-deployment__metric--pink">
-						<span class="analytics-deployment__metric-icon" aria-hidden="true"><Icon is:inline name="material-symbols:calendar-month-rounded" /></span>
-						<span class="analytics-deployment__metric-copy">
-							<span>最近间隔</span>
-							<strong data-push-interval>—</strong>
-							<small>保持活跃 ✦</small>
-						</span>
-					</div>
-					<div class="analytics-deployment__metric analytics-deployment__metric--blue">
-						<span class="analytics-deployment__metric-icon" aria-hidden="true"><Icon is:inline name="material-symbols:bar-chart-rounded" /></span>
-						<span class="analytics-deployment__metric-copy">
-							<span>平均节奏</span>
-							<strong data-push-average>—</strong>
-							<small>基于全部推送</small>
-						</span>
-					</div>
-					<div class="analytics-deployment__metric analytics-deployment__metric--violet">
-						<span class="analytics-deployment__metric-icon" aria-hidden="true"><Icon is:inline name="material-symbols:local-fire-department-rounded" /></span>
-						<span class="analytics-deployment__metric-copy">
-							<span>连续推送</span>
-							<strong data-push-streak>—</strong>
-							<small data-push-streak-note>继续加油！</small>
-						</span>
+					<div class="analytics-deployment__message">
+						<span class="analytics-deployment__message-icon" aria-hidden="true"><Icon is:inline name="material-symbols:lightbulb-rounded" /></span>
+						<div><strong data-push-heatmap-detail>快来和小蛇蛇交互一下。</strong><span>「每一次推送，都是让想法变成现实的一小步。」</span></div>
+						<Icon class="analytics-deployment__message-plane" is:inline name="material-symbols:send-rounded" aria-hidden="true" />
 					</div>
 				</div>
-					<div class="analytics-deployment__heatmap" data-push-heatmap>
-						<div class="analytics-deployment__heatmap-head">
-							<div class="analytics-deployment__heatmap-title"><strong>推送活动</strong><span title="每格代表一天，颜色越深表示推送越多" aria-label="每格代表一天，颜色越深表示推送越多"><Icon is:inline name="material-symbols:info-outline-rounded" aria-hidden="true" /></span></div>
-							<div class="analytics-deployment__snake-controls" aria-label="贪吃蛇设置">
-								<div class="analytics-deployment__snake-control" role="group" aria-label="蛇速度">
-									<span>蛇速度</span>
-									<div class="analytics-deployment__snake-options">
-										<button type="button" data-push-snake-speed="1" aria-pressed="true">1x</button>
-										<button type="button" data-push-snake-speed="2" aria-pressed="false">2x</button>
-										<button type="button" data-push-snake-speed="5" aria-pressed="false">5x</button>
-									</div>
-								</div>
-								<div class="analytics-deployment__snake-control" role="group" aria-label="食物容量，每个食物增长格数">
-									<span>食物容量</span>
-									<div class="analytics-deployment__snake-options">
-										<button type="button" data-push-snake-food-capacity="1" aria-pressed="true" title="吃一个食物增长 1 格">1x</button>
-										<button type="button" data-push-snake-food-capacity="2" aria-pressed="false" title="吃一个食物增长 2 格">2x</button>
-										<button type="button" data-push-snake-food-capacity="5" aria-pressed="false" title="吃一个食物增长 5 格">5x</button>
-									</div>
-								</div>
-							</div>
-							<div class="analytics-deployment__heatmap-tabs" role="group" aria-label="热力图时间粒度">
-								<button type="button" data-push-heatmap-mode="daily" aria-pressed="true">每日</button>
-								<button type="button" data-push-heatmap-mode="weekly" aria-pressed="false">每周</button>
-								<button type="button" data-push-heatmap-mode="cumulative" aria-pressed="false">累计</button>
-							</div>
+			</section>
+
+			<section
+				class="analytics-panel analytics-activity card-base"
+				aria-labelledby="analytics-activity-title"
+				data-visitor-activity
+			>
+				<header class="analytics-panel__header analytics-activity__header">
+					<div class="analytics-activity__heading">
+						<p class="analytics-section-kicker">VISITOR / ACTIVITY</p>
+						<div class="analytics-activity__title-row">
+							<h2 id="analytics-activity-title">访客活跃时间</h2>
+							<span class="analytics-panel__badge analytics-activity__range">近 30 天</span>
 						</div>
-						<div class="analytics-deployment__heatmap-scroll" data-push-heatmap-scroll>
-							<div class="analytics-deployment__heatmap-layout">
-								<div class="analytics-deployment__heatmap-main">
-									<div class="analytics-deployment__heatmap-grid" data-push-heatmap-grid role="grid" aria-label="近一年 GitHub 推送活动，每格代表一天，颜色越深表示当天推送越多"></div>
-									<div class="analytics-deployment__months" data-push-heatmap-months aria-hidden="true"></div>
-								</div>
-							</div>
-						</div>
-						<div class="analytics-deployment__heatmap-foot">
-							<span class="analytics-deployment__source"><Icon is:inline name="simple-icons:github" aria-hidden="true" /><span data-push-note>按 GitHub main 分支推送时间统计 · 已扣除每日 2 次固定 Actions</span></span>
-							<span class="analytics-deployment__heatmap-legend" aria-label="推送次数图例">
-								<span>少</span><i data-level="0"></i><i data-level="1"></i><i data-level="2"></i><i data-level="3"></i><i data-level="4"></i><span>多</span>
-							</span>
-							<strong data-push-count>—</strong>
-						</div>
-						<div class="analytics-deployment__message">
-							<span class="analytics-deployment__message-icon" aria-hidden="true"><Icon is:inline name="material-symbols:lightbulb-rounded" /></span>
-							<div><strong data-push-heatmap-detail>快来和小蛇蛇交互一下。</strong><span>「每一次推送，都是让想法变成现实的一小步。」</span></div>
-							<Icon class="analytics-deployment__message-plane" is:inline name="material-symbols:send-rounded" aria-hidden="true" />
-						</div>
+						<p class="analytics-panel__description">看看大家通常在什么时候来这里</p>
 					</div>
-				</section>
+				</header>
 
-				<section
-					class="analytics-panel analytics-activity card-base"
-					aria-labelledby="analytics-activity-title"
-					data-visitor-activity
-				>
-					<header class="analytics-panel__header analytics-activity__header">
-						<div class="analytics-activity__heading">
-							<p class="analytics-section-kicker">VISITOR / ACTIVITY</p>
-							<div class="analytics-activity__title-row">
-								<h2 id="analytics-activity-title">访客活跃时间</h2>
-								<span class="analytics-panel__badge analytics-activity__range">近 30 天</span>
+				<div class="analytics-activity__body">
+					<div class="analytics-activity__heatmap-wrap">
+						<div class="analytics-activity__heatmap" data-activity-heatmap>
+							<div class="analytics-activity__hours" aria-hidden="true">
+								{Array.from({ length: 12 }, (_, index) => <span>{String(index * 2).padStart(2, "0")}时</span>)}
 							</div>
-							<p class="analytics-panel__description">看看大家通常在什么时候来这里</p>
-						</div>
-					</header>
-
-					<div class="analytics-activity__body">
-						<div class="analytics-activity__heatmap-wrap">
-							<div class="analytics-activity__heatmap" data-activity-heatmap>
-								<div class="analytics-activity__hours" aria-hidden="true">
-									{Array.from({ length: 12 }, (_, index) => <span>{String(index * 2).padStart(2, "0")}时</span>)}
-								</div>
-								<div class="analytics-activity__days" aria-hidden="true">
-									{["周一", "周二", "周三", "周四", "周五", "周六", "周日"].map((day) => <span>{day}</span>)}
-								</div>
-								<div class="analytics-activity__grid" data-activity-grid role="grid" aria-label="近 30 天访客按星期与小时的活跃分布">
-									{Array.from({ length: 7 * 24 }, (_, index) => {
-										const weekday = Math.floor(index / 24);
-										const hour = index % 24;
-										return <button type="button" class="analytics-activity__cell" data-activity-cell data-weekday={weekday} data-hour={hour} aria-label={`${["周一", "周二", "周三", "周四", "周五", "周六", "周日"][weekday]} ${String(hour).padStart(2, "0")}:00，等待数据`}></button>;
-									})}
-								</div>
+							<div class="analytics-activity__days" aria-hidden="true">
+								{["周一", "周二", "周三", "周四", "周五", "周六", "周日"].map((day) => <span>{day}</span>)}
 							</div>
-							<p class="analytics-activity__note" data-activity-note>正在读取近 30 天的小时级访问记录…</p>
+							<div class="analytics-activity__grid" data-activity-grid role="grid" aria-label="近 30 天访客按星期与小时的活跃分布">
+								{Array.from({ length: 7 * 24 }, (_, index) => {
+									const weekday = Math.floor(index / 24);
+									const hour = index % 24;
+									return <button type="button" class="analytics-activity__cell" data-activity-cell data-weekday={weekday} data-hour={hour} aria-label={`${["周一", "周二", "周三", "周四", "周五", "周六", "周日"][weekday]} ${String(hour).padStart(2, "0")}:00，等待数据`}></button>;
+								})}
+							</div>
 						</div>
-
-						<div class="analytics-activity__art" aria-hidden="true">
-							<div class="analytics-activity__art-orbit"></div>
-							<p>有你来，真好！ <span>♥</span></p>
-						</div>
+						<p class="analytics-activity__note" data-activity-note>正在读取近 30 天的小时级访问记录…</p>
 					</div>
 
-					<div class="analytics-activity__stats" aria-label="访客活跃时间摘要">
-						<div class="analytics-activity__stat analytics-activity__stat--blue">
-							<span class="analytics-activity__stat-icon" aria-hidden="true"><Icon is:inline name="material-symbols:schedule-rounded" /></span>
-							<span><small>最活跃时间</small><strong data-activity-stat="time">—</strong></span>
-						</div>
-						<div class="analytics-activity__stat analytics-activity__stat--pink">
-							<span class="analytics-activity__stat-icon" aria-hidden="true"><Icon is:inline name="material-symbols:calendar-month-rounded" /></span>
-							<span><small>最活跃星期</small><strong data-activity-stat="day">—</strong></span>
-						</div>
-						<div class="analytics-activity__stat analytics-activity__stat--mint">
-							<span class="analytics-activity__stat-icon" aria-hidden="true"><Icon is:inline name="material-symbols:groups-rounded" /></span>
-							<span><small>夜间访问占比</small><strong data-activity-stat="night">—</strong></span>
-						</div>
-						<div class="analytics-activity__stat analytics-activity__stat--gold">
-							<span class="analytics-activity__stat-icon" aria-hidden="true"><Icon is:inline name="material-symbols:bar-chart-rounded" /></span>
-							<span><small>今日访客</small><strong data-umami-stat="todayVisitors" aria-live="polite">加载中</strong></span>
-						</div>
+					<div class="analytics-activity__art" aria-hidden="true">
+						<div class="analytics-activity__art-orbit"></div>
+						<p>有你来，真好！ <span>♥</span></p>
 					</div>
+				</div>
 
-					<footer class="analytics-activity__footer">
-						<span>按北京时间聚合 · 数据只保留统计维度</span>
-						<span class="analytics-activity__legend" aria-label="访问活跃度图例"><span>少</span><i data-level="0"></i><i data-level="1"></i><i data-level="2"></i><i data-level="3"></i><i data-level="4"></i><i data-level="5"></i><span>多</span></span>
-					</footer>
-				</section>
-			</main>
+				<div class="analytics-activity__stats" aria-label="访客活跃时间摘要">
+					<div class="analytics-activity__stat analytics-activity__stat--blue">
+						<span class="analytics-activity__stat-icon" aria-hidden="true"><Icon is:inline name="material-symbols:schedule-rounded" /></span>
+						<span><small>最活跃时间</small><strong data-activity-stat="time">—</strong></span>
+					</div>
+					<div class="analytics-activity__stat analytics-activity__stat--pink">
+						<span class="analytics-activity__stat-icon" aria-hidden="true"><Icon is:inline name="material-symbols:calendar-month-rounded" /></span>
+						<span><small>最活跃星期</small><strong data-activity-stat="day">—</strong></span>
+					</div>
+					<div class="analytics-activity__stat analytics-activity__stat--mint">
+						<span class="analytics-activity__stat-icon" aria-hidden="true"><Icon is:inline name="material-symbols:groups-rounded" /></span>
+						<span><small>夜间访问占比</small><strong data-activity-stat="night">—</strong></span>
+					</div>
+					<div class="analytics-activity__stat analytics-activity__stat--gold">
+						<span class="analytics-activity__stat-icon" aria-hidden="true"><Icon is:inline name="material-symbols:bar-chart-rounded" /></span>
+						<span><small>今日访客</small><strong data-umami-stat="todayVisitors" aria-live="polite">加载中</strong></span>
+					</div>
+				</div>
+
+				<footer class="analytics-activity__footer">
+					<span>按北京时间聚合 · 数据只保留统计维度</span>
+					<span class="analytics-activity__legend" aria-label="访问活跃度图例"><span>少</span><i data-level="0"></i><i data-level="1"></i><i data-level="2"></i><i data-level="3"></i><i data-level="4"></i><i data-level="5"></i><span>多</span></span>
+				</footer>
+			</section>
 
 			<aside class="analytics-sidebar" aria-label="站点统计分布">
 				<section
@@ -3434,8 +3434,12 @@ const sourceLabel = shareApiBase.includes("cloud.umami.is")
 	.analytics-summary-card > strong { display: block; margin-top: 0.72rem; color: var(--analytics-text); font-size: clamp(1.3rem, 2.25vw, 1.85rem); line-height: 1; letter-spacing: -0.035em; font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; }
 	.analytics-summary-card > span { display: block; margin-top: 0.38rem; color: var(--analytics-text-muted); font-size: 0.72rem; font-weight: 750; }
 	.analytics-summary-card > small { display: block; margin-top: 0.22rem; color: var(--analytics-text-faint); font-size: 0.62rem; }
-	.analytics-layout { display: grid; grid-template-columns: minmax(0, 1.8fr) minmax(16rem, 0.85fr); gap: 1rem; align-items: start; }
+	/* align-items: stretch —— 第一行左栏（访问脉冲）与右栏（侧栏）等高，底边对齐 */
+	.analytics-layout { display: grid; grid-template-columns: minmax(0, 1.8fr) minmax(16rem, 0.85fr); gap: 1rem; align-items: stretch; }
 	.analytics-main, .analytics-sidebar { display: grid; gap: 1rem; min-width: 0; }
+	/* 五块显式钉位：行1 脉冲|侧栏、行2 推送跨满、行3 活跃|评论；窄屏在 @media 900px 重置回 auto */
+	.analytics-main { grid-column: 1; grid-row: 1; }
+	.analytics-sidebar { grid-column: 2; grid-row: 1; }
 	/* .analytics-panel 本体外观由 card-base 提供，此处不再覆盖 border/background/shadow */
 	.analytics-panel__header { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; padding: 1.35rem 1.45rem 0; }
 	.analytics-panel__header--compact { align-items: center; padding-bottom: 0.15rem; }
@@ -3455,7 +3459,10 @@ const sourceLabel = shareApiBase.includes("cloud.umami.is")
 	.analytics-refresh svg { font-size: 1.05rem; }
 	.analytics-page.is-loading .analytics-refresh svg { animation: analytics-spin 0.8s linear infinite; }
 
-	.analytics-traffic { container-type: inline-size; }
+	/* flex 列：卡片被行高拉伸时，由 details 吃掉剩余高度，避免底部留白 */
+	.analytics-traffic { display: flex; flex-direction: column; container-type: inline-size; }
+	.analytics-traffic > * { flex: 0 0 auto; }
+	.analytics-traffic > .analytics-traffic__details { flex: 1 1 auto; }
 	.analytics-traffic > .analytics-panel__header { padding-top: 1.05rem; }
 	.analytics-traffic > .analytics-panel__header .analytics-panel__description { margin-top: 0.3rem; font-size: 0.74rem; }
 	@container (max-width: 440px) {
@@ -3569,7 +3576,8 @@ const sourceLabel = shareApiBase.includes("cloud.umami.is")
 	.analytics-ranking__copy small, .analytics-ranking__item > strong small { color: var(--analytics-text-faint); font-size: 0.62rem; font-weight: 500; }
 	.analytics-ranking__link > strong { color: var(--analytics-text); font-size: 1rem; font-weight: 820; font-variant-numeric: tabular-nums; letter-spacing: -0.025em; }
 	.analytics-panel__footnote { margin: 0 1.45rem; padding: 0.9rem 0 1.2rem; color: var(--analytics-text-faint); font-size: 0.66rem; line-height: 1.55; }
-	.analytics-deployment { position: relative; overflow: hidden; }
+	/* 跨中栏+右栏整宽；container-type 供 @container 窄容器折两列兜底（见文件末尾） */
+	.analytics-deployment { position: relative; overflow: hidden; grid-column: 1 / -1; grid-row: 2; container-type: inline-size; }
 	.analytics-deployment__header { position: relative; isolation: isolate; min-height: 9.8rem; align-items: flex-start !important; padding: 1.55rem 1.45rem 0.9rem; }
 	.analytics-deployment__heading { position: relative; z-index: 1; max-width: 66%; }
 	.analytics-deployment .analytics-section-kicker { margin-bottom: 0.48rem; }
@@ -3581,7 +3589,8 @@ const sourceLabel = shareApiBase.includes("cloud.umami.is")
 	.analytics-deployment__art::after { position: absolute; right: 10%; bottom: 0.25rem; left: 10%; height: 0.55rem; border-radius: 50%; background: color-mix(in oklab, var(--analytics-blue) 18%, transparent); content: ""; filter: blur(0.6rem); }
 	.analytics-deployment__art p { position: absolute; z-index: 2; top: 0.65rem; left: 0.2rem; margin: 0; color: color-mix(in oklab, var(--analytics-blue) 72%, var(--text-color)); font-family: var(--font-active-sans); font-size: 0.86rem; font-weight: 750; letter-spacing: 0.07em; line-height: 1.55; text-align: center; transform: rotate(-7deg); }
 	.analytics-deployment__art > span { position: absolute; z-index: 2; top: 0.22rem; right: 2.2rem; color: #f58baa; font-size: 1.15rem; transform: rotate(12deg); }
-	.analytics-deployment__metrics { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.65rem; margin: 0 1.35rem; }
+	/* 首卡带「最近一次推送」徽章，列宽加权多给一格，避免徽章压住 label */
+	.analytics-deployment__metrics { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1.2fr) repeat(3, minmax(0, 1fr)); gap: 0.65rem; margin: 0 1.35rem; }
 	.analytics-deployment__metric { position: relative; display: grid; grid-template-columns: 2rem minmax(0, 1fr) auto; align-items: center; gap: 0.46rem; min-width: 0; min-height: 4.8rem; overflow: hidden; padding: 0.72rem 0.7rem; border-radius: 0.78rem; background: color-mix(in oklab, var(--push-accent) 7%, var(--card-bg)); }
 	.analytics-deployment__metric::before { display: none; }
 	.analytics-deployment__metric-icon { display: grid; width: 2.12rem; height: 2.12rem; place-items: center; color: var(--push-accent); background: transparent; }
@@ -3679,6 +3688,8 @@ const sourceLabel = shareApiBase.includes("cloud.umami.is")
 	.analytics-activity {
 		position: relative;
 		overflow: hidden;
+		grid-column: 1;
+		grid-row: 3;
 		container-type: inline-size;
 		/* 仅叠加装饰渐变，保留 card-base 的 background-color（含壁纸透明/边框模式） */
 		background-image: radial-gradient(circle at 88% 55%, color-mix(in oklab, var(--analytics-blue) 7%, transparent), transparent 24rem);
@@ -3833,13 +3844,13 @@ const sourceLabel = shareApiBase.includes("cloud.umami.is")
 	@keyframes analytics-snapshot-pulse { 0%, 100% { opacity: 0.45; } 50% { opacity: 0.9; } }
 	@keyframes analytics-pulse { 0%, 100% { opacity: 0.45; transform: scale(0.85); } 50% { opacity: 1; transform: scale(1.1); } }
 	@keyframes analytics-spin { to { transform: rotate(360deg); } }
-	.analytics-comments { margin-top: 0.8rem; overflow: hidden; }
+	.analytics-comments { grid-column: 2; grid-row: 3; display: flex; flex-direction: column; margin-top: 0; overflow: hidden; container-type: inline-size; }
 	.analytics-comments__header { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: 1rem; padding: 1.05rem 1.45rem 0.65rem; }
 	.analytics-comments__header > div:first-child { min-width: 0; }
 	.analytics-comments__header-meta { display: flex; min-width: max-content; flex-direction: column; align-items: flex-end; gap: 0.55rem; }
 	.analytics-comments__header-meta a { display: inline-flex; align-items: center; gap: 0.3rem; color: var(--analytics-blue); font-size: 0.72rem; font-weight: 800; text-decoration: none; }
 	.analytics-comments__header-meta a:hover { text-decoration: underline; text-underline-offset: 0.2rem; }
-	.analytics-comments__list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1.5rem; row-gap: 0; margin: 0 1.45rem; padding: 0; list-style: none; }
+	.analytics-comments__list { display: grid; grid-template-columns: 1fr; column-gap: 1.5rem; row-gap: 0; flex: 1 1 0; min-height: 12rem; margin: 0 1.45rem; padding: 0; overflow-y: auto; overscroll-behavior: contain; list-style: none; }
 	.analytics-comment { min-width: 0; padding: 0; opacity: var(--comment-opacity, 1); }
 	.analytics-comment__link { display: grid; grid-template-columns: 2.3rem minmax(0, 1fr); align-items: start; gap: 0.62rem; min-width: 0; padding: 0.6rem 0.55rem; border-radius: 0.75rem; color: inherit; text-decoration: none; transform: translate3d(0, var(--comment-offset, 0rem), 0) scale(var(--comment-scale, 1)); transition: transform var(--duration-normal) var(--ease-standard), background-color var(--duration-normal) var(--ease-standard), box-shadow var(--duration-normal) var(--ease-standard); }
 	.analytics-comment__link:hover, .analytics-comment__link:focus-visible { background: color-mix(in oklab, var(--analytics-blue) 6%, var(--card-bg)); box-shadow: 0 0.5rem 1.15rem color-mix(in oklab, var(--analytics-blue) 14%, transparent); transform: translate3d(0.32rem, -0.1rem, 0) scale(1.01); }
@@ -3868,6 +3879,15 @@ const sourceLabel = shareApiBase.includes("cloud.umami.is")
 	.analytics-comment__skeleton-line--text { width: 92%; }
 	.analytics-comment__skeleton-line--text-short { width: 61%; }
 
+	/* 评论卡落到右列（约 256~380px）：头部堆叠、页签让位给昵称；列表已是单列基类，无需再收 */
+	@container (max-width: 32rem) {
+		.analytics-comments__header { grid-template-columns: 1fr; gap: 0.55rem; }
+		.analytics-comments__header-meta { width: 100%; align-items: flex-start; flex-direction: row; justify-content: space-between; }
+		.analytics-comments__list { grid-template-columns: 1fr; }
+		.analytics-comment__topline { grid-template-columns: 1fr; gap: 0.12rem; }
+		.analytics-comment__page { max-width: none; text-align: left; }
+	}
+
 	@keyframes analytics-skeleton { 0%, 100% { opacity: 0.45; } 50% { opacity: 0.85; } }
 	@keyframes analytics-snake-food { 0%, 100% { opacity: 0.78; filter: saturate(0.92); } 50% { opacity: 1; filter: saturate(1.18); } }
 
@@ -3879,6 +3899,13 @@ const sourceLabel = shareApiBase.includes("cloud.umami.is")
 
 	@media (max-width: 900px) {
 		.analytics-layout { grid-template-columns: 1fr; }
+		/* 单列后五块全部回到自动放置（DOM 顺序：脉冲→推送→活跃→侧栏→评论），
+		   否则 activity/comments 同钉在第 3 行会叠在一起 */
+		.analytics-main,
+		.analytics-sidebar,
+		.analytics-deployment,
+		.analytics-activity,
+		.analytics-comments { grid-column: 1 / -1; grid-row: auto; }
 		.analytics-sidebar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 	}
 
@@ -3939,6 +3966,11 @@ const sourceLabel = shareApiBase.includes("cloud.umami.is")
 		.analytics-comments__list { grid-template-columns: 1fr; }
 		.analytics-comments__header { grid-template-columns: 1fr; }
 		.analytics-comments__header-meta { width: 100%; align-items: flex-start; flex-direction: row; justify-content: space-between; }
+	}
+
+	/* 推送节奏卡片容器宽度不足时 metric 折成 2×2，避免 label/strong/small 出现省略号 */
+	@container (max-width: 860px) {
+		.analytics-deployment__metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 	}
 
 	@container (max-width: 540px) {
