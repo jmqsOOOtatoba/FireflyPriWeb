@@ -6,7 +6,8 @@ import MainGridLayout from "@/layouts/MainGridLayout.astro";
 export const prerender = true;
 
 const umamiAnalytics = analyticsConfig.umamiAnalytics;
-const twikooServer = commentConfig.type === "twikoo" ? (commentConfig.twikoo?.envId ?? "") : "";
+const twikooServer =
+	commentConfig.type === "twikoo" ? (commentConfig.twikoo?.envId ?? "") : "";
 const shareId = umamiAnalytics?.shareId ?? "";
 const shareApiBase = umamiAnalytics?.shareApiBase ?? "";
 const publicShareUrl =
@@ -2130,13 +2131,6 @@ const sourceLabel = shareApiBase.includes("cloud.umami.is")
 				night: card.querySelector('[data-activity-stat="night"]'),
 			};
 			const weekdayLabels = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
-			const weekdayIndex = { Mon: 0, Tue: 1, Wed: 2, Thu: 3, Fri: 4, Sat: 5, Sun: 6 };
-			const activityPartsFormatter = new Intl.DateTimeFormat("en-US", {
-				timeZone,
-				weekday: "short",
-				hour: "2-digit",
-				hourCycle: "h23",
-			});
 			const controller = new AbortController();
 			let activeValues = [];
 			let activityAnimationFrame;
@@ -2172,11 +2166,10 @@ const sourceLabel = shareApiBase.includes("cloud.umami.is")
 			};
 
 			const getActivityParts = (value) => {
-				const date = new Date(value);
-				if (Number.isNaN(date.getTime())) return null;
-				const parts = Object.fromEntries(activityPartsFormatter.formatToParts(date).map((part) => [part.type, part.value]));
-				const weekday = weekdayIndex[parts.weekday];
-				const hour = Number(parts.hour);
+				const match = /^(\d{4})-(\d{2})-(\d{2})[ T](\d{2})/u.exec(String(value ?? ""));
+				if (!match) return null;
+				const hour = Number.parseInt(match[4], 10);
+				const weekday = (new Date(Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3]))).getUTCDay() + 6) % 7;
 				return Number.isInteger(weekday) && Number.isInteger(hour) ? { weekday, hour } : null;
 			};
 
@@ -2242,20 +2235,35 @@ const sourceLabel = shareApiBase.includes("cloud.umami.is")
 					const share = await fetchShare(apiBase, shareId, controller.signal);
 					const endAt = Date.now();
 					const startAt = endAt - 30 * 24 * 60 * 60 * 1000;
-					const url = new URL(`${apiBase}/api/websites/${share.websiteId}/pageviews`);
-					url.searchParams.set("startAt", String(startAt));
-					url.searchParams.set("endAt", String(endAt));
-					url.searchParams.set("unit", "hour");
-					url.searchParams.set("timezone", timeZone);
-					const payload = await fetchJson(url, {
-						headers: {
-							"x-umami-share-token": share.token,
-							"x-umami-share-context": "1",
-						},
-						signal: controller.signal,
-					}, 7000);
-					const sessions = readRows(payload?.sessions);
-					const pageviews = readRows(payload?.pageviews);
+					// Umami silently degrades unit=hour to day when the range exceeds 48h, so cover 30 days with 48h slices.
+					const sliceMs = 48 * 60 * 60 * 1000;
+					const slices = Array.from({ length: 15 }, (_, index) => {
+						const sliceStart = startAt + index * sliceMs;
+						return [sliceStart, Math.min(endAt, sliceStart + sliceMs)];
+					});
+					const headers = {
+						"x-umami-share-token": share.token,
+						"x-umami-share-context": "1",
+					};
+					const results = await Promise.allSettled(
+						slices.map(([sliceStart, sliceEnd]) => {
+							const url = new URL(`${apiBase}/api/websites/${share.websiteId}/pageviews`);
+							url.searchParams.set("startAt", String(sliceStart));
+							url.searchParams.set("endAt", String(sliceEnd));
+							url.searchParams.set("unit", "hour");
+							url.searchParams.set("timezone", timeZone);
+							return fetchJson(url, { headers, signal: controller.signal }, 7000);
+						}),
+					);
+					const fulfilled = results.filter((result) => result.status === "fulfilled");
+					if (!fulfilled.length) {
+						const aborted = results.some((result) => result.status === "rejected" && result.reason?.name === "AbortError");
+						if (aborted) return;
+						renderActivity([], "小时级公开数据暂时不可用 · 可稍后刷新");
+						return;
+					}
+					const sessions = fulfilled.flatMap((result) => readRows(result.value?.sessions));
+					const pageviews = fulfilled.flatMap((result) => readRows(result.value?.pageviews));
 					renderActivity(sessions.length ? sessions : pageviews, sessions.length ? "按北京时间聚合近 30 天访客记录 · 鼠标移入查看具体时段" : "按北京时间聚合近 30 天访问记录 · 鼠标移入查看具体时段");
 				} catch (error) {
 					if (error?.name === "AbortError") return;
