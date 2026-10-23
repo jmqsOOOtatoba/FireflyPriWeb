@@ -236,6 +236,8 @@ enum I18nKey {
 	bilibiliNotConfiguredDesc = "bilibiliNotConfiguredDesc",
 
 	// 追番 - 公共组件
+	anime = "anime",
+	animeSubtitle = "animeSubtitle",
 	animeTotal = "animeTotal",
 	animeAverageRating = "animeAverageRating",
 	animeSearch = "animeSearch",
@@ -264,6 +266,11 @@ enum I18nKey {
 	animeTypeChinese = "animeTypeChinese",
 	animeTypeDrama = "animeTypeDrama",
 	animeTypeConcert = "animeTypeConcert",
+	animeTmdbAvg = "animeTmdbAvg",
+	animeSource = "animeSource",
+	animeDualSynced = "animeDualSynced",
+	animeNotConfigured = "animeNotConfigured",
+	animeNotConfiguredDesc = "animeNotConfiguredDesc",
 
 	// MyAnimeList
 	mal = "mal",

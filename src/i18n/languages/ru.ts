@@ -237,6 +237,14 @@ export const ru: Translation = {
 		"Настройте bilibili.uid в src/config/siteConfig.ts",
 
 	// Отслеживание аниме - общие компоненты
+	[Key.anime]: "Аниме",
+	[Key.animeSubtitle]: "Моя коллекция аниме и оценки",
+	[Key.animeTmdbAvg]: "Средний балл TMDB",
+	[Key.animeSource]: "Источник данных",
+	[Key.animeDualSynced]: "Двойная синхронизация TMDB и Bilibili",
+	[Key.animeNotConfigured]: "Источник данных аниме не настроен",
+	[Key.animeNotConfiguredDesc]:
+		"Укажите anime.tmdb или anime.bilibili в src/config/siteConfig.ts, чтобы отобразить список.",
 	[Key.animeTotal]: "Всего",
 	[Key.animeAverageRating]: "Средний рейтинг",
 	[Key.animeSearch]: "Поиск аниме...",

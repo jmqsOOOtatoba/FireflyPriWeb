@@ -237,6 +237,14 @@ export const en: Translation = {
 		"Configure bilibili.uid in src/config/siteConfig.ts",
 
 	// Anime Tracking - Shared components
+	[Key.anime]: "Anime",
+	[Key.animeSubtitle]: "My anime collection and ratings",
+	[Key.animeTmdbAvg]: "TMDB Avg",
+	[Key.animeSource]: "Source",
+	[Key.animeDualSynced]: "TMDB + Bilibili dual sync",
+	[Key.animeNotConfigured]: "Anime data source not configured",
+	[Key.animeNotConfiguredDesc]:
+		"Fill in anime.tmdb or anime.bilibili in src/config/siteConfig.ts to show your list.",
 	[Key.animeTotal]: "Total",
 	[Key.animeAverageRating]: "Avg Rating",
 	[Key.animeSearch]: "Search anime...",

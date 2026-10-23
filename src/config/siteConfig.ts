@@ -40,6 +40,12 @@ const pages = resolvePageToggles({
 
 	// 打赏页面开关
 	sponsor: true,
+
+	// 站点统计页面开关（/analytics，自建 Umami）
+	analytics: true,
+
+	// 追番页面开关（需先配置下方 anime.tmdb 或 anime.bilibili）
+	anime: false,
 });
 
 export const siteConfig: SiteConfig = {
@@ -302,8 +308,23 @@ export const siteConfig: SiteConfig = {
 		vnBaseUrl: "https://vndb.org/",
 		// 私密列表访问令牌，仅 static 模式下使用；不要把真实令牌提交到公开仓库！
 		apiToken: "",
-		// 对Nsfw的游戏封面模糊化
-		blurNsfw: true,
+		// NSFW 处理："off" 不过滤 | "blur" 仅模糊封面 | "hide" 隐藏条目
+		nsfw: "blur",
+	},
+
+	// ── 追番配置 ──────────────────────────────────
+	// TMDB 与 Bilibili 任一填好即可在 /anime/ 显示；两者都填则为双源同步
+	anime: {
+		tmdb: {
+			// TMDB API Key，从 https://www.themoviedb.org/settings/api 获取
+			apiKey: "",
+			// TMDB 列表 ID（列表需设为公开）
+			listId: "",
+		},
+		bilibili: {
+			// Bilibili 用户 UID
+			uid: "",
+		},
 	},
 
 	// ── MyAnimeList配置 ──────────────────────────────────

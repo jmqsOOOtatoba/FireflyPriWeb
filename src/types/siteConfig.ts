@@ -101,6 +101,8 @@ export type SiteConfig = {
 		bilibili: boolean; // 哔哩哔哩追番页面开关
 		dynamic: boolean; // 动态页面开关
 		projects: boolean; // 项目展示页开关
+		analytics: boolean; // 站点统计页面开关
+		anime: boolean; // 追番页面开关
 	};
 
 	// 分类导航栏开关
@@ -207,7 +209,7 @@ export type SiteConfig = {
 		vnBaseUrl?: string; // VNDB 条目详情页地址，末尾需要带 /
 		apiToken?: string; // 私密列表访问令牌，仅 static 模式下使用
 
-		blurNsfw?: boolean; // 对Nsfw的游戏封面模糊化，默认为true
+		nsfw?: NsfwMode; // NSFW 处理："off" 不过滤 | "blur" 仅模糊封面 | "hide" 隐藏条目
 	};
 
 	// MyAnimeList 配置
@@ -218,6 +220,17 @@ export type SiteConfig = {
 		animeBaseUrl?: string; // 动画条目详情页地址，末尾需要带 /
 		mangaBaseUrl?: string; // 漫画条目详情页地址，末尾需要带 /
 		nsfw?: NsfwMode; // NSFW 处理："off" 不过滤 | "blur" 仅模糊封面 | "hide" 隐藏条目
+	};
+
+	// 追番配置（TMDB 与 Bilibili 任一填好即可显示数据，两者都填为双源同步）
+	anime?: {
+		tmdb?: {
+			apiKey?: string; // TMDB API Key
+			listId?: string; // TMDB 列表 ID
+		};
+		bilibili?: {
+			uid?: string; // Bilibili 用户 UID
+		};
 	};
 
 	// Bilibili 配置

@@ -232,6 +232,14 @@ export const zh_CN: Translation = {
 		"请在 src/config/siteConfig.ts 中配置 bilibili.uid",
 
 	// 追番 - 公共组件
+	[Key.anime]: "追番",
+	[Key.animeSubtitle]: "我的番剧收藏与评分",
+	[Key.animeTmdbAvg]: "TMDB 均分",
+	[Key.animeSource]: "数据来源",
+	[Key.animeDualSynced]: "TMDB + Bilibili 双源同步",
+	[Key.animeNotConfigured]: "未配置追番数据源",
+	[Key.animeNotConfiguredDesc]:
+		"在 src/config/siteConfig.ts 的 anime.tmdb 或 anime.bilibili 中填入数据源信息后即可显示。",
 	[Key.animeTotal]: "总追番",
 	[Key.animeAverageRating]: "平均评分",
 	[Key.animeSearch]: "搜索番剧...",

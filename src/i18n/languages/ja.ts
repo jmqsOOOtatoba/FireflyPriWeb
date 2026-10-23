@@ -236,6 +236,14 @@ export const ja: Translation = {
 		"src/config/siteConfig.ts で bilibili.uid を設定してください",
 
 	// 追番 - 共通コンポーネント
+	[Key.anime]: "追番",
+	[Key.animeSubtitle]: "我的アニメコレクションと評価",
+	[Key.animeTmdbAvg]: "TMDB 平均",
+	[Key.animeSource]: "データソース",
+	[Key.animeDualSynced]: "TMDB + Bilibili デュアル同期",
+	[Key.animeNotConfigured]: "追番データソースが未設定です",
+	[Key.animeNotConfiguredDesc]:
+		"src/config/siteConfig.ts の anime.tmdb または anime.bilibili にデータソース情報を入力すると表示されます。",
 	[Key.animeTotal]: "合計",
 	[Key.animeAverageRating]: "平均評価",
 	[Key.animeSearch]: "アニメを検索...",

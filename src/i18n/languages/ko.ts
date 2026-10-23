@@ -236,6 +236,14 @@ export const ko: Translation = {
 		"src/config/siteConfig.ts에서 bilibili.uid를 설정하세요",
 
 	// Anime Tracking - Shared components
+	[Key.anime]: "애니",
+	[Key.animeSubtitle]: "나의 애니 컬렉션과 평점",
+	[Key.animeTmdbAvg]: "TMDB 평균",
+	[Key.animeSource]: "데이터 소스",
+	[Key.animeDualSynced]: "TMDB + Bilibili 이중 동기화",
+	[Key.animeNotConfigured]: "애니 데이터 소스가 설정되지 않았습니다",
+	[Key.animeNotConfiguredDesc]:
+		"src/config/siteConfig.ts 의 anime.tmdb 또는 anime.bilibili 에 데이터 소스 정보를 입력하면 표시됩니다.",
 	[Key.animeTotal]: "총계",
 	[Key.animeAverageRating]: "평균 평점",
 	[Key.animeSearch]: "애니메이션 검색...",
