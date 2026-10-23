@@ -3,23 +3,25 @@
 
 <div align="center">
 
-# Firefly
+# Firefly · 左沐の手册
 > A Fresh and Beautiful Astro Static Blog Theme Template
 > 
+> This site is a personal fork of [Firefly](https://github.com/CuteLeaf/Firefly) (v6.16.8), named "左沐の手册" and served from [azuma.mstzuomu.space](https://azuma.mstzuomu.space)
+> 
 > ![Node.js >= 22](https://img.shields.io/badge/node.js-%3E%3D22-brightgreen) 
-![pnpm >= 11](https://img.shields.io/badge/pnpm-%3E%3D9-blue)
+![pnpm >= 11](https://img.shields.io/badge/pnpm-%3E%3D11-blue)
 ![Astro](https://img.shields.io/badge/Astro-7-orange)
 ![TypeScript](https://img.shields.io/badge/TypeScript-6-blue)
 >
-> [![Stars](https://img.shields.io/github/stars/CuteLeaf/Firefly?style=social)](https://github.com/CuteLeaf/Firefly/stargazers)
-[![Forks](https://img.shields.io/github/forks/CuteLeaf/Firefly?style=social)](https://github.com/CuteLeaf/Firefly/network/members)
-[![Issues](https://img.shields.io/github/issues/CuteLeaf/Firefly)](https://github.com/CuteLeaf/Firefly/issues)
+> [![Stars](https://img.shields.io/github/stars/jmqsOOOtatoba/FireflyPriWeb?style=social)](https://github.com/jmqsOOOtatoba/FireflyPriWeb/stargazers)
+[![Forks](https://img.shields.io/github/forks/jmqsOOOtatoba/FireflyPriWeb?style=social)](https://github.com/jmqsOOOtatoba/FireflyPriWeb/network/members)
+[![Issues](https://img.shields.io/github/issues/jmqsOOOtatoba/FireflyPriWeb)](https://github.com/jmqsOOOtatoba/FireflyPriWeb/issues)
 > 
 > [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Z8Z41NQALY)
 >
 > **QQ交流群：[1087127207](https://qm.qq.com/q/ZGsFa8qX2G)**
 > 
-> ![GitHub License](https://img.shields.io/github/license/CuteLeaf/Firefly)
+> ![GitHub License](https://img.shields.io/github/license/jmqsOOOtatoba/FireflyPriWeb)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/CuteLeaf/Firefly)
 [![Afdian Sponsor](https://img.shields.io/badge/Afdian-Sponsor%20Author-ff69b4.svg)](https://ifdian.net/a/cuteleaf)
 </div>
@@ -30,9 +32,9 @@
 **[简体中文](README.md)** | **[繁體中文](docs/README.zh-TW.md)** | **[English](README.en.md)** | **[日本語](docs/README.ja.md)** | **[한국어](docs/README.ko.md)**
 
 🚀 Quick Guide:
-[**🖥️Live Demo**](https://firefly.cuteleaf.cn/) /
-[**📝Documentation**](https://docs-firefly.cuteleaf.cn/) /
-[**🍀My Blog**](https://blog.cuteleaf.cn)
+[**🖥️Live Site**](https://azuma.mstzuomu.space/) /
+[**📝Theme Docs**](https://docs-firefly.cuteleaf.cn/) /
+[**📊Public Analytics**](https://azuma.mstzuomu.space/analytics/)
 
 ⚡ Static Site Generation: Ultra-fast loading speed and SEO optimization based on Astro
 
@@ -92,26 +94,47 @@
 
 If you have useful features and optimizations, please submit a [Pull Request](https://github.com/CuteLeaf/Firefly/pulls)
 
+### Personal Additions
+
+- [x] **Friend Circle** - `/fcircle/` aggregates recent posts from friend-link RSS feeds
+- [x] **Bookmark Nav** - `/booknav/` categorized bookmark directory, driven by `booknavConfig.ts`
+- [x] **Gallery** - `/gallery/` photo album page
+- [x] **Moments** - `/dynamic/` short-form timeline with pinning, location and a Memos data source
+- [x] **Projects** - `/projects/` project showcase page
+- [x] **Guestbook** - `/guestbook/` visitor messages
+- [x] **Bangumi & Bilibili** - Bangumi collection shelves and Bilibili watch progress
+- [x] **Analytics** - Self-hosted Umami (`umami.mstzuomu.space`) plus a public stats page at `/analytics/`, linked from the navbar; Busuanzi was removed entirely
+- [x] **Publisher** - `publisher/` is a standalone Vercel project (`pub.mstzuomu.space`) exposing six APIs: article / articles / auth / friend-apply / friend-decide / publish
+- [x] **Self-service Friend Links** - Submitted through a form, reviewed by email, with an optional rejection reason
+- [x] **Visitor Info** - Visitor location, weather and temperature, plus weather alerts
+- [x] **Site Stats** - Post count, category count, tag count, total word count and uptime
+- [x] **Reading Comfort** - Reading progress bar and circular indicator, plus an immersive reading mode
+- [x] **Twikoo Comments** - Self-hosted comment service (`twikoo.mstzuomu.space`)
+- [x] **Bilibili Card** - `::bilibili{uid="..."}` directive renders an uploader card
+- [x] **Music Player** - Global music player plus the `::music` directive
+- [x] **Image Hosting** - Dedicated host at `tu.mstzuomu.space`
+- [x] **Dual ICP Footer** - 鲁ICP备2026062086号-1 plus the public-security filing number and badge, injected through `FooterConfig.html`
+
 ## 🚀 Quick Start
 
 ### Requirements
 
-- Node.js ≥ 22
-- pnpm ≥ 11
+- Node.js ≥ 22.23.0 (see `engines.node` in `package.json`)
+- pnpm 11.22.0 (see `packageManager` in `package.json`)
 
 ### Local Development
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/Cuteleaf/Firefly.git
-   cd Firefly
+   git clone https://github.com/jmqsOOOtatoba/FireflyPriWeb.git
+   cd FireflyPriWeb
    ```
    
-   **First [Fork](https://github.com/CuteLeaf/Firefly/fork) to your own repository then clone (recommended). Don't forget to Star before Fork!**
+   **If you want to build your own site on top of this repo, [Fork](https://github.com/jmqsOOOtatoba/FireflyPriWeb/fork) it first and then clone:**
 
    ```bash
-   git clone https://github.com/you-github-name/Firefly.git
-   cd Firefly
+   git clone https://github.com/you-github-name/FireflyPriWeb.git
+   cd FireflyPriWeb
    ```
 3. **Install dependencies:**
    ```bash
@@ -132,21 +155,22 @@ If you have useful features and optimizations, please submit a [Pull Request](ht
    Blog will be available at `http://localhost:4321`
 
 ### Platform Hosting Deployment
-- **Refer to the [official guide](https://docs.astro.build/en/guides/deploy/) to deploy your blog to Vercel, Netlify, Cloudflare Pages, EdgeOne Pages, etc.**
-- **Vercel**, **Netlify** and other major platforms auto-deploy, automatically selecting the appropriate adapter based on the environment.
 
-   Framework Preset: `Astro`
+This site is deployed on **Tencent Cloud EdgeOne Pages**: pushing to the GitHub `master` branch triggers a build and publishes plain static files.
 
-   Root Directory: `./`
+- Framework Preset: `Astro`
+- Root Directory: `./`
+- Output Directory: `dist`
+- Build Command: `pnpm run build`
+- Install Command: `pnpm install`
 
-   Output Directory: `dist`
+Any other static host (Vercel, Netlify, Cloudflare Pages, etc.) works just as well — configure it following the [official Astro deployment guide](https://docs.astro.build/en/guides/deploy/).
 
-   Build Command: `pnpm run build`
+**A few notes:**
 
-   Install Command: `pnpm install`
-
-   [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/CuteLeaf/Firefly&project-name=Firefly&repository-name=Firefly)
-   [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/CuteLeaf/Firefly)
+- The canonical entry point is <https://azuma.mstzuomu.space>, defined as `site_url` in `src/config/siteConfig.ts`; `www.mstzuomu.space` and the bare domain 302-redirect to it (see `Layout.astro`).
+- The `wrangler.jsonc`, `wrangler.toml` and `vercel.json` files at the repository root are leftovers from the upstream template and are not part of this site's deployment.
+- `astro.config.mjs` only attaches the Cloudflare adapter when the `CF_WORKERS` environment variable is present; the default is a plain static build with no adapter at all.
 
 ## 📖 Configuration
 
@@ -179,12 +203,14 @@ src/
 │   ├── analyticsConfig.ts        # Analytics configuration
 │   ├── announcementConfig.ts     # Announcement configuration
 │   ├── backgroundWallpaper.ts    # Background wallpaper configuration
+│   ├── booknavConfig.ts          # Bookmark navigation configuration
 │   ├── commentConfig.ts          # Comment system configuration
 │   ├── coverImageConfig.ts       # Cover image configuration
 │   ├── displaySettingsConfig.ts  # Settings panel configuration
 │   ├── dynamicConfig.ts          # Moments page configuration
 │   ├── effectsConfig.ts          # Animation effects config (sakura, etc.)
 │   ├── expressiveCodeConfig.ts   # Code highlighting configuration
+│   ├── fcircleConfig.ts          # Friend circle configuration
 │   ├── fontConfig.ts             # Font configuration
 │   ├── FooterConfig.html           # Footer configuration
 │   ├── friendsConfig.ts          # Friend links configuration
@@ -242,29 +268,50 @@ Also supports [Memos](https://www.usememos.com/) as a data source. Configure the
 
 ## 📖 Markdown Extensions
 
-In addition to the default [GitHub Flavored Markdown](https://github.github.com/gfm/) support in Astro, there are some additional Markdown features:
+In addition to the default [GitHub Flavored Markdown](https://github.github.com/gfm/) support in Astro, more than 20 remark / rehype plugins live under `src/plugins/` and provide the following extensions:
 
 - Admonitions - Supports configuration for GitHub, Obsidian, VitePress, and Docusaurus themes ([Preview and Usage](https://firefly.cuteleaf.cn/posts/markdown-extended/))
 - GitHub Repository Cards ([Preview and Usage](https://firefly.cuteleaf.cn/posts/markdown-extended/))
 - Enhanced Code Blocks based on Expressive Code ([Preview](http://firefly.cuteleaf.cn/posts/code-examples/) / [Documentation](https://expressive-code.com/))
+- Bilibili User Card - `::bilibili{uid="353880725"}`; the avatar and nickname are fetched at build time and rendered as a full card
+- Music Player - `::music{url="..."}` or `::music{server="netease" id="..."}`
+- PDF Viewer - `::pdf{url="https://example.com/file.pdf"}`
+- Mermaid Diagrams - Rendered from code blocks, with zoom and pan
+- PlantUML Diagrams - Rendered from code blocks, with theme switching plus zoom and pan
+- Wiki Links - `[[post-path]]` style internal links, resolved to the target title and URL
+- Image Grid - Multiple images are laid out automatically as a grid
+- Email Protection - Addresses in the body are encoded automatically to defeat scrapers
+- External Links - Off-site links get `target` / `rel` attributes added automatically
+- Figures - Images are wrapped in `<figure>` with optional captions
+- Reading Time and Excerpt - Reading time and post excerpts are generated at build time
 
 ## 🧞 Commands
 
 All commands need to be executed in the project root directory:
 
-| Command                    | Action                                              |
-|:---------------------------|:----------------------------------------------------|
-| `pnpm install`             | Install dependencies                                |
-| `pnpm dev`                 | Start local development server at `localhost:4321`  |
-| `pnpm build`               | Build site to `./dist/`                             |
-| `pnpm preview`             | Preview built site locally                          |
-| `pnpm check`               | Check for errors in code                            |
-| `pnpm format`              | Format your code using Biome                        |
-| `pnpm new-post <filename>` | Create new article                                  |
-| `pnpm new-d <content>`     | Create a new moment                                 |
-| `pnpm new-dynamic <content>` | Create a new moment (full command)                |
-| `pnpm astro ...`           | Execute `astro add`, `astro check` and other commands |
-| `pnpm astro --help`        | Display Astro CLI help                              |
+| Command                      | Action                                                          |
+|:-----------------------------|:----------------------------------------------------------------|
+| `pnpm install`               | Install dependencies (`preinstall` enforces pnpm only)            |
+| `pnpm dev`                   | Start local development server at `localhost:4321` (same as `pnpm start`) |
+| `pnpm build`                 | Run the full 10-step build pipeline and output to `./dist/`      |
+| `pnpm preview`               | Preview built site locally                                       |
+| `pnpm check`                 | Run Astro diagnostics and check for errors in code               |
+| `pnpm type-check`            | Run the TypeScript check (`tsc --noEmit`)                        |
+| `pnpm format`                | Format `src` and `scripts` using Biome                           |
+| `pnpm lint`                  | Lint and safely fix `src` and `scripts` using Biome              |
+| `pnpm new-post <filename>`   | Create new article                                               |
+| `pnpm new-d <content>`       | Create a new moment (alias of `new-dynamic`)                     |
+| `pnpm new-dynamic <content>` | Create a new moment (full command)                               |
+| `pnpm lqips`                 | Regenerate only the image LQIP placeholders                      |
+| `pnpm friend-json`           | Regenerate only the friend-links JSON                            |
+| `pnpm github-cards`          | Regenerate only the GitHub card data                             |
+| `pnpm bilibili-cards`        | Regenerate only the Bilibili card data                           |
+| `pnpm astro ...`             | Execute `astro add`, `astro check` and other commands            |
+| `pnpm astro --help`          | Display Astro CLI help                                           |
+
+`pnpm build` is a composite command that runs ten steps in order:
+
+generate friend-links JSON → generate GitHub card data → generate Bilibili card data → generate LQIP placeholders → generate VNDB covers → `astro build` → prune mascot assets → subset fonts → minify inline scripts → run Pagefind indexing.
 
 ## 🙏 Acknowledgments
 

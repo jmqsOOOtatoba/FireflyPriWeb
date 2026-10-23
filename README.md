@@ -3,23 +3,25 @@
 
 <div align="center">
 
-# 流萤 / Firefly 
+# 流萤 / Firefly · 左沐の手册
 > 一款清新美观的 Astro 静态博客主题模板
 > 
+> 本站是 [Firefly](https://github.com/CuteLeaf/Firefly) 的个人 fork（v6.16.8），站点名「左沐の手册」，主入口 [azuma.mstzuomu.space](https://azuma.mstzuomu.space)
+> 
 > ![Node.js >= 22](https://img.shields.io/badge/node.js-%3E%3D22-brightgreen) 
-![pnpm >= 11](https://img.shields.io/badge/pnpm-%3E%3D9-blue)
+![pnpm >= 11](https://img.shields.io/badge/pnpm-%3E%3D11-blue)
 ![Astro](https://img.shields.io/badge/Astro-7-orange)
 ![TypeScript](https://img.shields.io/badge/TypeScript-6-blue)
 >
-> [![Stars](https://img.shields.io/github/stars/CuteLeaf/Firefly?style=social)](https://github.com/CuteLeaf/Firefly/stargazers)
-[![Forks](https://img.shields.io/github/forks/CuteLeaf/Firefly?style=social)](https://github.com/CuteLeaf/Firefly/network/members)
-[![Issues](https://img.shields.io/github/issues/CuteLeaf/Firefly)](https://github.com/CuteLeaf/Firefly/issues)
+> [![Stars](https://img.shields.io/github/stars/jmqsOOOtatoba/FireflyPriWeb?style=social)](https://github.com/jmqsOOOtatoba/FireflyPriWeb/stargazers)
+[![Forks](https://img.shields.io/github/forks/jmqsOOOtatoba/FireflyPriWeb?style=social)](https://github.com/jmqsOOOtatoba/FireflyPriWeb/network/members)
+[![Issues](https://img.shields.io/github/issues/jmqsOOOtatoba/FireflyPriWeb)](https://github.com/jmqsOOOtatoba/FireflyPriWeb/issues)
 > 
 > [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Z8Z41NQALY)
 >
 > **QQ交流群：[1087127207](https://qm.qq.com/q/ZGsFa8qX2G)**
 > 
-> ![GitHub License](https://img.shields.io/github/license/CuteLeaf/Firefly)
+> ![GitHub License](https://img.shields.io/github/license/jmqsOOOtatoba/FireflyPriWeb)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/CuteLeaf/Firefly)
 [![爱发电打赏](https://img.shields.io/badge/爱发电-打赏作者-ff69b4.svg)](https://ifdian.net/a/cuteleaf)
 
@@ -31,9 +33,9 @@
 **[简体中文](README.md)** | **[繁體中文](docs/README.zh-TW.md)** | **[English](README.en.md)** | **[日本語](docs/README.ja.md)** | **[한국어](docs/README.ko.md)**
 
 🚀 快速指南：
-[**🖥️在线预览**](https://firefly.cuteleaf.cn/) /
-[**📝使用文档**](https://docs-firefly.cuteleaf.cn/) /
-[**🍀我的博客**](https://blog.cuteleaf.cn) 
+[**🖥️本站入口**](https://azuma.mstzuomu.space/) /
+[**📝主题文档**](https://docs-firefly.cuteleaf.cn/) /
+[**📊公开统计**](https://azuma.mstzuomu.space/analytics/) 
 
 ⚡ 静态站点生成: 基于 Astro 的超快加载速度和 SEO 优化
 
@@ -93,32 +95,46 @@
 如果你有好用的功能和优化，请提交 [Pull Request](https://github.com/CuteLeaf/Firefly/pulls)
 
 ### 个人新增
-- [x] **访客信息** - 显示访客位置、天气、温度等信息
+
+- [x] **友圈** - `/fcircle/` 友链动态聚合页，抓取友链 RSS 集中展示
+- [x] **书签导航** - `/booknav/` 分类书签导航页，由 `booknavConfig.ts` 配置
+- [x] **相册** - `/gallery/` 图片相册页
+- [x] **动态** - `/dynamic/` 短动态时间线，支持置顶、位置与 Memos 数据源
+- [x] **项目** - `/projects/` 项目展示页
+- [x] **留言板** - `/guestbook/` 留言互动
+- [x] **番组与追番** - Bangumi 番组收藏与 B 站追番进度
+- [x] **统计分析** - 自建 Umami（`umami.mstzuomu.space`）+ 公开统计页 `/analytics/`，导航栏有入口；已完全移除不蒜子统计
+- [x] **发布台** - `publisher/` 独立 Vercel 项目（`pub.mstzuomu.space`），对外提供 article / articles / auth / friend-apply / friend-decide / publish 六个 API
+- [x] **友链自助申请** - 表单提交后走邮件审核，拒绝时可填写理由
+- [x] **访客信息** - 显示访客位置、天气、温度等信息，附天气预警
 - [x] **站点统计** - 文章数量、分类数量、标签数量、总字数、运行天数等统计
-- [x] **不蒜子统计** - 总浏览量和访客数统计
-- [x] **留言功能** - 支持留言互动
-- [x] **Umami后台** - 网站数据后台可视化
+- [x] **阅读增强** - 阅读进度条与进度圆环，另提供沉浸阅读模式
+- [x] **Twikoo 评论** - 自建评论服务（`twikoo.mstzuomu.space`）
+- [x] **B 站卡片** - `::bilibili{uid="..."}` 指令内嵌 UP 主卡片
+- [x] **音乐播放器** - 全局音乐播放器与 `::music` 指令
+- [x] **图床** - `tu.mstzuomu.space` 独立图床
+- [x] **双备案页脚** - 鲁ICP备2026062086号-1 与公安备案号 + 图标，由 `FooterConfig.html` 注入
 
 ## 🚀 快速开始
 
 ### 环境要求
 
-- Node.js ≥ 22
-- pnpm ≥ 11
+- Node.js ≥ 22.23.0（见 `package.json` 的 `engines.node`）
+- pnpm 11.22.0（见 `package.json` 的 `packageManager`）
 
 ### 本地开发部署
 
 1. **克隆仓库：**
    ```bash
-   git clone https://github.com/Cuteleaf/Firefly.git
-   cd Firefly
+   git clone https://github.com/jmqsOOOtatoba/FireflyPriWeb.git
+   cd FireflyPriWeb
    ```
    
-   **先 [Fork](https://github.com/CuteLeaf/Firefly/fork) 到自己仓库再克隆（推荐），记得先点 Star 再 Fork 哦！**
+   **想基于本仓库再做二次开发的话，先 [Fork](https://github.com/jmqsOOOtatoba/FireflyPriWeb/fork) 到自己仓库再克隆：**
 
    ```bash
-   git clone https://github.com/you-github-name/Firefly.git
-   cd Firefly
+   git clone https://github.com/you-github-name/FireflyPriWeb.git
+   cd FireflyPriWeb
    ```
 3. **安装依赖：**
    ```bash
@@ -139,21 +155,22 @@
    博客将在 `http://localhost:4321` 可用
 
 ### 平台托管部署
-- **参考[官方指南](https://docs.astro.build/zh-cn/guides/deploy/)将博客部署至 Vercel, Netlify, Cloudflare Pages, EdgeOne Pages 等。**
-- **Vercel**、**Netlify** 等主流平台自动部署，会根据环境自动选择适配器。
 
-   框架预设： `Astro`
+本站部署在 **腾讯云 EdgeOne Pages**：推送到 GitHub `master` 分支后自动构建并发布，产物为纯静态文件。
 
-   根目录： `./`
+- 框架预设：`Astro`
+- 根目录：`./`
+- 输出目录：`dist`
+- 构建命令：`pnpm run build`
+- 安装命令：`pnpm install`
 
-   输出目录： `dist`
+其他静态托管平台（Vercel、Netlify、Cloudflare Pages 等）同样可以直接用，按 [Astro 官方部署指南](https://docs.astro.build/zh-cn/guides/deploy/) 配置即可。
 
-   构建命令： `pnpm run build`
+**几点说明：**
 
-   安装命令： `pnpm install`
-
-   [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/CuteLeaf/Firefly&project-name=Firefly&repository-name=Firefly)
-   [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/CuteLeaf/Firefly)
+- 站点主入口是 <https://azuma.mstzuomu.space>，定义在 `src/config/siteConfig.ts` 的 `site_url`；`www.mstzuomu.space` 与裸域会 302 跳转到主站（见 `Layout.astro`）。
+- 根目录的 `wrangler.jsonc`、`wrangler.toml`、`vercel.json` 是上游模板的残留配置，本站部署链路不使用它们。
+- `astro.config.mjs` 只在存在环境变量 `CF_WORKERS` 时才挂载 Cloudflare adapter；默认是纯静态构建，不需要任何 adapter。
 
 ## 📖 配置说明
 
@@ -186,12 +203,14 @@ src/
 │   ├── analyticsConfig.ts        # 统计分析配置
 │   ├── announcementConfig.ts     # 公告配置
 │   ├── backgroundWallpaper.ts    # 背景壁纸配置
+│   ├── booknavConfig.ts          # 书签导航配置
 │   ├── commentConfig.ts          # 评论系统配置
 │   ├── coverImageConfig.ts       # 封面图配置
 │   ├── displaySettingsConfig.ts  # 设置面板配置
 │   ├── dynamicConfig.ts          # 动态页面配置
 │   ├── effectsConfig.ts          # 动画特效配置（樱花等）
 │   ├── expressiveCodeConfig.ts   # 代码高亮配置
+│   ├── fcircleConfig.ts          # 友圈配置
 │   ├── fontConfig.ts             # 字体配置
 │   ├── FooterConfig.html           # 页脚配置
 │   ├── friendsConfig.ts          # 友链配置
@@ -248,31 +267,50 @@ location: China # 位置
 
 ## 🧩 Markdown 扩展语法
 
-除了 Astro 默认支持的 [GitHub Flavored Markdown](https://github.github.com/gfm/) 之外，还包含了一些额外的 Markdown 功能：
+除了 Astro 默认支持的 [GitHub Flavored Markdown](https://github.github.com/gfm/) 之外，`src/plugins/` 下还挂载了 20 多个 remark / rehype 插件，提供以下扩展语法：
 
 - 提醒块（Admonitions） - 支持 GitHub, Obsidian, VitePress, Docusaurus 四种风格主题配置 ([预览和用法](https://firefly.cuteleaf.cn/posts/markdown-extended/))
 - GitHub 仓库卡片 ([预览和用法](https://firefly.cuteleaf.cn/posts/markdown-extended/))
 - 基于 Expressive Code 的增强代码块 ([预览](http://firefly.cuteleaf.cn/posts/code-examples/) / [文档](https://expressive-code.com/))
-
-- Bilibili用户卡片 自行添加
+- B 站用户卡片 - `::bilibili{uid="353880725"}`，构建期抓取头像与昵称并渲染完整卡片
+- 音乐播放器 - `::music{url="..."}` 或 `::music{server="netease" id="..."}`
+- PDF 查看器 - `::pdf{url="https://example.com/file.pdf"}`
+- Mermaid 图表 - 代码块内渲染，支持缩放拖动
+- PlantUML 图表 - 代码块内渲染，支持主题切换与缩放拖动
+- Wiki 链接 - `[[文章路径]]` 形式的站内互链，自动解析标题与地址
+- 图片网格 - 多张图片自动排版为网格
+- 邮箱保护 - 正文中的邮箱地址自动编码，抵御爬虫收集
+- 外链处理 - 站外链接自动补 `target` / `rel` 属性
+- 图片说明 - 图片自动包裹 `<figure>` 并支持配文
+- 阅读时长与摘要 - 构建期生成阅读时间与文章摘要
 
 ## 🧞 指令
 
 下列指令均需要在项目根目录执行：
 
-| Command                    | Action                                 |
-| :------------------------- | :------------------------------------- |
-| `pnpm install`             | 安装依赖                               |
-| `pnpm dev`                 | 在 `localhost:4321` 启动本地开发服务器 |
-| `pnpm build`               | 构建网站至 `./dist/`                   |
-| `pnpm preview`             | 本地预览已构建的网站                   |
-| `pnpm check`               | 检查代码中的错误                       |
-| `pnpm format`              | 使用 Biome 格式化您的代码              |
-| `pnpm new-post <filename>` | 创建新文章                             |
-| `pnpm new-d <content>`     | 创建一条动态                           |
-| `pnpm new-dynamic <content>` | 创建一条动态（完整命令）              |
-| `pnpm astro ...`           | 执行 `astro add`, `astro check` 等指令 |
-| `pnpm astro --help`        | 显示 Astro CLI 帮助                    |
+| Command                      | Action                                                        |
+| :--------------------------- | :------------------------------------------------------------ |
+| `pnpm install`               | 安装依赖（`preinstall` 会强制校验只允许 pnpm）                 |
+| `pnpm dev`                   | 在 `localhost:4321` 启动本地开发服务器（`pnpm start` 等价）    |
+| `pnpm build`                 | 执行完整的 10 步构建链，产物输出到 `./dist/`                   |
+| `pnpm preview`               | 本地预览已构建的网站                                          |
+| `pnpm check`                 | 运行 Astro 诊断，检查代码中的错误                              |
+| `pnpm type-check`            | 运行 TypeScript 类型检查（`tsc --noEmit`）                     |
+| `pnpm format`                | 使用 Biome 格式化 `src` 与 `scripts`                           |
+| `pnpm lint`                  | 使用 Biome 检查并安全修复 `src` 与 `scripts`                   |
+| `pnpm new-post <filename>`   | 创建新文章                                                    |
+| `pnpm new-d <content>`       | 创建一条动态（`new-dynamic` 的别名）                           |
+| `pnpm new-dynamic <content>` | 创建一条动态（完整命令）                                      |
+| `pnpm lqips`                 | 单独重新生成图片 LQIP 占位图                                  |
+| `pnpm friend-json`           | 单独重新生成友链 JSON                                         |
+| `pnpm github-cards`          | 单独重新生成 GitHub 卡片数据                                  |
+| `pnpm bilibili-cards`        | 单独重新生成 B 站卡片数据                                     |
+| `pnpm astro ...`             | 执行 `astro add`, `astro check` 等指令                        |
+| `pnpm astro --help`          | 显示 Astro CLI 帮助                                           |
+
+`pnpm build` 是一条复合命令，按顺序执行 10 个步骤：
+
+生成友链 JSON → 生成 GitHub 卡片数据 → 生成 B 站卡片数据 → 生成 LQIP 占位图 → 生成 VNDB 封面 → `astro build` → 清理看板娘资源 → 字体子集化 → 内联脚本压缩 → 生成 Pagefind 搜索索引。
 
 ## 🙏 致谢
 

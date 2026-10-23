@@ -7,10 +7,14 @@
 
 ## Checklist
 
-- [ ] I have read the [**CONTRIBUTING**](https://github.com/CuteLeaf/Firefly/blob/master/CONTRIBUTING.md) document.
-- [ ] I have checked to ensure that this Pull Request is not for personal changes.
+- [ ] I have read the [**CONTRIBUTING**](../CONTRIBUTING.md) document.
+- [ ] I have checked that my personal configuration changes did not accidentally modify logic that others can reuse.
 - [ ] I have performed a self-review of my own code.
 - [ ] My changes generate no new warnings.
+- [ ] `pnpm check` passes.
+- [ ] `pnpm type-check` passes.
+- [ ] `pnpm build` succeeds.
+- [ ] For UI changes, screenshots of the affected pages are included below.
 
 ## Related Issue
 

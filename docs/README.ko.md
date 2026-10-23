@@ -3,23 +3,25 @@
 
 <div align="center">
 
-# Firefly
+# Firefly · 左沐の手册
 > 산뜻하고 아름다운 Astro 정적 블로그 테마 템플릿
+>
+> 이 사이트는 [Firefly](https://github.com/CuteLeaf/Firefly)의 개인 포크(v6.16.8)이며, 사이트 이름은 「左沐の手册」, 메인 주소는 [azuma.mstzuomu.space](https://azuma.mstzuomu.space)입니다.
 >
 > ![Node.js >= 22](https://img.shields.io/badge/node.js-%3E%3D22-brightgreen)
 ![pnpm >= 11](https://img.shields.io/badge/pnpm-%3E%3D11-blue)
 ![Astro](https://img.shields.io/badge/Astro-7-orange)
 ![TypeScript](https://img.shields.io/badge/TypeScript-6-blue)
 >
-> [![Stars](https://img.shields.io/github/stars/CuteLeaf/Firefly?style=social)](https://github.com/CuteLeaf/Firefly/stargazers)
-[![Forks](https://img.shields.io/github/forks/CuteLeaf/Firefly?style=social)](https://github.com/CuteLeaf/Firefly/network/members)
-[![Issues](https://img.shields.io/github/issues/CuteLeaf/Firefly)](https://github.com/CuteLeaf/Firefly/issues)
+> [![Stars](https://img.shields.io/github/stars/jmqsOOOtatoba/FireflyPriWeb?style=social)](https://github.com/jmqsOOOtatoba/FireflyPriWeb/stargazers)
+[![Forks](https://img.shields.io/github/forks/jmqsOOOtatoba/FireflyPriWeb?style=social)](https://github.com/jmqsOOOtatoba/FireflyPriWeb/network/members)
+[![Issues](https://img.shields.io/github/issues/jmqsOOOtatoba/FireflyPriWeb)](https://github.com/jmqsOOOtatoba/FireflyPriWeb/issues)
 >
 > [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Z8Z41NQALY)
 >
 > **QQ 커뮤니티: [1087127207](https://qm.qq.com/q/ZGsFa8qX2G)**
 >
-> ![GitHub License](https://img.shields.io/github/license/CuteLeaf/Firefly)
+> ![GitHub License](https://img.shields.io/github/license/jmqsOOOtatoba/FireflyPriWeb)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/CuteLeaf/Firefly)
 [![Afdian Sponsor](https://img.shields.io/badge/Afdian-Sponsor%20Author-ff69b4.svg)](https://ifdian.net/a/cuteleaf)
 </div>
@@ -30,9 +32,9 @@
 **[简体中文](../README.md)** | **[繁體中文](README.zh-TW.md)** | **[English](../README.en.md)** | **[日本語](README.ja.md)** | **[한국어](README.ko.md)**
 
 🚀 빠른 안내:
-[**🖥️온라인 데모**](https://firefly.cuteleaf.cn/) /
-[**📝문서**](https://docs-firefly.cuteleaf.cn/) /
-[**🍀내 블로그**](https://blog.cuteleaf.cn)
+[**🖥️사이트 바로가기**](https://azuma.mstzuomu.space/) /
+[**📝테마 문서**](https://docs-firefly.cuteleaf.cn/) /
+[**📊공개 통계**](https://azuma.mstzuomu.space/analytics/)
 
 ⚡ 정적 사이트 생성: Astro 기반의 매우 빠른 로딩 속도와 SEO 최적화
 
@@ -92,26 +94,47 @@
 
 유용한 기능이나 개선 사항이 있다면 [Pull Request](https://github.com/CuteLeaf/Firefly/pulls)를 보내 주세요.
 
+### 개인 추가 기능
+
+- [x] **프렌드 서클** - `/fcircle/` 프렌드 링크의 RSS를 모아 최신 글을 한곳에 표시
+- [x] **북마크 내비** - `/booknav/` 카테고리별 북마크 모음, `booknavConfig.ts`로 설정
+- [x] **갤러리** - `/gallery/` 이미지 앨범 페이지
+- [x] **일상** - `/dynamic/` 짧은 글 타임라인, 고정·위치·Memos 데이터 소스 지원
+- [x] **프로젝트** - `/projects/` 프로젝트 소개 페이지
+- [x] **방명록** - `/guestbook/` 방문자 메시지
+- [x] **Bangumi와 Bilibili** - Bangumi 컬렉션과 Bilibili 시청 진도
+- [x] **통계 분석** - 자체 호스팅 Umami(`umami.mstzuomu.space`)와 공개 통계 페이지 `/analytics/`, 내비게이션 바에 진입점이 있음. 부수안즈(busuanzi) 통계는 완전히 제거
+- [x] **퍼블리셔** - `publisher/`는 독립된 Vercel 프로젝트(`pub.mstzuomu.space`)로, article / articles / auth / friend-apply / friend-decide / publish 여섯 개의 API를 제공
+- [x] **프렌드 링크 자동 신청** - 폼으로 신청하고 메일로 검토하며, 거절 시 사유를 남길 수 있음
+- [x] **방문자 정보** - 방문자 위치, 날씨, 기온 등을 표시하고 기상 경보도 함께 제공
+- [x] **사이트 통계** - 게시물 수, 카테고리 수, 태그 수, 총 글자 수, 운영 일수 등
+- [x] **읽기 환경 강화** - 읽기 진행 막대와 진행 링, 그리고 몰입 읽기 모드
+- [x] **Twikoo 댓글** - 자체 호스팅 댓글 서비스(`twikoo.mstzuomu.space`)
+- [x] **Bilibili 카드** - `::bilibili{uid="..."}` 지시어로 업로더 카드 삽입
+- [x] **음악 플레이어** - 전역 음악 플레이어와 `::music` 지시어
+- [x] **이미지 호스팅** - `tu.mstzuomu.space` 전용 호스트
+- [x] **이중 ICP 푸터** - 鲁ICP备2026062086号-1 과 공안 등록 번호·아이콘을 `FooterConfig.html`로 삽입
+
 ## 🚀 빠른 시작
 
 ### 요구 사항
 
-- Node.js ≥ 22
-- pnpm ≥ 11
+- Node.js ≥ 22.23.0 (`package.json`의 `engines.node`)
+- pnpm 11.22.0 (`package.json`의 `packageManager`)
 
 ### 로컬 개발
 
 1. **저장소 복제:**
    ```bash
-   git clone https://github.com/CuteLeaf/Firefly.git
-   cd Firefly
+   git clone https://github.com/jmqsOOOtatoba/FireflyPriWeb.git
+   cd FireflyPriWeb
    ```
 
-   **먼저 자신의 저장소로 [Fork](https://github.com/CuteLeaf/Firefly/fork)한 다음 복제하는 것을 권장합니다. Fork 전에 Star를 누르는 것도 잊지 마세요!**
+   **이 저장소를 기반으로 자신만의 사이트를 만들려면 먼저 자신의 저장소로 [Fork](https://github.com/jmqsOOOtatoba/FireflyPriWeb/fork)한 다음 복제하세요:**
 
    ```bash
-   git clone https://github.com/you-github-name/Firefly.git
-   cd Firefly
+   git clone https://github.com/you-github-name/FireflyPriWeb.git
+   cd FireflyPriWeb
    ```
 3. **의존성 설치:**
    ```bash
@@ -132,21 +155,22 @@
    블로그는 `http://localhost:4321`에서 이용할 수 있습니다.
 
 ### 호스팅 플랫폼에 배포
-- **[공식 가이드](https://docs.astro.build/en/guides/deploy/)를 참고하여 블로그를 Vercel, Netlify, Cloudflare Pages, EdgeOne Pages 등에 배포하세요.**
-- **Vercel**, **Netlify** 등 주요 플랫폼에서는 환경에 맞는 어댑터를 자동으로 선택하여 배포합니다.
 
-   프레임워크 프리셋: `Astro`
+이 사이트는 **Tencent Cloud EdgeOne Pages**에 배포되어 있습니다. GitHub `master` 브랜치에 푸시하면 자동으로 빌드·배포되며, 결과물은 순수 정적 파일입니다.
 
-   루트 디렉터리: `./`
+- 프레임워크 프리셋: `Astro`
+- 루트 디렉터리: `./`
+- 출력 디렉터리: `dist`
+- 빌드 명령: `pnpm run build`
+- 설치 명령: `pnpm install`
 
-   출력 디렉터리: `dist`
+Vercel, Netlify, Cloudflare Pages 같은 다른 정적 호스팅에서도 그대로 사용할 수 있습니다. [Astro 공식 배포 가이드](https://docs.astro.build/en/guides/deploy/)를 참고해 설정하세요.
 
-   빌드 명령: `pnpm run build`
+**몇 가지 참고 사항:**
 
-   설치 명령: `pnpm install`
-
-   [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/CuteLeaf/Firefly&project-name=Firefly&repository-name=Firefly)
-   [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/CuteLeaf/Firefly)
+- 사이트 메인 주소는 <https://azuma.mstzuomu.space>이며 `src/config/siteConfig.ts`의 `site_url`에 정의되어 있습니다. `www.mstzuomu.space`와 루트 도메인은 메인 사이트로 302 리다이렉트됩니다(`Layout.astro`).
+- 저장소 루트의 `wrangler.jsonc`, `wrangler.toml`, `vercel.json`은 업스트림 템플릿에서 남은 설정이며 이 사이트의 배포 경로에서는 사용하지 않습니다.
+- `astro.config.mjs`는 환경 변수 `CF_WORKERS`가 있을 때만 Cloudflare 어댑터를 연결합니다. 기본값은 어댑터가 필요 없는 순수 정적 빌드입니다.
 
 ## 📖 구성 안내
 
@@ -179,12 +203,14 @@ src/
 │   ├── analyticsConfig.ts        # Analytics configuration
 │   ├── announcementConfig.ts     # Announcement configuration
 │   ├── backgroundWallpaper.ts    # Background wallpaper configuration
+│   ├── booknavConfig.ts          # Bookmark navigation configuration
 │   ├── commentConfig.ts          # Comment system configuration
 │   ├── coverImageConfig.ts       # Cover image configuration
 │   ├── displaySettingsConfig.ts  # Settings panel configuration
 │   ├── dynamicConfig.ts          # Moments page configuration
 │   ├── effectsConfig.ts          # Animation effects config (sakura, etc.)
 │   ├── expressiveCodeConfig.ts   # Code highlighting configuration
+│   ├── fcircleConfig.ts          # Friend circle configuration
 │   ├── fontConfig.ts             # Font configuration
 │   ├── FooterConfig.html           # Footer configuration
 │   ├── friendsConfig.ts          # Friend links configuration
@@ -242,29 +268,50 @@ location: China # Location
 
 ## 🧩 Markdown 확장 문법
 
-Astro가 기본으로 지원하는 [GitHub Flavored Markdown](https://github.github.com/gfm/) 외에도 다음과 같은 Markdown 기능을 제공합니다.
+Astro가 기본으로 지원하는 [GitHub Flavored Markdown](https://github.github.com/gfm/) 외에도 `src/plugins/` 아래에 20여 개의 remark / rehype 플러그인이 연결되어 다음과 같은 확장 기능을 제공합니다.
 
 - 알림 블록(Admonitions) - GitHub, Obsidian, VitePress, Docusaurus 테마 구성 지원 ([미리 보기 및 사용법](https://firefly.cuteleaf.cn/posts/markdown-extended/))
 - GitHub 저장소 카드 ([미리 보기 및 사용법](https://firefly.cuteleaf.cn/posts/markdown-extended/))
 - Expressive Code 기반의 향상된 코드 블록 ([미리 보기](http://firefly.cuteleaf.cn/posts/code-examples/) / [문서](https://expressive-code.com/))
+- Bilibili 사용자 카드 - `::bilibili{uid="353880725"}`. 프로필 이미지와 닉네임을 빌드 시점에 가져와 카드 전체를 렌더링
+- 음악 플레이어 - `::music{url="..."}` 또는 `::music{server="netease" id="..."}`
+- PDF 뷰어 - `::pdf{url="https://example.com/file.pdf"}`
+- Mermaid 다이어그램 - 코드 블록에서 렌더링하며 확대·이동 지원
+- PlantUML 다이어그램 - 코드 블록에서 렌더링하며 테마 전환과 확대·이동 지원
+- Wiki 링크 - `[[게시물 경로]]` 형태의 사이트 내 링크로, 제목과 주소를 자동 해석
+- 이미지 그리드 - 여러 이미지를 자동으로 그리드 배치
+- 이메일 보호 - 본문의 이메일 주소를 자동으로 인코딩해 수집 봇을 차단
+- 외부 링크 처리 - 외부 링크에 `target` / `rel` 속성을 자동 부여
+- 이미지 캡션 - 이미지를 자동으로 `<figure>`로 감싸고 설명 문구 지원
+- 읽기 시간과 발췌 - 빌드 시점에 읽기 시간과 게시물 발췌 생성
 
 ## 🧞 명령
 
 모든 명령은 프로젝트 루트 디렉터리에서 실행해야 합니다.
 
-| Command                    | Action                                              |
-|:---------------------------|:----------------------------------------------------|
-| `pnpm install`             | 의존성 설치                                         |
-| `pnpm dev`                 | `localhost:4321`에서 로컬 개발 서버 시작            |
-| `pnpm build`               | 사이트를 `./dist/`에 빌드                           |
-| `pnpm preview`             | 빌드된 사이트를 로컬에서 미리 보기                  |
-| `pnpm check`               | 코드 오류 검사                                      |
-| `pnpm format`              | Biome으로 코드 서식 정리                            |
-| `pnpm new-post <filename>` | 새 게시물 생성                                      |
-| `pnpm new-d <content>`     | 새 일상 생성                                        |
-| `pnpm new-dynamic <content>` | 새 일상 생성(전체 명령)                           |
-| `pnpm astro ...`           | `astro add`, `astro check` 및 기타 명령 실행         |
-| `pnpm astro --help`        | Astro CLI 도움말 표시                               |
+| Command                      | Action                                                    |
+|:-----------------------------|:----------------------------------------------------------|
+| `pnpm install`               | 의존성 설치 (`preinstall`이 pnpm만 허용하도록 강제)        |
+| `pnpm dev`                   | `localhost:4321`에서 로컬 개발 서버 시작 (`pnpm start` 동일) |
+| `pnpm build`                 | 10단계 빌드 체인을 실행하고 `./dist/`에 출력               |
+| `pnpm preview`               | 빌드된 사이트를 로컬에서 미리 보기                         |
+| `pnpm check`                 | Astro 진단을 실행해 코드 오류 검사                         |
+| `pnpm type-check`            | TypeScript 타입 검사 실행 (`tsc --noEmit`)                 |
+| `pnpm format`                | Biome으로 `src`와 `scripts` 서식 정리                      |
+| `pnpm lint`                  | Biome으로 `src`와 `scripts`를 검사하고 안전하게 수정        |
+| `pnpm new-post <filename>`   | 새 게시물 생성                                             |
+| `pnpm new-d <content>`       | 새 일상 생성 (`new-dynamic`의 별칭)                        |
+| `pnpm new-dynamic <content>` | 새 일상 생성(전체 명령)                                    |
+| `pnpm lqips`                 | 이미지 LQIP 플레이스홀더만 다시 생성                       |
+| `pnpm friend-json`           | 프렌드 링크 JSON만 다시 생성                               |
+| `pnpm github-cards`          | GitHub 카드 데이터만 다시 생성                             |
+| `pnpm bilibili-cards`        | Bilibili 카드 데이터만 다시 생성                           |
+| `pnpm astro ...`             | `astro add`, `astro check` 및 기타 명령 실행               |
+| `pnpm astro --help`          | Astro CLI 도움말 표시                                      |
+
+`pnpm build`는 다음 10단계를 순서대로 실행하는 복합 명령입니다.
+
+프렌드 링크 JSON 생성 → GitHub 카드 데이터 생성 → Bilibili 카드 데이터 생성 → LQIP 플레이스홀더 생성 → VNDB 커버 생성 → `astro build` → 마스코트 리소스 정리 → 폰트 서브셋 생성 → 인라인 스크립트 압축 → Pagefind 검색 색인 생성.
 
 ## 🙏 감사의 말
 

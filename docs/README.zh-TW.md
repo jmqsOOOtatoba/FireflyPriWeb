@@ -3,23 +3,25 @@
 
 <div align="center">
 
-# Firefly
+# Firefly · 左沐の手册
 > 一款清新美觀的 Astro 靜態博客主題模板
 > 
+> 本站是 [Firefly](https://github.com/CuteLeaf/Firefly) 的個人 fork（v6.16.8），站點名「左沐の手册」，主入口 [azuma.mstzuomu.space](https://azuma.mstzuomu.space)
+> 
 > ![Node.js >= 22](https://img.shields.io/badge/node.js-%3E%3D22-brightgreen) 
-![pnpm >= 11](https://img.shields.io/badge/pnpm-%3E%3D9-blue)
+![pnpm >= 11](https://img.shields.io/badge/pnpm-%3E%3D11-blue)
 ![Astro](https://img.shields.io/badge/Astro-7-orange)
 ![TypeScript](https://img.shields.io/badge/TypeScript-6-blue)
 >
-> [![Stars](https://img.shields.io/github/stars/CuteLeaf/Firefly?style=social)](https://github.com/CuteLeaf/Firefly/stargazers)
-[![Forks](https://img.shields.io/github/forks/CuteLeaf/Firefly?style=social)](https://github.com/CuteLeaf/Firefly/network/members)
-[![Issues](https://img.shields.io/github/issues/CuteLeaf/Firefly)](https://github.com/CuteLeaf/Firefly/issues)
+> [![Stars](https://img.shields.io/github/stars/jmqsOOOtatoba/FireflyPriWeb?style=social)](https://github.com/jmqsOOOtatoba/FireflyPriWeb/stargazers)
+[![Forks](https://img.shields.io/github/forks/jmqsOOOtatoba/FireflyPriWeb?style=social)](https://github.com/jmqsOOOtatoba/FireflyPriWeb/network/members)
+[![Issues](https://img.shields.io/github/issues/jmqsOOOtatoba/FireflyPriWeb)](https://github.com/jmqsOOOtatoba/FireflyPriWeb/issues)
 > 
 > [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Z8Z41NQALY)
 >
 > **QQ交流群：[1087127207](https://qm.qq.com/q/ZGsFa8qX2G)**
 > 
-> ![GitHub License](https://img.shields.io/github/license/CuteLeaf/Firefly)
+> ![GitHub License](https://img.shields.io/github/license/jmqsOOOtatoba/FireflyPriWeb)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/CuteLeaf/Firefly)
 [![愛發電打賞](https://img.shields.io/badge/愛發電-打賞作者-ff69b4.svg)](https://ifdian.net/a/cuteleaf)
 
@@ -31,9 +33,9 @@
 **[简体中文](../README.md)** | **[繁體中文](README.zh-TW.md)** | **[English](../README.en.md)** | **[日本語](README.ja.md)** | **[한국어](README.ko.md)**
 
 🚀 快速指南：
-[**🖥️線上預覽**](https://firefly.cuteleaf.cn/) /
-[**📝使用文檔**](https://docs-firefly.cuteleaf.cn/) /
-[**🍀我的部落格**](https://blog.cuteleaf.cn) 
+[**🖥️本站入口**](https://azuma.mstzuomu.space/) /
+[**📝主題文檔**](https://docs-firefly.cuteleaf.cn/) /
+[**📊公開統計**](https://azuma.mstzuomu.space/analytics/) 
 
 ⚡ 靜態站點生成: 基於 Astro 的超快載入速度和 SEO 優化
 
@@ -93,26 +95,47 @@
 
 如果你有好用的功能和優化，請提交 [Pull Request](https://github.com/CuteLeaf/Firefly/pulls)
 
+### 個人新增
+
+- [x] **友圈** - `/fcircle/` 友鏈動態聚合頁，抓取友鏈 RSS 集中展示
+- [x] **書籤導航** - `/booknav/` 分類書籤導航頁，由 `booknavConfig.ts` 配置
+- [x] **相簿** - `/gallery/` 圖片相簿頁
+- [x] **動態** - `/dynamic/` 短動態時間軸，支援置頂、位置與 Memos 資料來源
+- [x] **專案** - `/projects/` 專案展示頁
+- [x] **留言板** - `/guestbook/` 留言互動
+- [x] **番組與追番** - Bangumi 番組收藏與 B 站追番進度
+- [x] **統計分析** - 自建 Umami（`umami.mstzuomu.space`）＋公開統計頁 `/analytics/`，導覽列有入口；已完全移除不蒜子統計
+- [x] **發佈台** - `publisher/` 獨立 Vercel 專案（`pub.mstzuomu.space`），對外提供 article / articles / auth / friend-apply / friend-decide / publish 六個 API
+- [x] **友鏈自助申請** - 表單送出後走郵件審核，拒絕時可填寫理由
+- [x] **訪客資訊** - 顯示訪客位置、天氣、溫度等資訊，附天氣預警
+- [x] **站點統計** - 文章數量、分類數量、標籤數量、總字數、運行天數等統計
+- [x] **閱讀增強** - 閱讀進度條與進度圓環，另提供沉浸閱讀模式
+- [x] **Twikoo 評論** - 自建評論服務（`twikoo.mstzuomu.space`）
+- [x] **B 站卡片** - `::bilibili{uid="..."}` 指令內嵌 UP 主卡片
+- [x] **音樂播放器** - 全域音樂播放器與 `::music` 指令
+- [x] **圖床** - `tu.mstzuomu.space` 獨立圖床
+- [x] **雙備案頁尾** - 魯ICP備2026062086号-1 與公安備案號＋圖示，由 `FooterConfig.html` 注入
+
 ## 🚀 快速開始
 
 ### 環境要求
 
-- Node.js ≥ 22
-- pnpm ≥ 11
+- Node.js ≥ 22.23.0（見 `package.json` 的 `engines.node`）
+- pnpm 11.22.0（見 `package.json` 的 `packageManager`）
 
 ### 本地開發部署
 
 1. **克隆儲存庫：**
    ```bash
-   git clone https://github.com/Cuteleaf/Firefly.git
-   cd Firefly
+   git clone https://github.com/jmqsOOOtatoba/FireflyPriWeb.git
+   cd FireflyPriWeb
    ```
    
-   **先 [Fork](https://github.com/CuteLeaf/Firefly/fork) 到自己儲存庫再克隆（推薦），記得先點 Star 再 Fork 哦！**
+   **想基於本儲存庫再做二次開發的話，先 [Fork](https://github.com/jmqsOOOtatoba/FireflyPriWeb/fork) 到自己儲存庫再克隆：**
 
    ```bash
-   git clone https://github.com/you-github-name/Firefly.git
-   cd Firefly
+   git clone https://github.com/you-github-name/FireflyPriWeb.git
+   cd FireflyPriWeb
    ```
 3. **安裝依賴：**
    ```bash
@@ -132,25 +155,23 @@
    ```
    部落格將在 `http://localhost:4321` 可用
 
-### 社區教程
-Cloudflare Workers 部署：[【不用服务器，无需备案，零成本搭建一个自己的个人博客】](https://www.bilibili.com/video/BV1hX9XBKEhm)
-
 ### 平台託管部署
-- **參考[官方指南](https://docs.astro.build/zh-cn/guides/deploy/)將部落格部署至 Vercel, Netlify, Cloudflare Pages, EdgeOne Pages 等。**
-- **Vercel**、**Netlify** 等主流平台自動部署，會根據環境自動選擇適配器。
 
-   框架預設： `Astro`
+本站部署在 **騰訊雲 EdgeOne Pages**：推送到 GitHub `master` 分支後自動建置並發布，產物為純靜態檔案。
 
-   根目錄： `./`
+- 框架預設：`Astro`
+- 根目錄：`./`
+- 輸出目錄：`dist`
+- 建置命令：`pnpm run build`
+- 安裝命令：`pnpm install`
 
-   輸出目錄： `dist`
+其他靜態託管平台（Vercel、Netlify、Cloudflare Pages 等）同樣可以直接使用，依 [Astro 官方部署指南](https://docs.astro.build/zh-cn/guides/deploy/) 配置即可。
 
-   建置命令： `pnpm run build`
+**幾點說明：**
 
-   安裝命令： `pnpm install`
-
-   [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/CuteLeaf/Firefly&project-name=Firefly&repository-name=Firefly)
-   [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/CuteLeaf/Firefly)
+- 站點主入口是 <https://azuma.mstzuomu.space>，定義於 `src/config/siteConfig.ts` 的 `site_url`；`www.mstzuomu.space` 與裸域會 302 跳轉到主站（見 `Layout.astro`）。
+- 根目錄的 `wrangler.jsonc`、`wrangler.toml`、`vercel.json` 是上游模板的殘留配置，本站部署鏈路不使用它們。
+- `astro.config.mjs` 只在存在環境變數 `CF_WORKERS` 時才掛載 Cloudflare adapter；預設是純靜態建置，不需要任何 adapter。
 
 ## 📖 配置說明
 
@@ -183,12 +204,14 @@ src/
 │   ├── analyticsConfig.ts        # 統計分析配置
 │   ├── announcementConfig.ts     # 公告配置
 │   ├── backgroundWallpaper.ts    # 背景桌布配置
+│   ├── booknavConfig.ts          # 書籤導航配置
 │   ├── commentConfig.ts          # 留言系統配置
 │   ├── coverImageConfig.ts       # 封面圖配置
 │   ├── displaySettingsConfig.ts  # 設置面板配置
 │   ├── dynamicConfig.ts          # 動態頁面配置
 │   ├── effectsConfig.ts          # 動畫特效配置（櫻花等）
 │   ├── expressiveCodeConfig.ts   # 程式碼高亮配置
+│   ├── fcircleConfig.ts          # 友圈配置
 │   ├── fontConfig.ts             # 字型配置
 │   ├── FooterConfig.html           # 頁尾配置
 │   ├── friendsConfig.ts          # 友鏈配置
@@ -245,28 +268,50 @@ location: China # 位置
 
 ## 🧩 Markdown 擴充語法
 
-除了 Astro 預設支援的 [GitHub Flavored Markdown](https://github.github.com/gfm/) 之外，還包含了一些額外的 Markdown 功能：
+除了 Astro 預設支援的 [GitHub Flavored Markdown](https://github.github.com/gfm/) 之外，`src/plugins/` 下還掛載了 20 多個 remark / rehype 外掛，提供以下擴充語法：
 
-- 提醒塊（Admonitions） - 支援 GitHub, Obsidian, VitePress 三種風格主題配置 ([預覽和用法](https://firefly.cuteleaf.cn/posts/markdown-extended/))
+- 提醒塊（Admonitions） - 支援 GitHub, Obsidian, VitePress, Docusaurus 四種風格主題配置 ([預覽和用法](https://firefly.cuteleaf.cn/posts/markdown-extended/))
 - GitHub 儲存庫卡片 ([預覽和用法](https://firefly.cuteleaf.cn/posts/markdown-extended/))
 - 基於 Expressive Code 的增強程式碼區塊 ([預覽](http://firefly.cuteleaf.cn/posts/code-examples/) / [文檔](https://expressive-code.com/))
+- B 站使用者卡片 - `::bilibili{uid="353880725"}`，建置期抓取頭像與暱稱並繪製完整卡片
+- 音樂播放器 - `::music{url="..."}` 或 `::music{server="netease" id="..."}`
+- PDF 檢視器 - `::pdf{url="https://example.com/file.pdf"}`
+- Mermaid 圖表 - 於程式碼區塊內繪製，支援縮放拖曳
+- PlantUML 圖表 - 於程式碼區塊內繪製，支援主題切換與縮放拖曳
+- Wiki 連結 - `[[文章路徑]]` 形式的站內互鏈，自動解析標題與網址
+- 圖片網格 - 多張圖片自動排版為網格
+- 信箱保護 - 正文中的信箱位址自動編碼，抵禦爬蟲收集
+- 外鏈處理 - 站外連結自動補上 `target` / `rel` 屬性
+- 圖片說明 - 圖片自動包裹 `<figure>` 並支援配文
+- 閱讀時長與摘要 - 建置期產生閱讀時間與文章摘要
+
 ## 🧞 指令
 
 下列指令均需要在專案根目錄執行：
 
-| Command                    | Action                                 |
-| :------------------------- | :------------------------------------- |
-| `pnpm install`             | 安裝依賴                               |
-| `pnpm dev`                 | 在 `localhost:4321` 啟動本地開發伺服器 |
-| `pnpm build`               | 建置網站至 `./dist/`                   |
-| `pnpm preview`             | 本地預覽已建置的網站                   |
-| `pnpm check`               | 檢查程式碼中的錯誤                     |
-| `pnpm format`              | 使用 Biome 格式化您的程式碼            |
-| `pnpm new-post <filename>` | 建立新文章                             |
-| `pnpm new-d <content>`     | 建立一則動態                           |
-| `pnpm new-dynamic <content>` | 建立一則動態（完整命令）             |
-| `pnpm astro ...`           | 執行 `astro add`, `astro check` 等指令 |
-| `pnpm astro --help`        | 顯示 Astro CLI 說明                    |
+| Command                      | Action                                                    |
+| :--------------------------- | :-------------------------------------------------------- |
+| `pnpm install`               | 安裝依賴（`preinstall` 會強制只允許 pnpm）                 |
+| `pnpm dev`                   | 在 `localhost:4321` 啟動本地開發伺服器（`pnpm start` 等價） |
+| `pnpm build`                 | 執行完整的 10 步建置鏈，產物輸出到 `./dist/`               |
+| `pnpm preview`               | 本地預覽已建置的網站                                      |
+| `pnpm check`                 | 執行 Astro 診斷，檢查程式碼中的錯誤                       |
+| `pnpm type-check`            | 執行 TypeScript 型別檢查（`tsc --noEmit`）                 |
+| `pnpm format`                | 使用 Biome 格式化 `src` 與 `scripts`                      |
+| `pnpm lint`                  | 使用 Biome 檢查並安全修復 `src` 與 `scripts`               |
+| `pnpm new-post <filename>`   | 建立新文章                                                |
+| `pnpm new-d <content>`       | 建立一則動態（`new-dynamic` 的別名）                      |
+| `pnpm new-dynamic <content>` | 建立一則動態（完整命令）                                  |
+| `pnpm lqips`                 | 單獨重新產生圖片 LQIP 佔位圖                              |
+| `pnpm friend-json`           | 單獨重新產生友鏈 JSON                                     |
+| `pnpm github-cards`          | 單獨重新產生 GitHub 卡片資料                              |
+| `pnpm bilibili-cards`        | 單獨重新產生 B 站卡片資料                                 |
+| `pnpm astro ...`             | 執行 `astro add`, `astro check` 等指令                    |
+| `pnpm astro --help`          | 顯示 Astro CLI 說明                                       |
+
+`pnpm build` 是一條複合命令，依序執行 10 個步驟：
+
+產生友鏈 JSON → 產生 GitHub 卡片資料 → 產生 B 站卡片資料 → 產生 LQIP 佔位圖 → 產生 VNDB 封面 → `astro build` → 清理看板娘資源 → 字型子集化 → 內聯腳本壓縮 → 產生 Pagefind 搜尋索引。
 
 ## 🙏 致謝
 
