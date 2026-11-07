@@ -197,6 +197,14 @@ export const friendsConfig: FriendLink[] = [
 		weight: 1,
 		enabled: true,
 	},
+	{
+		title: "一只喵⁹",
+		imgurl: "https://luvgaze.com/favicon.ico",
+		desc: "❀ 等风听雨 ︱ 梅花落 ❀",
+		siteurl: "https://luvgaze.com",
+		weight: 1,
+		enabled: true,
+	},
 	/* friend-autogen-insert-above */
 ];
 
