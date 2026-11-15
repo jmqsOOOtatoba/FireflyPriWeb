@@ -205,6 +205,15 @@ export const friendsConfig: FriendLink[] = [
 		weight: 1,
 		enabled: true,
 	},
+	{
+		title: "AzKanna的小站",
+		imgurl: "https://blog.azkanna.cn/_astro/avatar.Dgx0_rtv_Z2l8vPi.webp",
+		desc: "Ciallo～(∠・ω< )⌒★",
+		siteurl: "https://blog.azkanna.cn",
+		tags: ["Blog"],
+		weight: 1,
+		enabled: true,
+	},
 	/* friend-autogen-insert-above */
 ];
 
