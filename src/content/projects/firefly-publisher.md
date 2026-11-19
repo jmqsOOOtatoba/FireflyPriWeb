@@ -17,7 +17,7 @@ link:
     value: "https://github.com/jmqsOOOtatoba/firefly-publisher"
   - label: "教程"
     icon: "material-symbols:menu-book"
-    value: "https://azuma.mstzuomu.space/posts/azuma.zuomu-blog-17/"
+    value: "https://azuma.mstzuomu.space/posts/azuma-zuomu-blog-17/"
 ---
 
 ## 功能特性
